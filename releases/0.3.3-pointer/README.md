@@ -1,9 +1,9 @@
-# 地图目标指针 0.3.3
+# Map Target Pointer 0.3.3
 
-在地图上选中店铺或手动标点后，目标位置只显示箭头，不再额外显示同名名牌。店铺原有名称、右侧用途指南和顶部导航保持原样，避免一个地点出现两块同名牌。
+After selecting a shop or a manual waypoint on the map, the target position shows only an arrow — no extra duplicate nameplate. The shop's original name, the right-side purpose guide, and the top navigation stay as they were, avoiding two identical nameplates on one spot.
 
-按 M 打开或关闭地图；右键侧栏条目或地图店名仍可导航。导航坐标、已发现店铺记录和存档格式沿用现有版本。
+Press M to open or close the map; right-click a sidebar entry or a map shop name to navigate. Navigation coordinates, discovered shop records, and the save format follow the existing version.
 
-安装命令为项目根目录的 `Install-TownLabels.ps1 -Target Experiment`。安装脚本会阻止覆盖正在运行的目标游戏，先备份旧模组和导航数据，仅替换导航 DLL，并核对原程序、框架、配置及存档保持不变。安装不会自动启动游戏。
+The install command is the project root's `Install-TownLabels.ps1 -Target Experiment`. The installer blocks overwriting a running target game, backs up the old mod and navigation data first, replaces only the navigation DLL, and verifies the original program, framework, config, and saves stay unchanged. Installing never starts the game.
 
-已核对安装后的导航 DLL 与本包一致，完整存档、旧 DLL 和标点已备份，药水模组未改。重开后的游戏内显示尚待用户确认；正式游玩副本未更新。
+The installed navigation DLL was verified to match this package; the full saves, old DLL, and waypoints were backed up, and the potion mod was untouched. The in-game display after relaunch still awaits the user's confirmation; the formal copy was not updated.

@@ -1,54 +1,54 @@
-# 旅行驿站 0.1.4（实验版）
+# Fast Travel 0.1.4 (playtest)
 
-本次字体微调：保留原版方正粗圆字形，改进像素对齐和采样，地图/探索减轻黑描边；不改布局或玩法。已独立备份更新实验副本，真实观感待重开确认。见 字体记录（本地验证记录未随源码发布）。
+This font tweak: keeps the original FangZheng CuYuan glyph shapes, improves pixel alignment and sampling, and lightens the black outline on the map/explorer panels; no layout or gameplay changes. The playtest copy was updated as an independent backup; the real look is still pending a re-launch to confirm. See font record (local validation records are not published with the source).
 
-减少到城镇补给、卖东西和重复跑长路的时间。沿用 [Trader Fast Travel](https://github.com/synap5e/cubeworld-trader-fast-travel) 的到访记录、商人落点和最近城镇回城流程，增加到访地标的基础信息和可确认的 Boss 名字、职业自动登记。之后按 **F8** 选择地点传送，或“返回最近城镇”。其他野外地点也可手动登记，不生成建筑、NPC，不改变城镇数量或世界生成。
+Cuts the time spent returning to towns for resupply and selling, and re-running long routes. It follows the visit records, merchant landing points, and return-to-nearest-town flow of [Trader Fast Travel](https://github.com/synap5e/cubeworld-trader-fast-travel), adding basic info for visited landmarks plus confirmable auto-registered boss names and classes. Then press **F8** to pick a place to teleport to, or "return to the nearest town". Other wild locations can also be registered manually; it generates no buildings or NPCs and changes no town count or world generation.
 
-## 到访自动登记
+## Automatic visit registration
 
-0.1.3修复“看见、交战过，F8仍无记录”：Boss观察每秒至多一次，独立于移动、施法、跳跃和站稳要求。附近水平512格、垂直256格内，读到可可靠关联的真实首领后立即记住名字和职业；已有该地驿站时直接补充，不改落点或手写内容。不要求存在任务类型5，也不要求打开F8。距离范围是有界读取条件，不代表镜头可见或视线无遮挡。
+0.1.3 fixes "seen it, fought it, still no F8 record": boss observation runs at most once per second, independent of the moving, casting, jumping, and standing-still requirements. Within 512 cells horizontally and 256 vertically nearby, once a reliably-linked real boss is read, the name and class are remembered immediately; if the place already has a station, it just fills in — the landing point and the handwritten content are untouched. It does not require quest type 5 to exist, nor the F8 window to be open. The distance range is a bounded read condition, not camera visibility or an unobstructed line of sight.
 
-观察依据原出生记录与实体完整ID、种族、等级及巨型首领标志关联出生所属地点，特殊Boss种族沿用已核实SDK列表；任务类型5的任务首领仍核对详细任务身份。同一地点多名可确认首领时优先记录原游戏准星明确指向的那一名，没有明确目标则不任意挑最近者。仍驻留的倒地首领也可读取，未读取过且已被游戏移除的历史Boss不能补造。
+The observation links a spawn record to its spawn location via the entity's full ID, species, level, and the giant-boss flag; special boss species follow the verified SDK list; quest type-5 quest bosses still get their detailed quest identity checked. When several confirmable bosses share a location, the one the original game's crosshair clearly targets is recorded first; without a clear target, no nearest one is picked arbitrarily. A still-resident downed boss can also be read; historical bosses that were never read and have been removed by the game cannot be fabricated.
 
-Boss信息单独保存于 `encounters.bin`，按同一角色和世界隔离，最多保留32个地点的最近首领观察；它不包含可直接传送的落点。正常离开、实体卸载和重开后保留。已有驿站的自动信息及未关联但落点属于该原生地点格的手动记录会补充Boss信息；自定义名称、备注和脚下落点保留。观察记录不等于击杀判定或完整首领档案。
+Boss info is saved separately in `encounters.bin`, isolated by character and world, keeping the latest boss observation for at most 32 places; it contains no directly teleportable landing points. It survives normal exits, entity unloads, and restarts. For existing stations, the auto info — plus manual records that are unlinked but whose landing point belongs to that native place cell — gets the boss info appended; custom names, notes, and the underfoot landing point are kept. An observation record is not a kill verdict or a complete boss profile.
 
-传送落点仍要求下坐骑、落地停稳约3～6秒：在地标中心附近256格以内，或当前处于已有首领观察的原生地点格内，保存玩家脚下的实际落点。原任务首领附近水平96格、垂直32格且地标中心1024格内的登记路径保留。城镇继续使用商店旁站稳位置；移动和交战时只记录信息，不创建空中或移动中的传送落点。没有可靠关联时保留未知，特殊首领不强套普通职业。
+Teleport landing points still require dismounting and standing still for about 3–6 seconds: within 256 cells of a landmark center, or inside a native place cell that already has a boss observation, the player's actual underfoot landing point is saved. The registration path of within 96 cells horizontally / 32 vertically of an original quest boss and 1024 cells of the landmark center is kept. Towns keep using the standing spot next to the shops; while moving or fighting, only info is recorded — no aerial or moving teleport points are created. Without a reliable link it stays unknown; special bosses are not force-fitted with ordinary classes.
 
-自动信息标注“上次现场记录”。新任务会重新核对，已清除任务或暂时卸载保留历史；基础信息与个人文字分开保存。自动新建落点优先补充同地点记录或32格/垂直4格内未关联手动记录；满32条时不挤掉旧记录。原0.1.2只在停稳后查询任务类型5的做法已被本次观察机制补足。
+The auto info is labeled "last on-site record". A new quest re-verifies; cleared quests or temporary unloads keep the history; the basic info and the personal text are saved separately. An auto-created landing point prefers to fill in the record for the same place, or an unlinked manual record within 32/4 cells; when the 32 are full, old records are not pushed out. The old 0.1.2 behavior of only querying quest type 5 after standing still is superseded by this observation mechanism.
 
-## 编辑名称与备注
+## Editing names and notes
 
-F8 → 选中已登记地点 → **编辑名称/备注**。名称可改成自己容易辨认的名字，多行备注可写难度、打法、是否打过和下次准备。上方自动信息供查看，下方文字由你填写。点“保存修改”后存入记录；“取消编辑”不保存草稿。城镇记录也可编辑，原城镇身份和落点保留。
+F8 → select a registered place → **edit name/note**. The name can become whatever is easy for you to recognize; the multi-line note can record difficulty, tactics, whether you have beaten it, and your next plans. The auto info on top is for reading; the text below is yours to write. Click "save changes" to store it; "cancel edit" discards the draft. Town records can be edited too; the original town identity and landing point are kept.
 
-列表显示 Boss 信息及备注首行，选中后下方区域可滚动查看自动信息和完整备注；编辑页面可以查看和修改完整备注。不会推断打法、难度感受或是否打过。名称不能重复或为空，沿用64字节上限；备注最多1024字节，可换行。
+The list shows the boss info and the note's first line; after selecting, the lower area scrolls through the auto info and the full note; the edit page can view and change the full note. It does not guess tactics, difficulty impressions, or whether you have won. Names cannot duplicate or be empty, keeping the 64-byte cap; notes are at most 1024 bytes and may wrap.
 
-旧 `CWTRAVEL1/2/3/4` 地点直接读入，不会补造未观察的Boss或批量改写旧记录，仍使用 `CWTRAVEL4`。观察历史也复用有界编码，出生位置仅作为信息关联使用，不进入传送列表。每文件上限128KiB；保存前验证并保留、读回核对 `stations_backup.bin` 或 `encounters_backup.bin`，写入失败尝试恢复。观察历史失败会保留现场信息并重试，损坏历史保留且禁止覆盖，不锁定另一份正常驿站。安装另备份完整数据；回退0.1.2可继续读取现有驿站，独立历史文件保留。
+Old `CWTRAVEL1/2/3/4` places load directly; unobserved bosses are not fabricated and old records are not batch-rewritten; `CWTRAVEL4` is still used. The observation history also uses the bounded encoding; spawn positions are only used for info linking and never enter the teleport list. The per-file cap is 128 KiB; before saving it verifies, keeps, and reads back `stations_backup.bin` or `encounters_backup.bin`, and a write failure attempts recovery. An observation-history failure keeps the live info and retries; a corrupted history is kept and overwrite-locked, without locking the other healthy stations. The installer additionally backs up the full data; rolling back to 0.1.2 can keep reading existing stations, and the independent history file is kept.
 
-## 使用
+## Usage
 
-1. 正常退出游戏和启动器后，运行根目录 `Install-FastTravel.ps1`；默认安装实验副本，不更新其他 Mod 或公共框架。原模组管理器有独立“旅行驿站”开关。
-2. 在城镇商店、地标中心或可确认的 Boss 附近的平整空地停稳，等待自动登记；打开F8也会检查。地标要两次稳定采样，通常3～6秒。其他野外地点用 F8 → 输入名称 → “登记当前位置”；留空时优先使用已识别地点名，否则自动编号。避开门、墙、屋顶、水面和坐骑。
-3. 以后在单人世界站稳，关闭地图、背包等原版菜单，F8 → “返回最近城镇”或选择驿站 → “确认传送”。不收费，不改变药水、装备、经验和重生点。
-4. 传送后保持落点约1.5秒，让原游戏加载地形；连续两次检测到站稳后结束。明显下坠、偏离或8秒仍未站稳时尝试返回出发点。它是失败保护，真实加载及返回效果仍需游戏内验收，不能保证所有落点绝对安全。
-5. 每个角色名字、世界种子和世界名字组合最多32个驿站。重命名角色后建立新记录，同名角色在同名同种子世界会共用记录。旧存档不能补造历史落脚点，需要安装后再到店铺附近站稳一次；有城镇标签不等于已经获得可传送落点。旧Mod的 `.sav` 文件暂不导入或移动。
-6. “移除选中驿站”只删该记录，不改变地点。停用和卸下保留全部驿站文件与游戏存档。最近城镇引用另存在同一目录的 `last_city.bin`。
+1. After fully exiting the game and launcher, run `Install-FastTravel.ps1` from the root; it installs to the playtest copy by default and updates no other mod or the shared framework. The original mod manager has an independent "旅行驿站" (Fast Travel) switch.
+2. Stand still on flat ground near a town shop, a landmark center, or a confirmable boss, and wait for the auto registration; opening F8 also checks. Landmarks need two stable samples, usually 3–6 seconds. Other wild places: F8 → type a name → "register current position"; if left empty, an identified place name is preferred, otherwise an auto number. Avoid doors, walls, roofs, water, and mounts.
+3. Later, standing still in a single-player world with the map, inventory, and other vanilla menus closed: F8 → "return to nearest town" or pick a station → "confirm teleport". No fee; potions, equipment, experience, and the respawn point are untouched.
+4. After teleporting it holds the landing point for about 1.5 seconds so the original game can load terrain; it ends after detecting standing still twice in a row. On a clear fall, drift, or no stable footing within 8 seconds, it attempts to return to the starting point. That is a failure safeguard — the real loading and return effect still need in-game acceptance, and no landing point is guaranteed absolutely safe.
+5. At most 32 stations per character-name + world-seed + world-name combination. A renamed character starts a new record; same-named characters in a same-name same-seed world share the record. Old saves cannot fabricate historical landing points — after installing, stand still near the shops once; having town labels does not mean having a teleportable landing point. The old mod's `.sav` files are not imported or moved for now.
+6. "Remove selected station" deletes only that record and changes no place. Disabling and removal keep all station files and game saves. The nearest-town reference is stored separately in `last_city.bin` in the same directory.
 
-F8 或窗口右上角关闭。死亡、空中、移动或动作中禁止发起；联机及无法核实网络状态时锁定。保护期间不要切角色或退出；一旦身份或网络改变，立即停止操作，不移动新角色。宠物、坐骑跟随尚未验证，本版仅支持单人、下坐骑后使用。
+Close with F8 or the window's top-right. Starting is forbidden while dead, airborne, moving, or in an action; it locks in multiplayer or when the network state cannot be verified. During the safeguard, do not switch characters or exit; as soon as the identity or network changes, everything stops immediately — the new character is never moved. Pet and mount following are unverified; this version is single-player only, after dismounting.
 
-## 独立边界
+## Independent boundaries
 
-| 项目 | 值 |
+| Item | Value |
 | --- | --- |
 | DLL | `mods/fast_travel.dll` |
 | manifest ID | `local.cubeworld.fast_travel` |
-| 管理器 ID / 开关 | `FastTravel` / `fast_travel.enabled` |
-| 数据 | `data/fast_travel/world_<seed>_<worldhash>_player_<namehash>/stations.bin`、`encounters.bin`（单独观察历史） |
-| 权限 | Overlay、RawMem、Writes；只读世界名、地点、商店和 Boss 记录及名字词表；仅在用户确认传送后通过SDK保护接口写入原有角色坐标与速度；自动登记只写本Mod数据，不安装游戏函数钩子 |
+| Manager ID / switch | `FastTravel` / `fast_travel.enabled` |
+| Data | `data/fast_travel/world_<seed>_<worldhash>_player_<namehash>/stations.bin`, `encounters.bin` (separate observation history) |
+| Permissions | Overlay, RawMem, Writes; read-only world names, places, shops, boss records, and the name word lists; only after the user confirms a teleport, writes the original character's coordinates and velocity through the SDK's protected interface; auto-registration writes only this mod's data and installs no game function hooks |
 
-其他五个 Mod 均非依赖。源码复用地图的命名规则及探索的独立字体助手，不依赖它们的 DLL。旧启动器仍要求地图 DLL 文件存在时，可以停用地图，不能绕过原卸下保护。
+None of the other five mods is a dependency. The source reuses the map's naming rules and the explorer's independent font helper without depending on their DLLs. While the old launcher still requires the map DLL file, the map can be disabled — the original removal protection cannot be bypassed.
 
-`Manage-Mod.ps1 -Mod FastTravel -Action Disable/Enable/Uninstall` 沿用现有管理流程。卸下只移动本 DLL 到备份，保留数据和存档；已经正常保存的角色位置不因停用自动撤销。安装强制核对游戏、加载器及候选 DLL 散列，未知版本或已有未知 DLL 拒绝覆盖。
+`Manage-Mod.ps1 -Mod FastTravel -Action Disable/Enable/Uninstall` follows the existing management flow. Removal moves only this DLL into backups, keeping data and saves; positions already legitimately saved are not auto-reverted by disabling. The installer strictly verifies the game, loader, and candidate DLL hashes; unknown versions or an unknown existing DLL refuse to overwrite.
 
-根目录 `Build-FastTravel.ps1` 只构建和离线检查，不启动游戏。最新构建、安装及真实验收分开记录，见 0.1.3验证记录（本地验证记录未随源码发布）；原传送边界见 0.1.0记录（本地验证记录未随源码发布），来源见 [SOURCES.md](SOURCES.md)。
+`Build-FastTravel.ps1` in the root only builds and runs offline checks; it never starts the game. The latest build, install, and real acceptance are recorded separately — see the 0.1.3 validation record (local validation records are not published with the source); the original teleport boundaries are in the 0.1.0 record (local validation records are not published with the source), the sources in [SOURCES.md](SOURCES.md).
 
-落点自动发现只在站稳时每3秒至多检查一次，附近地点粗记录最多9条；店铺实体树上限4096节点，靠近已有城镇落点时跳过扫描。独立Boss观察每秒最多一次、最多7×7细区，每区4096/合计8192条生成记录，每次实体按ID查找最多64树节点；截断或关联不唯一时不任意确认。原任务类型5补充路径仍每10秒按需查询3×3细区。不会生成远方地图或调用游戏随机函数。
+The landing-point auto-discovery checks at most once every 3 seconds while standing still, with at most 9 coarse nearby place records; the shop entity tree caps at 4096 nodes, and the scan is skipped near an existing town landing point. The independent boss observation runs at most once per second over at most a 7×7 fine grid — 4096 spawn records per cell, 8192 total, and at most 64 tree nodes per entity ID lookup; on truncation or ambiguous linking, nothing is confirmed arbitrarily. The original quest type-5 supplementary path still queries a 3×3 fine grid on demand every 10 seconds. It never generates distant map data or calls the game's random functions.

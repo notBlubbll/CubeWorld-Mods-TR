@@ -1,58 +1,58 @@
-# 区域探索 0.1.6（首领职业测试版）
+# Region Explorer 0.1.6 (boss-class test version)
 
-本次字体微调：保留原版方正粗圆字形，改进像素对齐和采样，地图/探索减轻黑描边；不改布局或玩法。已独立备份更新实验副本，真实观感待重开确认。见 字体记录（本地验证记录未随源码发布）。
+This font tweak: keeps the original FangZheng CuYuan glyph shapes, improves pixel alignment and sampling, and lightens the black outline on the map/explorer panels; no layout or gameplay changes. The playtest copy was updated as an independent backup; the real look is still pending a re-launch to confirm. See font record (local validation records are not published with the source).
 
-在原版 M 地图左侧列出游戏已经生成、当前仍在内存中的周边城镇、挑战和地标，按水平直线距离排序。左键选择一行即可设为目的地，关闭地图继续赶路。
+Lists the nearby towns, challenges, and landmarks the game has already generated and still holds in memory, on the left side of the vanilla M map, sorted by straight-line horizontal distance. Left-click a row to set it as the destination, close the map, and keep going.
 
-0.1.5 在“挑战”页每条记录下增加首领职业信息：
+0.1.5 adds boss class info under each record on the "Challenges" page:
 
-- **已确认**：原刷怪记录、地点、当前任务与实体编号核对一致后，读取实际首领的职业，不要求镜头看见它。
-- **预测**：只对当前任务类型5中、已有详细刷怪记录的常规首领，按原程序的任务随机种子和实体编号独立计算。不是猜职业，也不根据玩家职业筛选地点；仍需在游戏内对照实际结果。
-- **首领职业未知**：远处尚无详细记录、其他生成分支、关联失败或多名首领无法排除时保留未知，不隐藏地点。特殊物种核实时显示“特殊首领”，已完成地点没有历史职业则显示“首领职业未记录”。
+- **Confirmed**: after the spawn record, place, current quest, and entity number all match, the actual boss's class is read — the camera does not need to see it.
+- **Predicted**: only for regular bosses of the current quest type 5 that already have detailed spawn records, computed independently from the original program's quest random seed and entity number. It is not guessing a class, and places are not filtered by the player's class; it still needs in-game comparison against the real result.
+- **Boss class unknown**: kept unknown — and the place is not hidden — when there is no detailed record yet, another spawn branch applies, linking fails, or several bosses cannot be ruled out. Special species show "special boss" once verified; finished places with no historical class show "boss class not recorded".
 
-这不是整张无限地图的种子预测。常规职业预测仅覆盖已驻留的详细生成记录；更远的粗地图地标仍可能显示未知。两秒刷新，只在 M 地图的“挑战”页查询玩家周围最多7×7个详细区块，总计最多8192条刷怪记录，每块上限4096；关图、其他页签和走路时不进行这项查询。只读当前生成记录和实体，不强制加载区块、生成怪物或调用游戏的随机函数。原版等级颜色、地点分类、距离排序、留存完成状态、字体和导航保留。预测若与同一编号的实际首领不一致，会停止本次世界会话的预测，保留可核实的实际读取。程序内含组合与错误路径检查，真实游戏中的职业与帧率仍待验收。
+This is not a seed prediction of the whole infinite map. The regular class prediction covers only resident detailed spawn records; farther coarse-map landmarks may still show unknown. It refreshes every two seconds, and only the "Challenges" page of the M map queries up to a 7×7 grid of detailed chunks around the player — at most 8192 spawn records total, 4096 per chunk; no such query runs with the map closed, on other tabs, or while walking. It reads only the current spawn records and entities — no forced chunk loads, no monster spawns, no calls to the game's random functions. The vanilla level colors, place categories, distance sorting, retained completion states, fonts, and navigation are kept. If a prediction disagrees with the actual boss of the same number, prediction stops for this world session and the verifiable actual read stays. In-code combination and error-path checks exist; the real in-game class and frame rate are still pending acceptance.
 
-0.1.4 复核原版类型和 Alpha 资料，将“树木”改为“巨树”、“岩石”改为“巨岩”；`Crater` 不足以证明陨石成因，改为“环形坑”。其他类型保留。对照本机汉化 DLL 严格核对全部 40 个地名音节，词表没有字面问号；截图中的“露?龙”原名是“露芶龙”，但原字体缺少“芶”（U+82B6）。探索使用独立字体对象，优先沿用原游戏字形，只给缺字补上本机系统字体；原专名、共享默认字体、其他 Mod、公共框架及存档不改。新字体只在首次需要显示探索界面时建立并复用，不每帧读字体文件；不支持动态字体的旧后端保持原状并记录不可用。
+0.1.4 re-checked the vanilla types against Alpha references: "tree" became "巨树" (giant tree) and "rock" became "巨岩" (giant rock); `Crater` does not prove a meteor origin, so it became "环形坑" (ring crater). The other types are kept. All 40 place-name syllables were strictly verified against the local Chinese DLL, with no literal question marks in the word lists; the "露?龙" in the screenshot was really "露芶龙", but the original font lacks "芶" (U+82B6). The explorer uses an independent font object, preferring the original game's glyphs and filling only missing characters from the local system font; the original proper names, the shared default font, the other mods, the shared framework, and the saves are untouched. The new font is built once on first need and reused — no per-frame font-file reads; the old backend without dynamic fonts stays as-is and is logged unavailable.
 
-0.1.3 给名字加上原版地点类型，例如“宫殿 · 瓦丽雅”“金字塔 · 泰勒莫”；原名字仍取自运行时词表，不另造专名。同属类别 14 的城堡、废墟、地下墓穴、宫殿、神庙、金字塔按子类型分别识别；未核实的组合只写“地标”。这是地点类型，不是沙漠、雪地等群系名称或边界预测。
+0.1.3 adds the vanilla place type to names, for example "宫殿 · 瓦丽雅" (Palace) or "金字塔 · 泰勒莫" (Pyramid); the proper names still come from the runtime word lists — none were invented. Castle, ruins, catacombs, palace, temple, and pyramid — all category 14 — are told apart by subtype; unverified combinations just say "landmark". This is a place type, not a biome name like desert or snow, and not a boundary prediction.
 
-“挑战”列出当前任务以及仍有进度/完成状态的周边记录。旧版只看任务编号，会漏掉编号已清零、状态仍为 1/2 的地点；这类现在标为“留存进度/留存完成”，与当前任务区分。顶部显示当前页签的记录总数和完成状态数，页数按数量自动计算；未完成在前，完成在后。它不是角色所有历史击杀/通关的统计，也不主动判定所有森林或建筑都有 Boss。离开加载范围、游戏重置或清除状态后，旧记录仍可能不再列出，本版未建立永久历史档案。
+"Challenges" lists the current quests plus nearby records that still have progress/completion state. The old version looked only at the quest number and missed places whose number was cleared but whose state was still 1/2; those are now labeled "retained progress/retained completed", distinct from current quests. The top shows the current tab's record and completion counts, and the pages are computed automatically; unfinished first, completed after. It is not a statistic of the character's whole kill/clear history, and it does not assume every forest or building has a boss. After leaving the load range, a game reset, or a state clear, old records may no longer be listed; this version builds no permanent history archive.
 
-0.1.2 在地标和挑战列表中沿用原版地标名称的等级颜色：**白色较低、青蓝色相近、红色偏高**。即使地点尚远，只要已生成记录中能读到地区等级，就能提前显示。每行保留任务状态、难度文字和距离；选中用金色边框表示，已完成保留绿色状态文字，不再覆盖名称的难度颜色。城镇保持白色，不做战斗难度推荐。
+0.1.2 adopts the vanilla landmark level colors in the landmark and challenge lists: **white lower, cyan comparable, red higher**. Even for far places, as long as the region level is readable from the generated record, it shows early. Each row keeps the quest state, difficulty text, and distance; the selection uses a gold frame, and completed keeps the green status text — the difficulty color of the name is never overridden. Towns stay white with no combat-difficulty recommendation.
 
-这是地区等级与当前角色等级的原版比较，不评估装备、职业、怪物数量或操作，也不保证青色地点一定能打过。它不是固定相差几级的阈值；算法和原始字节核对见 [SOURCES.md](SOURCES.md)。角色等级读取失败或数值异常时，名称灰显并写“难度未知”，不根据远近猜颜色。升级后实时重新比较。
+This is the vanilla comparison of region level to the current character level; it does not evaluate equipment, class, monster count, or skill, and it does not promise a cyan place is beatable. It is not a fixed level-difference threshold; the algorithm and original bytes are in [SOURCES.md](SOURCES.md). On a character-level read failure or an abnormal value the name grays out with "difficulty unknown" — no distance-based color guessing. Re-comparison is live after leveling up.
 
-0.1.4 沿用原有“区域探索”管理器条目与独立开关，仅更新探索 DLL；粗地图扫描范围、两秒刷新、距离排序、地图标点和存储格式不变，不额外生成地图或安装游戏钩子。0.1.5 仅增加上述按需首领查询。地图照明保持用户的关闭状态。最新安装与验收状态见 `research/evidence/explorer-0.1.5-validation.md`。
+0.1.4 keeps the existing "区域探索" (Region Explorer) manager entry and independent switch, updating only the explorer DLL; the coarse-map scan range, two-second refresh, distance sorting, map waypoints, and storage format are unchanged, with no extra map generation and no game hooks. 0.1.5 only adds the on-demand boss query above. Map Light keeps the user's off state. The latest install and acceptance status is in `research/evidence/explorer-0.1.5-validation.md`.
 
-0.1.1 修复鼠标移入探索面板后不可见：原生鼠标先于 Mod 面板绘制，被面板遮住；现在仅在探索面板内、游戏处于前台时，最后补画白色像素手形。手指尖与列表点击判断使用同一坐标；关闭地图或移出面板后由原游戏显示鼠标，不修改全局鼠标状态。
+0.1.1 fixed the invisible cursor over the explorer panel: the native cursor was drawn before the mod panel and got covered; now a white pixel hand is drawn last, only inside the explorer panel and with the game in the foreground. The fingertip and the list click test use the same coordinates; on closing the map or leaving the panel the original game shows the cursor again — no global cursor-state changes.
 
-这版读取已有地图数据，不会根据种子生成远方地图，也没有完整区域边界预测。未出现在列表中不代表那里没有地点。城镇可比店主实体更早识别；挑战依据原记录中的任务编号或非零状态列入，不能把所有地标都称为 Boss。原地图存档不保存实时任务状态，不能从普通地图存档补造完整通关历史。
+This version reads existing map data; it does not generate far-away maps from the seed and has no full region-boundary prediction. Not appearing in the list does not mean a place does not exist. Towns can be recognized earlier than shopkeeper entities; challenges are listed by the original record's quest number or a non-zero state — not every landmark can be called a boss. The original map save holds no live quest state, so no complete clear history can be fabricated from an ordinary map save.
 
-## 使用
+## Usage
 
-1. 默认安装到 `playtest` 实验副本，正式副本不自动安装。游戏和启动器完全退出后运行根目录 `Install-RegionExplorer.ps1`。
-2. 在现有模组管理器中打开“区域探索”，使用原实验副本入口自行启动。不要向正在运行的游戏安装或热插拔。
-3. 进入角色和世界后按 M，选择“城镇”“挑战”或“地标”；“挑战”页查看首领职业信息。左键列表中的地点设置目标，每两秒读取一次，翻页可看后续地点。
-4. 同时启用地图导航 0.3.6 时，共用原顶部方向栏和一个向下箭头；不增加地图名牌。地图兼容更新由 `Install-TownLabels.ps1` 独立进行，不由本安装脚本捆绑覆盖。
-5. 地图导航停用或未安装时，本模块独立显示右下方向/距离提示和地图单箭头。安装了旧地图导航时，请先单独更新地图到 0.3.6，再同时启用，避免旧版导航同时留下一个手动目标。
-6. 列表底部“取消探索目标”仅清除本功能的目标。与新版地图同时运行时，后来手动标记的位置优先；不会每帧抢回探索目标。
+1. Installs to the `playtest` copy by default; the formal copy is never auto-installed. After the game and launcher fully exit, run `Install-RegionExplorer.ps1` from the root.
+2. Turn on "区域探索" (Region Explorer) in the existing mod manager and start via the original playtest entry yourself. Do not install or hot-plug into a running game.
+3. After entering a character and world press M and pick "Towns", "Challenges", or "Landmarks"; the "Challenges" page shows the boss class info. Left-click a place in the list to set the target — it reads once every two seconds, and paging shows more places.
+4. With Navigation 0.3.6 also enabled, they share the original top direction bar and one down arrow; no extra map nameplates. Map compatibility updates go through `Install-TownLabels.ps1` independently and are not bundled by this installer.
+5. With Navigation disabled or absent, this module shows its own bottom-right direction/distance hint and single map arrow. With the old Navigation installed, first update the map to 0.3.6 alone, then enable both, to avoid the old navigation leaving a manual target behind too.
+6. "Cancel explorer target" at the list bottom clears only this feature's target. When running together with the new map, a later manual marker wins; the explorer target is not re-seized every frame.
 
-地点名字读取原程序运行时的生成词表；本机汉化游戏截图已显示中文地点名，其他汉化组合是否一致仍需确认。没有另造翻译。数字沿用导航的游戏坐标单位 `m`，尚未校准成真实米数。目标为地点中心的 XY，不能保证是建筑入口或 Boss 实体的精确位置，也不提供绕障路径。
+Place names are read from the original program's runtime generation word lists; local Chinese-game screenshots already show Chinese place names, and other localization combos still need confirmation. No translation was invented. Numbers use Navigation's game coordinate unit `m`, not yet calibrated to real meters. Targets are the place center's XY — not guaranteed to be a building entrance or the boss entity's exact spot, and no obstacle pathing is provided.
 
-## 独立边界
+## Independent boundaries
 
-| 项目 | 值 |
+| Item | Value |
 | --- | --- |
 | DLL | `mods/region_explorer.dll` |
 | manifest ID | `local.cubeworld.region_explorer` |
-| 管理器 ID | `RegionExplorer`，中文名“区域探索” |
-| 开关 | `region_explorer.enabled`，位于共享 `mods.ini`，其他键不改 |
-| 数据 | `data/region_explorer/world_<seed>_<namehash>/target.bin` |
-| 能力 | 仅 Overlay、RawMem；不声明 Writes 或 RawHooks |
-| 读取上限 | 粗地图为玩家周围 ±3 个存储块、每块64条地点；仅“挑战”页另查周围最多49个详细区块、总计最多8192条刷怪记录 |
+| Manager ID | `RegionExplorer`, Chinese name "区域探索" |
+| Switch | `region_explorer.enabled`, in the shared `mods.ini`; the other keys are untouched |
+| Data | `data/region_explorer/world_<seed>_<namehash>/target.bin` |
+| Capabilities | Overlay, RawMem only; no Writes or RawHooks declared |
+| Read limits | coarse map ±3 storage blocks around the player, 64 places per block; only the "Challenges" page additionally queries up to 49 detailed chunks nearby — at most 8192 spawn records total |
 
-使用现有 `Manage-Mod.ps1 -Mod RegionExplorer -Action Disable/Enable/Uninstall`。停用保留 DLL；卸下将本 DLL 移入项目备份，保留数据和所有存档。地图、药水、区域探索各自启停。现有旧公共启动器仍要求地图 DLL 文件存在；地图可独立停用，直接卸下地图仍由原管理流程锁定，不能靠本模块绕过。
+Use the existing `Manage-Mod.ps1 -Mod RegionExplorer -Action Disable/Enable/Uninstall`. Disabling keeps the DLL; removal moves this DLL into the project backup, keeping the data and all saves. Map, potion, and explorer each toggle independently. The existing old shared launcher still requires the map DLL file; the map can be disabled on its own, and removing the map directly stays locked by the original management flow — this module cannot bypass it.
 
-## 构建与检查
+## Build and checks
 
-根目录运行 `Build-RegionExplorer.ps1`，仅构建和检查，不安装或启动游戏。`research/inspect_explorer.py --saved` 以 SQLite 只读模式核对实验地图存档；`--live` 只读已核实路径的游戏进程。来源和偏移依据见 [SOURCES.md](SOURCES.md)。当前证据与剩余游戏内验收见 `research/evidence/explorer-0.1.0-validation.md`。
+Run `Build-RegionExplorer.ps1` from the root — build and checks only, no install, no game start. `research/inspect_explorer.py --saved` checks the playtest map save read-only in SQLite mode; `--live` reads only the verified game-process path. Sources and offset basis in [SOURCES.md](SOURCES.md). Current evidence and the remaining in-game acceptance are in `research/evidence/explorer-0.1.0-validation.md`.

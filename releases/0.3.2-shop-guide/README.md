@@ -1,9 +1,9 @@
-# 店铺用途指南 0.3.2
+# Shop Purpose Guide 0.3.2
 
-打开地图时，在画面右上方显示附近已发现店铺的名字、距离、两行用途/常见商品说明；关闭地图即隐藏。地图上的原有店名标记保留，不在地图地点旁添加用途段落。
+With the map open, the top-right of the screen shows nearby discovered shops' names, distances, and two lines of purpose/common-goods notes; closing the map hides it. The original shop name labels on the map are kept, and no purpose text is added next to map places.
 
-旅馆、道具店、武器店、防具店、鉴定店、铁匠铺、木工坊、纺织坊的说明按 2013 Alpha 资料整理。常见商品不代表当前实际库存。完整对应资料与英文名称见本包 `店铺用途与来源.md`。
+The notes for the inn, item shop, weapon shop, armor shop, identifier's shop, smithy, workshop, and clothier were compiled from 2013 Alpha references. Common goods do not represent current stock. The full reference table and the English names are in this package's `shop-guide-sources.md`.
 
-继续使用 `C:\Projects\CubeWorld-Mods\playtest\NavigationLauncher.exe` 启动开发副本。按 M 打开/关闭地图；右键侧栏条目或地图店名仍可导航。店名识别、标点坐标与已有缓存格式沿用 0.3.1。
+Keep launching the development copy via `C:\Projects\CubeWorld-Mods\playtest\NavigationLauncher.exe`. Press M to open/close the map; right-clicking a sidebar entry or a map shop name still navigates. Shop recognition, waypoint coordinates, and the existing cache format follow 0.3.1.
 
-安装脚本为项目根目录 `Install-TownLabels.ps1 -Target Experiment`，目标游戏必须先正常退出。脚本备份旧模组与导航数据，仅替换导航 DLL，并核对原程序、框架、配置及存档散列保持不变。正式目录本次未更新。
+The install script is the project root's `Install-TownLabels.ps1 -Target Experiment`; the target game must be exited normally first. The script backs up the old mod and navigation data, replaces only the navigation DLL, and verifies the original program, framework, config, and save hashes stay unchanged. The formal copy was not updated this time.

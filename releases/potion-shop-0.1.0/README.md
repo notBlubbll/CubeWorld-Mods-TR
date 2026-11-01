@@ -1,15 +1,15 @@
-# 药水商店待测版 0.1.0
+# Potion Shop pending-test version 0.1.0
 
-**已知问题：缺少 Writes 声明，运行时上架和定价修改被框架还原。此包保留用于复现，不再用于新安装；修复版见同级 `potion-shop-0.1.1`。**
+**Known issue: missing Writes declaration — the runtime stocking and price changes were reverted by the framework. This package is kept for reproduction and is no longer used for new installs; see the sibling `potion-shop-0.1.1` for the fixed version.**
 
-在 2013 Alpha 的原版道具店（Item Shop，杂货店）购买基础生命药水，10 铜币一瓶，仅单人模式。高档药水不在这次定价范围内。回血、使用、堆叠和携带上限沿用原版；自制药水与卖出价格沿用原版。
+Buy basic health potions at the 2013 Alpha's vanilla item shop (general store), 10 copper a bottle, single-player only. Higher-tier potions are not part of this pricing. Healing, use, stacking, and carry limits stay vanilla; crafted potions and sale prices stay vanilla.
 
-通过现有“导航启动”加载；这是独立的 `potion_shop.dll`，与导航模组同时工作。无需替换 `Cube.exe` 或模组框架。附带文件为模组、版本及散列清单、GPL-3.0 许可证；完整源码在项目 `potion_shop/`。
+Load through the existing "导航启动" (navigation launch); this is the standalone `potion_shop.dll`, working alongside the navigation mod. No replacement of `Cube.exe` or the mod framework. The attached files are the mod, a version/hash manifest, and the GPL-3.0 license; the full source is in the project's `potion_shop/`.
 
-初版 Win32 Release 编译成功，115 项库存和定价离线检查通过。游戏内的价格显示、购买扣款、堆叠与保存重开尚待验证。
+The first Win32 Release build compiled successfully, and the 115 offline inventory and pricing checks passed. The in-game price display, purchase charging, stacking, and save/restart are still to be verified.
 
-安装脚本在项目根目录 `Install-PotionShop.ps1`，默认目标为 `Experiment`（`C:\Projects\CubeWorld-Mods\playtest`）。脚本要求目标游戏已退出，核对游戏及框架版本，备份完整目标存档，再只添加本模组。`-ValidateOnly` 只检查，不安装；正式目录需显式指定 `-Target Formal`。
+The install script is the project root's `Install-PotionShop.ps1`, targeting `Experiment` by default (`C:\Projects\CubeWorld-Mods\playtest`). The script requires the target game to have exited, verifies the game and framework versions, backs up the full target saves, then adds only this mod. `-ValidateOnly` checks without installing; the formal directory needs an explicit `-Target Formal`.
 
-试玩时进入道具店：确认新增生命药水标价 10 铜币；记下钱数，买 1 瓶应少 10 铜、药水多 1；现有同属性药水应合并堆叠，钱不足或达到原版携带上限时应拒绝购买。关闭并重开商店，药水应仍可购买。随后正常退出，再重开核对钱数和药水数量。
+When trying it out, enter the item shop: confirm the new health potion is priced at 10 copper; note your money — buying 1 should cost 10 copper and add 1 potion; same-stat potions should merge into a stack; purchases should be refused when money is insufficient or the vanilla carry limit is reached. Close and reopen the shop — the potion should still be purchasable. Then exit normally and relaunch to verify the money and the potion count.
 
-回退时正常退出游戏，将该副本 `mods\potion_shop.dll` 移出 `mods` 文件夹即可。购买的药水仍为原版物品；无需恢复存档来卸载模组。
+To roll back, exit the game normally and move that copy's `mods\potion_shop.dll` out of the `mods` folder. The bought potions remain vanilla items; no save restore is needed to uninstall the mod.

@@ -1,58 +1,58 @@
-# 旅行驿站：上游源码与适配依据
+# Fast Travel: upstream source and adaptation basis
 
-## 0.1.3 漏记修复（2026-10-26）
+## 0.1.3 missed-record fix (2026-10-26)
 
-用户在F8反馈已看到并交战的Boss没有记录。核查0.1.2：`discoverPlace` 要求 `standing()` 后才观察，`observePlace/observe` 又要求任务类型5；确实会错过战斗中观察窗口和无当前任务编号的静态首领。当前实验进程只读核查确认正在使用0.1.2，F8实际5个地点没有Boss字段，周围粗/细地点存在任务0记录；用户已离开原Boss，后续采样未找到该Boss，因此不将这两个确定的代码缺口宣称为已精确复现了原Boss的全部失败条件，也不补造名字。
+The user reported in F8 that a boss they had seen and fought was not recorded. Checking 0.1.2: `discoverPlace` required `standing()` before observing, and `observePlace/observe` additionally required quest type 5 — it really did miss the in-combat observation window and the static bosses with no current quest number. A read-only check of the live playtest process confirmed 0.1.2 in use, with 5 actual F8 places having no boss field and coarse/fine places around having quest-0 records; the user had already left the original boss, and later sampling did not find it, so these two confirmed code gaps are not claimed to have precisely reproduced all of the original boss's failure conditions, and no name was fabricated.
 
-新观察仅在本模块 `visit.hpp` 中实现，复用原有有界区块/ID查找助手，未改区域探索的预测或匹配行为。去掉对所有首领统一要求任务5和Spawn任务位0x1000：巨型首领要求Spawn与实际实体均有0x200；特殊种族沿用Qube `offsets.h::kBossSpecies`。原生巨型怪物分支见本地 `GameController.cpp` 中实体 `+0x7E & 0x200` 且 `+0x60==1` 的分支，取名方法沿用下节已核实名牌调用。按原生成ID、出生格、物种、等级、实体ID、生命值及实体种类核对；任务5任务首领仍要求同一详细任务。没有只拿距离最近怪物当Boss。
+The new observation is implemented only in this module's `visit.hpp`, reusing the existing bounded-block/ID-lookup helpers, without changing the region explorer's prediction or matching. It drops the blanket quest-5 and Spawn-quest-bit-0x1000 requirement for all bosses: giant bosses require 0x200 in both the Spawn and the actual entity; special species follow Qube's `offsets.h::kBossSpecies`. The native giant-monster branch is in the local `GameController.cpp` — entity `+0x7E & 0x200` with `+0x60==1` — and the naming follows the verified name-plate calls of the next section. Matching checks the original spawn ID, spawn cell, species, level, entity ID, health, and entity kind; quest-5 quest bosses still require the same detailed quest. The nearest monster is never taken for a boss.
 
-实际信息记录与传送落点分开：观察允许移动/施法/空中，每秒至多一次；完整身份一致的仍驻留倒地实体可读，生命值NaN/负数拒绝。多名候选时使用原游戏 `GC+0x800A70` 的准星目标ID消歧，无目标则不任意确认。原生出生格关联已存在地标，水平512/垂直256内才观察；名字、职业字段沿用原只读方法。模块独立 `encounters.bin` 保存32个地点最近观察，继续用有界CWTRAVEL4编码，出生坐标只供关联，不是传送坐标。`stations.bin` 保留原站稳锚点；信息观察不写游戏。检查及现场未验收边界见 0.1.3记录（本地验证记录未随源码发布）。
+The info recording and the teleport landing points are separate: observation allows moving/casting/airborne, at most once per second; a still-resident downed entity with a fully matching identity can be read, while NaN/negative health is rejected. With several candidates, the crosshair target ID from the original game's `GC+0x800A70` disambiguates; with no target, nothing is confirmed arbitrarily. The native spawn-cell linkage requires an existing landmark and a range of 512 horizontal / 256 vertical; the name and class fields follow the original read-only methods. The module's independent `encounters.bin` saves the latest observation for 32 places, still using the bounded CWTRAVEL4 encoding; spawn coordinates are for linking only and are not teleport coordinates. `stations.bin` keeps the original stand-still anchors; info observation writes nothing to the game. The checks and the unverified live boundary are in the 0.1.3 record (local validation records are not published with the source).
 
-## 0.1.2 到访及 Boss 信息（2026-10-26）
+## 0.1.2 visit and boss info (2026-10-26)
 
-沿用现有地点解析、原生地点名字词表及 `region_explorer/boss.hpp` 的现场实体匹配，本次仅增加可选只读观察回调和扫描半径参数，原区域探索默认半径3、预测开关和输出逻辑不变。旅行驿站使用半径1并关闭预测，匹配任务类型5、任务种子/物种/等级、原生成ID和唯一存活实体后才记录。特殊物种保留专有名字但不套普通职业；本次不扩展任务生成预测、不改Boss或地图逻辑。
+Following the existing place resolution, the native place-name word lists, and the live entity matching from `region_explorer/boss.hpp`, this pass only adds an optional read-only observation callback and a scan-radius parameter; the region explorer's default radius of 3, prediction switch, and output logic are unchanged. Fast Travel uses radius 1 with prediction off, recording only after matching quest type 5, quest seed/species/level, the original spawn ID, and a unique living entity. Special species keep their proper names but get no ordinary class; this pass extends no quest-spawn prediction and changes no boss or map logic.
 
-Boss专有名字不能直接拿SDK的 `resolveDisplayName`，因为它可能返回物种标签。结合本地 `external/CubeWorld-Reversal/cube/GameController.cpp` 名牌分支与当前游戏只读反汇编，核对 `0x49A950–0x49A95E` 和 `0x49A9C0–0x49A9CE`：原 `NameGen(0x5A0ED0)` 输入为实体ID低32位和种族 `+0x64`；非空显式名字 `+0x1168` 优先，否则巨型标志 `+0x7E & 0x200` 时用种族词表。证据见 名牌取名调用（本地验证记录未随源码发布）。
+A boss's proper name cannot come straight from the SDK's `resolveDisplayName`, which may return the species label. Combining the name-plate branch of the local `external/CubeWorld-Reversal/cube/GameController.cpp` with read-only disassembly of the current game, `0x49A950–0x49A95E` and `0x49A9C0–0x49A9CE` were verified: the original `NameGen(0x5A0ED0)` takes the entity ID's low 32 bits and the species at `+0x64`; a non-empty explicit name at `+0x1168` wins, otherwise, with the giant flag `+0x7E & 0x200`, the species word list is used. Evidence in the name-plate naming calls (local validation records are not published with the source).
 
-在 `visit.hpp` 重现原生无副作用的索引计算：first=`uint32(seed/7 + seed*13) % count`，last=`uint32(seed*7 + seed/10) % count`；读取实际运行中的MSVC UTF-16字符串表，组合当前语言名字。分种族两表各10项，默认两表各20项；覆盖原生成器的全部分支，包含默认 `0x76B808/0x76B9F0` 及种族2的 `0x76BBD0/0x76BCC0`，完整地址表在源码。只读有界字符串，不调用游戏函数或随机数；表未初始化、显式名字编码无法核实或读不到时保持未知。名字与职业独立确认，不将物种名、附近普通怪或预测职业写成真实Boss信息。
+The native side-effect-free index computation is reproduced in `visit.hpp`: first=`uint32(seed/7 + seed*13) % count`, last=`uint32(seed*7 + seed/10) % count`; it reads the actual running MSVC UTF-16 string tables and composes the current-language names. Two tables of 10 entries per species, 20 per table by default; all branches of the original generator are covered, including the defaults `0x76B808/0x76B9F0` and species 2's `0x76BBD0/0x76BCC0` — the full address table is in the source. Only bounded strings are read; no game functions or random numbers are called; if the tables are uninitialized, the explicit name's encoding cannot be verified, or the read fails, it stays unknown. Names and classes are confirmed independently — species names, nearby ordinary monsters, or predicted classes are never written as real boss info.
 
-新增 `CWTRAVEL4` 自动信息字段与任务身份；兼容1/2/3并保留原个人文字和完整坐标。任务变化清空旧Boss、任务清除保留历史、未加载保留已确认记录；不补造历史访问。现场坐标只用于验证到访，实际传送锚点始终来自站稳角色脚下。离线生产路径、安装和现场未验收边界见 0.1.2验证（本地验证记录未随源码发布）。
+The new `CWTRAVEL4` auto-info fields and quest identity are compatible with 1/2/3 and keep the original personal text and full coordinates. A quest change clears the old boss, a cleared quest keeps the history, an unloaded one keeps the confirmed record; no historical visit is fabricated. The live coordinates only verify the visit; the actual teleport anchor always comes from where the standing character stands. The offline production paths, install, and unverified live boundaries are in the 0.1.2 validation (local validation records are not published with the source).
 
-## 0.1.1 名称和备注
+## 0.1.1 names and notes
 
-0.1.1 为当前模块增量增加名称和多行备注，不改变上游传送流程或原生坐标处理。读入兼容 `CWTRAVEL1/2`，保存时使用 `CWTRAVEL3`；修改仅替换文字字段，保留完整坐标、城镇编号和最近城镇引用。核实原SDK `modstorage::put` 会截断目标文件，因此本模块保存前先通过同一SDK保留并读回核对 `stations_backup`，主文件失败时尝试恢复，失败后锁定；没有为此升级公共框架。格式、异常路径及当前旧地点只读回放记录见 0.1.1验证（本地验证记录未随源码发布）。
+0.1.1 adds names and multi-line notes for this module's increment, changing neither the upstream teleport flow nor the native coordinate handling. Loading is compatible with `CWTRAVEL1/2`, saving uses `CWTRAVEL3`; the change only replaces the text fields and keeps the full coordinates, town number, and nearest-town reference. The original SDK's `modstorage::put` was verified to truncate the target file, so this module first preserves and reads back `stations_backup` through the same SDK before saving, attempts recovery when the main file fails, and locks after repeated failure; the shared framework was not upgraded for this. The format, the exception paths, and the current read-only replay of old places are in the 0.1.1 validation (local validation records are not published with the source).
 
-核对日期：2026-10-25，Asia/Shanghai。主要参考：[Synap5e / Trader Fast Travel](https://github.com/synap5e/cubeworld-trader-fast-travel)，本次读取 master 提交 `27e57f113b0aa1bbb4c78c219a5ab6fac8c6a12c`，核心文件1235行；发布记录最新为 [v0.5.1](https://github.com/synap5e/cubeworld-trader-fast-travel/releases/tag/v0.5.1)。原码研究副本在 `research/upstream/TraderFastTravel/`，不参与构建或安装。上游元数据 license 为 null，没有擅自标成 MIT/GPL。
+Verification date: 2026-10-25, Asia/Shanghai. Primary reference: [Synap5e / Trader Fast Travel](https://github.com/synap5e/cubeworld-trader-fast-travel), reading master commit `27e57f113b0aa1bbb4c78c219a5ab6fac8c6a12c` this pass, 1235 core lines; the latest release is [v0.5.1](https://github.com/synap5e/cubeworld-trader-fast-travel/releases/tag/v0.5.1). The original research copy is in `research/upstream/TraderFastTravel/`, not part of the build or install. The upstream metadata license is null and was not presumptuously labeled MIT/GPL.
 
-## 从现成实现沿用的部分
+## Parts adopted from the existing implementation
 
-| 原源码 | 已核实的行为 | 当前适配 |
+| Original source | Verified behavior | Current adaptation |
 | --- | --- | --- |
-| 285–297、675–677、1049–1051行 | 保存、恢复三个64位原生定点坐标 | 保留完整坐标方法，通过Qube保护写入接口写入固定24字节角色位置块，再读取核对；不经float转换。速度清零使用类型化接口。 |
-| 447–584行 | 自动记录到访城镇，优先商业区，落地后更新 | 复用已核实的城镇类别、店铺实体和名字词表；实际站稳且靠近商店才记录，替换不能识别汉化的英文 City / District 判断。 |
-| 764–774行 | 商人附近的站立位置优先作为落点 | 要求距离真实商店小于32、垂直差小于4；保存角色落点，不用城镇中心或商人实体的高度猜落点。 |
-| 1011–1074行 | J键返回最近到访城镇 | 保留最近城镇记录，F8内提供“返回最近城镇”及确认，沿用当前框架输入。 |
-| 301–430行 | 按种子保存城市及最后城镇 | 接入DLL独立数据目录，并隔离世界名、种子、角色名；限制数量、大小和坐标，损坏文件锁定保留。旧 `.sav` 不自动迁移。 |
+| lines 285–297, 675–677, 1049–1051 | Saves and restores three 64-bit native fixed-point coordinates | The full coordinate method is kept, writing the fixed 24-byte character position block through Qube's protected write interface and reading it back to verify; no float conversion. Zeroing the velocity uses the typed interface. |
+| lines 447–584 | Auto-registers visited towns, preferring commercial districts, updating after landing | Reuses the verified town categories, shop entities, and name word lists; records only when actually standing still near a shop, replacing the English City/District checks that cannot recognize the Chinese localization. |
+| lines 764–774 | The standing position near a merchant is preferred as the landing point | Requires being within 32 of a real shop and a vertical difference under 4; saves the character's landing point — no town-center or merchant-entity height guessing. |
+| lines 1011–1074 | J key returns to the most recently visited town | Keeps the nearest-town record; F8 offers "return to nearest town" with confirmation, reusing the current framework's input. |
+| lines 301–430 | Saves cities and the last town per seed | Wired into the DLL's independent data directory, isolated by world name, seed, and character name; counts, sizes, and coordinates are capped, and corrupted files lock and are kept. Old `.sav` files are not migrated automatically. |
 
-这是对上游流程和坐标方法的适配，接入、中文识别、UI、格式及保护使用当前工程实现。没有把旧DLL原样装入或把整个旧源码编译为当前模块。上游没有地形加载保护；当前增加约1.5秒落点保持、站稳检测、下坠或超时尝试返回，效果仍需真实验收。
+This is an adaptation of the upstream flow and coordinate methods; the wiring, Chinese recognition, UI, formats, and protections use the current project's implementation. The old DLL was not installed as-is, nor was the whole old source compiled into the current module. Upstream has no terrain-loading protection; the current version adds the ~1.5 s landing hold, the standing-still detection, and the fall/timeout attempt to return — the effect still needs real acceptance.
 
-## 接入兼容性核对
+## Wiring compatibility check
 
-对当前 `playtest/Cube.exe` 做只读指令签名核对，见 `research/evidence/trader-fast-travel-source-match.json`。7个原定位模式均有命中，其中6个唯一；`load_world` 同时命中 `0x5a52ea`、`0x60542a`，旧函数只取第一个。签名存在不等于完整兼容验证。尚未实测旧DLL与当前五Mod同用，不能声称已知冲突，也不能声称直接兼容。
+A read-only instruction-signature check against the current `playtest/Cube.exe` is in `research/evidence/trader-fast-travel-source-match.json`. All 7 original location patterns matched, 6 of them uniquely; `load_world` matched both `0x5a52ea` and `0x60542a`, and the old function takes only the first. A matching signature is not a full compatibility verification. The old DLL has not been tested together with the current five mods — no known conflict is claimed, and neither is direct compatibility.
 
-旧 DllMain 会直接改跳转、改摊位对话、重新绑定标准输出，并尝试移动游戏根目录全部 `.sav` 文件；卸载分支调用 `exit(0)`。旧专用启动器没有当前Qube的manifest、独立开关和安全锁定。因此保留玩法流程及原生坐标办法，替换接入层，复用当前公共框架。
+The old DllMain directly patched jumps, changed stall dialogs, rebound stdout, and tried to move all `.sav` files in the game root; its unload branch calls `exit(0)`. The old dedicated launcher has none of the current Qube manifest, independent switches, or safety locks. So the gameplay flow and the native coordinate approach are kept, the wiring layer is replaced, and the current shared framework is reused.
 
-收费与本次交通便利目标分开：本版免费，不修改金钱或现有经济配置；未照搬原每等级收费及拼错的 `rbase_cost` 配置项。
+Fees are separate from this convenience goal: this version is free and changes no money or economy config; the original per-level charge and the misspelled `rbase_cost` config key were not copied.
 
-## 本地版本和边界
+## Local version and boundaries
 
-- 当前2013 Alpha游戏 SHA256：`84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`；加载器：`D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`。安装核对全文件散列，运行核对已验证PE信息，不混用2019/Omega地址或存档。
-- SDK `api/system.cpp::apiMemWrite` 经过能力检查和writeguard。只写重新核实的角色地址 `+0x10`、24字节坐标；角色或世界变化立即停止。没有新的原函数钩子，不更新公共框架。
-- 城镇读取复用 `region_explorer/explore.hpp`，店铺读取复用 `navigation/town_scan.hpp`；属于源码复用，不依赖其DLL。最多检查附近9条地点记录，仅在站稳且发现未知城镇、或已登记城镇的其他店铺位置时按需扫描店铺，上限4096节点。
-- 现有地图/探索读位置，照明改渲染参数，背包改显示及鼠标映射，药水改临时库存和价格。新功能不占用这些钩子；游戏内组合、远距加载和宠物跟随仍待验收。
+- Current 2013 Alpha game SHA256: `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`; loader: `D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`. The installer verifies the full file hashes, and the runtime verifies the known PE info; no 2019/Omega addresses or saves are mixed in.
+- The SDK's `api/system.cpp::apiMemWrite` goes through the capability checks and the writeguard. It writes only the re-verified character address `+0x10`, the 24-byte coordinates; on any character or world change it stops immediately. No new native-function hooks, no shared-framework updates.
+- The town reads reuse `region_explorer/explore.hpp`, and the shop reads reuse `navigation/town_scan.hpp`; that is source reuse, not a dependency on their DLLs. At most 9 nearby place records are checked; shops are scanned only on demand — when standing still with an unknown town discovered, or another shop position of a registered town — capped at 4096 nodes.
+- The existing map/explorer read positions, the light changes render parameters, the inventory changes display and mouse mapping, the potion changes the temporary inventory and prices. The new feature takes none of those hooks; in-game combinations, far-distance loading, and pet following are still pending acceptance.
 
-2026-10-25首次开发时核对的 [Omega官方补丁索引](https://wollay.com/patch-notes/) 最新为2026-10-24 v0.1.12；该条是当时快照，具体页读取失败，不补写机制。[10月13日补丁](https://wollay.com/patch-notes/2026-10-13-map-navigation-bulk-selling-and-bug-fixes/) 的村庄快捷项把地图居中至村庄，并非角色传送，不能直接解决当前Alpha的重复赶路。小范围适配比改城镇密度或创建完整实体驿站系统更合适。0.1.2为现有模块信息登记增量，不将该日期快照宣称为最新状态。
+At the first development on 2026-10-25, the [Omega official patch index](https://wollay.com/patch-notes/) was latest at 2026-10-24 v0.1.12; that entry was a snapshot of the time — the specific page read failed, and no mechanism was written in. The [October 13 patch](https://wollay.com/patch-notes/2026-10-13-map-navigation-bulk-selling-and-bug-fixes/)'s village shortcut centers the map on the village rather than teleporting the character, so it does not solve the current Alpha's repeated long routes. A small-scope adaptation fits better than changing town density or building a full entity-station system. 0.1.2 is an info-registration increment for the existing module; that dated snapshot is not claimed as the latest state.
 
-## 本次字体微调
+## This font tweak
 
-保留原游戏字体，正常笔画浓度、像素对齐和私有字体采样；不改变共享默认字体、物品数据或交互。独立编译更新，见 验证记录（本地验证记录未随源码发布）。
+Keeps the original game font, with normal stroke weight, pixel alignment, and the private font sampling; no changes to the shared default font, item data, or interaction. Independently compiled and updated — see validation record (local validation records are not published with the source).

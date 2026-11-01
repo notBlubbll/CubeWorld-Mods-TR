@@ -1,41 +1,41 @@
-# 批量补给的依据与投入判断
+# Batch Actions: basis and investment decision
 
-核对日期：2026-10-28。目标是当前固定散列的 2013 Alpha 实验副本，减少买空瓶、装水和制药时的重复操作。0.1.1 按用户后续反馈改为可见数量窗口，A / D 每次减 / 加 10。
+Verification date: 2026-10-28. The target is the current hash-pinned 2013 Alpha playtest copy, reducing the repeated actions when buying empty bottles, filling water, and brewing potions. 0.1.1 switched to the visible quantity window per the user's follow-up feedback, with A / D changing 10 per press.
 
-## 复用判断
+## Reuse decision
 
-- 当前原版已经支持按住制作按钮，每轮约一秒连续制作。这由本地固定版本的 `0x48f1a0` 附近循环及制作调用确认；它仍逐份完成，没有统一的一次最多十份购买与制作操作。用户已在本次对话选择统一批量十份。
-- [Omega 官方补丁索引](https://wollay.com/patch-notes/)在核对时最新条目是 [2026-10-27 v0.1.14](https://wollay.com/patch-notes/2026-10-27-0-1-14-quest-rewards-and-gameplay-fixes/)。其制作界面及体验修正属于另一版本，没有证据说明可直接用于本地 Alpha 加载器；不升级或迁移当前游戏。
-- 搜索到旧版“按键助手”的第三方介绍，其中包含模拟多次点击及长按的办法；缺少已确认的原作者许可证、当前 Qube Loader 与背包分类兼容证据，不下载安装。检查的 [Cube World Alpha Mods](https://github.com/Gapagapi1/Cube-World-Alpha-Mods) 是另一旧框架下的配置/服务器 Mod，并未提供本次可直接复用的批量实现。未发现经过当前组合验证的现成替代品，不表示不存在其他方案。
-- 建议继续本次小功能：独立 DLL，选择数量后确认，复用原生扣款和配方逻辑，不扩展奖励体系或经济数值。
+- The current vanilla already supports holding the craft button, crafting continuously at roughly one round per second. This was confirmed by the loop near the pinned local `0x48f1a0` and its craft calls; it still completes one unit at a time, with no unified buy-and-craft-up-to-ten operation. The user has chosen in this conversation to batch ten uniformly.
+- The [Omega official patch index](https://wollay.com/patch-notes/) was latest at [2026-10-27 v0.1.14](https://wollay.com/patch-notes/2026-10-27-0-1-14-quest-rewards-and-gameplay-fixes/) at check time. Its crafting UI and experience fixes belong to a different version; there is no evidence they apply to the local Alpha loader directly; the current game is not upgraded or migrated.
+- Third-party write-ups of an old "key helper" were found, including simulated multi-click and long-press methods; without a confirmed original-author license, or evidence of compatibility with the current Qube Loader and Inventory Sort, nothing was downloaded. The checked [Cube World Alpha Mods](https://github.com/Gapagapi1/Cube-World-Alpha-Mods) is a config/server mod under another old framework and offers nothing directly reusable for this batch feature. No ready-made alternative verified against the current combination was found — that does not mean none exists.
+- The recommendation is to continue this small feature: a standalone DLL, pick the quantity then confirm, reusing the native charging and recipe logic, with no reward-system or economy-number expansion.
 
-## 本地原生代码与固定程序核对
+## Local native code and pinned-program verification
 
-参考 `external/CubeWorld-Reversal/cube/control/GameController.cpp`，同时核对本地 `playtest/Cube.exe` 的反汇编。该反编译项目存在错误命名，以下以函数实际行为为依据。
+Referencing `external/CubeWorld-Reversal/cube/control/GameController.cpp` while checking the disassembly of the local `playtest/Cube.exe`. That decompilation project contains mis-names; the function's actual behavior is the basis below.
 
-| 位置 | 实际行为 |
+| Location | Actual behavior |
 | --- | --- |
-| `0x47b600` | `__thiscall(GameController*, int button)`，按钮 1 是右键；原版分支检查玩家格、装备、商店选择、余额、携带上限，再加物并扣款 |
-| `0x47b1b0` | 当前装备悬停查询，用于避免把原生装备操作重复执行 |
-| `0x47b450` / `0x47b550` | 玩家背包/商店选择查询；商店 Widget 在 `GC+0x80095c`，临时库存 `GC+0x800c0c` |
-| `0x48f1c6`～`0x48f1dd` | 将配方 Widget 的 `+0x16c` 复制到 `GC+0x1000e7c`，启动原版制作 |
-| `0x4709c0` | 虽被命名为 `onItemPickup`，实际消费暂存需求列表、检查携带限制并添加制作产物；不得在材料不足时直接调用 |
-| `0x59cff0` | 普通生命药水需要心之花 `(11,22)` 和水瓶 `(11,26)`，水瓶需要空瓶 `(11,12, material 24)`，各一份 |
+| `0x47b600` | `__thiscall(GameController*, int button)`, button 1 is right-click; the vanilla branch checks the player cell, equipment, shop selection, balance, and carry cap, then adds the item and charges |
+| `0x47b1b0` | The current equipment hover query, used to avoid double-running the native equipment operation |
+| `0x47b450` / `0x47b550` | Player-inventory / shop-selection queries; the shop Widget is at `GC+0x80095c`, the temporary inventory at `GC+0x800c0c` |
+| `0x48f1c6`–`0x48f1dd` | Copies the recipe Widget's `+0x16c` to `GC+0x1000e7c`, starting the vanilla crafting |
+| `0x4709c0` | Though named `onItemPickup`, it actually consumes the staging requirement list, checks the carry cap, and adds the craft result; it must not be called directly when materials are insufficient |
+| `0x59cff0` | Ordinary health potions need heart-flowers `(11,22)` and water bottles `(11,26)`, one each; water bottles need empty bottles `(11,12, material 24)` |
 
-原生 `Item` 大小 `0x118`。背包格为 `count + Item`，需求格为 `Item + count`，均为 `0x11c`，顺序不同。对目标物品使用原生语义字段比较，忽略未初始化填充；只允许无改造的普通补给。背包读取有数量上限及保护检查，跨页读取仍逐段通过 SDK。
+The native `Item` is `0x118` bytes. An inventory cell is `count + Item`, a requirement cell is `Item + count`, both `0x11c`, in different orders. Target items are compared with native semantic fields, ignoring uninitialized padding; only unmodified ordinary supplies are allowed. Inventory reads are capped and protected; cross-page reads still go through the SDK segment by segment.
 
-## 加载器及已有 Mod
+## Loader and existing mods
 
-参考 `external/Qube-Loader/modloader/src/game/gamehooks/hookbus.cpp`、`rawpool.cpp`、`src/game/pickup.cpp` 和 `src/game/capture_detour.h`。通用拦截器在原生调用前同步运行，重新进入入口会依次运行共享订阅者；本模组用线程局部标志阻止自身再次展开批次。
+Referencing `external/Qube-Loader/modloader/src/game/gamehooks/hookbus.cpp`, `rawpool.cpp`, `src/game/pickup.cpp`, and `src/game/capture_detour.h`. The generic interceptors run synchronously before the native call, and re-entering the entry runs the shared subscribers in order; this mod uses a thread-local flag to stop itself from re-expanding a batch.
 
-背包分类已经拦截 `0x47b600`，声明是 Thiscall、一个整数参数。本模组声明相同并延迟到 READY 注册；买空瓶时每次重新经过原有保护，不绕过背包分类。制作入口与加载器的按需 ITEM_PICKUP 捕获互斥，当前六个模块未使用该事件，未来组合必须单独核实。
+Inventory Sort already intercepts `0x47b600`, declared Thiscall with one integer argument. This mod declares the same and registers late at READY; buying empty bottles passes through the existing protections each time and does not bypass Inventory Sort. The craft entry is mutually exclusive with the loader's on-demand ITEM_PICKUP capture, which none of the current six modules use; future combinations must be verified separately.
 
-固定程序 SHA-256：`84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`。加载器 SHA-256：`D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`。安装器分别核对，不升级共享框架。
+Pinned program SHA-256: `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`. Loader SHA-256: `D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`. The installer verifies both separately and upgrades no shared framework.
 
-## 本次现场核对和界面修正
+## This round's live check and UI fix
 
-`research/inspect_batch.py` 对实际实验进程只读查询：角色当前有 50 个空瓶、7 个心之花、15 个 37 级生命药水及 50 个 33 级生命药水；商店空瓶原生字段与本模块语义一致。这确认了当时空瓶已达到原版上限，是当时不能再买的明确原因。不能据此证明之前每次操作未生效都仅由这一原因造成。记录见 `research/evidence/batch-actions-0.1.0-live-fields.json`。
+`research/inspect_batch.py` made read-only queries against the actual playtest process: the character had 50 empty bottles, 7 heart-flowers, 15 level-37 health potions, and 50 level-33 health potions; the shop's empty-bottle native fields match this module's semantics. This confirmed the empty bottles were at the vanilla cap at the time — the concrete reason no more could be bought then. It cannot prove that every earlier failed purchase was due to this alone. The record is in `research/evidence/batch-actions-0.1.0-live-fields.json`.
 
-旧版在已有 50 个时未进入批量处理且没有单独数量窗口。新版允许这种场景进入显示层，以“已有 50 / 50、本次最多 0”解释原因，执行层仍拒绝超限。
+The old version, when already at 50, entered no batch handling and had no separate quantity window. The new version lets this case into the display layer, explaining with "owned 50 / 50, max this round 0", while the execution layer still refuses the overflow.
 
-数量窗口输入接管参考加载器 `src/overlay/overlay.cpp` 和 `src/hooks/input_block.cpp`。接管期间游戏原鼠标悬停不能作为稳定交易目标，故捕获原商店 Widget、格地址和完整物品身份，确认后每份重新核实。原生 `0x47b600` 的按钮 2 同样进入购买分支，并跳过按钮 1 的右键菜单处理；临时只改 `bagWidget+0x184`、`shopWidget+0x184`、`GC+0x8008f0` 和 `GC+0x11b` 四处界面/输入字段，逐份恢复。期间不触碰金币和物品数据。生产路径检查验证了原悬停丢失、部分绑定失败及还原，真实 UI 和游戏调用效果仍需更新后验收。
+The quantity window's input takeover references the loader's `src/overlay/overlay.cpp` and `src/hooks/input_block.cpp`. During takeover the game's own mouse hover is not a stable trade target, so the original shop Widget, cell address, and full item identity are captured and re-verified per unit after confirmation. Native `0x47b600` button 2 also enters the buy branch, skipping button 1's right-click menu handling; it temporarily changes only four UI/input fields — `bagWidget+0x184`, `shopWidget+0x184`, `GC+0x8008f0`, and `GC+0x11b` — restoring them per unit. Money and item data are untouched. The production-path checks verified the original hover loss, partial binding failures, and restoration; the real UI and game-call effects still need post-update acceptance.

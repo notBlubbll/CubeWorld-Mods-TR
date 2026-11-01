@@ -1,9 +1,9 @@
-# 旅行驿站 0.1.2
+# Fast Travel 0.1.2
 
-到访可识别地标中心或其已确认的真实Boss附近、下坐骑落地停稳后，自动登记地点名、类型、地区等级与脚下落点；可确认时同时保存Boss专有名字和职业。没有确认的信息显示未知，特殊首领不强套普通职业。自动信息与个人名称、备注分别保存，重访不会覆盖你的文字。
+After dismounting and standing still near an identifiable landmark center or its confirmed real boss, the place's name, type, region level, and your underfoot landing point are registered automatically; when confirmable, the boss's proper name and class are saved too. Unconfirmed info shows unknown, and special bosses get no ordinary class force-fitted. The auto info and your personal names/notes are saved separately — revisiting does not overwrite your text.
 
-F8 → 选择地点可查看；“编辑名称/备注”补充打法、难度感受和准备事项。自动信息标明“上次现场记录”，新任务会重新核对。原城镇自动登记、手动野外登记与传送方式保留。
+F8 → select a place to view it; "edit name/note" adds tactics, difficulty impressions, and preparations. The auto info is labeled "last on-site record", and a new quest re-verifies. The original town auto-registration, manual wild registration, and the teleport method are kept.
 
-兼容读取 `CWTRAVEL1/2/3`，实际新增或更新时保存为 `CWTRAVEL4`；回退旧DLL需要一起恢复对应格式的数据备份。完全退出游戏及启动器后运行根目录 `Install-FastTravel.ps1`，默认只更新实验副本本Mod，保留其他Mod、原开关与完整存档。沿用原管理器条目。
+Compatible reading of `CWTRAVEL1/2/3`; actual additions or updates save as `CWTRAVEL4`; rolling back to the old DLL requires restoring the matching-format data backup together. After fully exiting the game and launcher, run the root's `Install-FastTravel.ps1` — it updates only this mod in the playtest copy by default, keeping the other mods, the original switches, and the full saves. The original manager entry is reused.
 
-适用范围、到访条件与当前任务类型5限制见 [使用说明](../../fast_travel/README.md)，验证范围见 0.1.2记录（本地验证记录未随源码发布）。没有自动启动游戏，实际Boss名字对应、自动登记触发和重开显示仍需游戏内验收。
+For the applicable scope, visit conditions, and the current quest-type-5 restriction see the [usage notes](../../fast_travel/README.md); for the validation scope see the 0.1.2 record (local validation records are not published with the source). No automatic game start; the actual boss-name matching, auto-registration triggering, and the relaunch display still need in-game acceptance.

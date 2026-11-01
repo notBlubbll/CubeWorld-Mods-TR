@@ -1,11 +1,11 @@
-# 药水商店修复待测版 0.1.1
+# Potion Shop fix pending-test version 0.1.1
 
-2026-10-23 16:31 +08:00 已更新实验副本，原模组与完整存档已备份。115 项库存/定价检查及 24 项实际 DLL 仿真回归通过，游戏内正在等待用户复测。
+2026-10-23 16:31 +08:00 — the playtest copy was updated, with the original mod and full saves backed up. The 115 inventory/pricing checks and the 24 real-DLL simulation regressions passed; the in-game retest is waiting for the user.
 
-修复 0.1.0 已加载但商店不出现药水的问题。原版运行记录确认：库存复制钩子确实触发，但模组未声明 `Writes`，框架恢复了库存参数，也会恢复价格覆盖。0.1.1 补齐该声明；这属于模组自身能力声明，不修改 Windows 或框架的权限设置。
+Fixes 0.1.0 loading but no potion appearing in the shop. The vanilla runtime logs confirmed: the inventory-copy hook did fire, but the mod had not declared `Writes`, so the framework restored the inventory parameters — and would also restore the price override. 0.1.1 adds that declaration; it is the mod's own capability declaration, changing no Windows or framework permission settings.
 
-功能不变：2013 Alpha 单人模式，道具店（Item Shop）出售原版基础生命药水，10 铜币一瓶；其他商品、高档药水、使用方式及卖出估值沿用原版。
+The feature is unchanged: 2013 Alpha single-player, the item shop sells the vanilla basic health potion at 10 copper a bottle; the other goods, higher potions, usage, and sale valuation stay vanilla.
 
-通过实验副本原有“导航启动”加载。安装脚本 `Install-PotionShop.ps1` 要求目标游戏关闭，备份完整目标存档及旧药水 DLL，再只更新药水模组。不会更新导航或替换框架。正式副本没有安装此模组。
+Load through the playtest copy's existing "导航启动" (navigation launch). The install script `Install-PotionShop.ps1` requires the target game to be closed, backs up the full target saves and the old potion DLL, then updates only the potion mod. It updates no navigation and replaces no framework. The formal copy does not have this mod installed.
 
-实际游戏中仍待确认：重新启动后进道具店，在列表末尾看到药水、显示 10 铜币、买一瓶药水 +1 且钱 -10，关店重开仍能购买，正常保存重开后数量及钱数正确。版本与验证状态见 `release.json`。
+Still to confirm in the real game: after restarting, enter the item shop and see the potion at the end of the list, priced 10 copper; buying one gives +1 potion and −10 money; reopening the shop still allows buying; a normal save and restart keeps the counts and money right. Version and validation status are in `release.json`.

@@ -1,42 +1,42 @@
-# 区域探索 0.1.2（地区等级难度）
+# Region Explorer 0.1.2 (region-level difficulty)
 
-在原版 M 地图左侧列出游戏已经生成、当前仍在内存中的周边城镇、挑战和地标，按水平直线距离排序。左键选择一行即可设为目的地，关闭地图继续赶路。
+Lists the nearby towns, challenges, and landmarks the game has already generated and still holds in memory, on the left side of the vanilla M map, sorted by straight-line horizontal distance. Left-click a row to set it as the destination, close the map, and keep going.
 
-0.1.2 在地标和挑战列表中沿用原版地标名称的等级颜色：**白色较低、青蓝色相近、红色偏高**。即使地点尚远，只要已生成记录中能读到地区等级，就能提前显示。每行保留任务状态、难度文字和距离；选中用金色边框表示，已完成保留绿色状态文字，不再覆盖名称的难度颜色。城镇保持白色，不做战斗难度推荐。
+0.1.2 adopts the vanilla landmark level colors in the landmark and challenge lists: **white lower, cyan comparable, red higher**. Even for far places, as long as the region level is readable from the generated record, it shows early. Each row keeps the quest state, difficulty text, and distance; the selection uses a gold frame, and completed keeps the green status text — the difficulty color of the name is never overridden. Towns stay white with no combat-difficulty recommendation.
 
-这是地区等级与当前角色等级的原版比较，不评估装备、职业、怪物数量或操作，也不保证青色地点一定能打过。它不是固定相差几级的阈值；算法和原始字节核对见 [SOURCES.md](SOURCES.md)。角色等级读取失败或数值异常时，名称灰显并写“难度未知”，不根据远近猜颜色。升级后实时重新比较。
+This is the vanilla comparison of region level to the current character level; it does not evaluate equipment, class, monster count, or skill, and it does not promise a cyan place is beatable. It is not a fixed level-difference threshold; the algorithm and original bytes are in [SOURCES.md](SOURCES.md). On a character-level read failure or an abnormal value the name grays out with "difficulty unknown" — no distance-based color guessing. Re-comparison is live after leveling up.
 
-本次沿用原有“区域探索”管理器条目与独立开关，仅更新探索 DLL；扫描范围、两秒刷新、距离排序、地图标点和存储格式不变，不额外生成地图、扫描怪物或安装游戏钩子。地图照明保持用户的关闭状态。安装与验收状态见 `research/evidence/explorer-0.1.2-validation.md`。
+This round keeps the existing "区域探索" (Region Explorer) manager entry and independent switch, updating only the explorer DLL; the scan range, two-second refresh, distance sorting, map waypoints, and storage format are unchanged, with no extra map generation, no monster scanning, and no game hooks. Map Light keeps the user's off state. Install and acceptance status are in `research/evidence/explorer-0.1.2-validation.md`.
 
-0.1.1 修复鼠标移入探索面板后不可见：原生鼠标先于 Mod 面板绘制，被面板遮住；现在仅在探索面板内、游戏处于前台时，最后补画白色像素手形。手指尖与列表点击判断使用同一坐标；关闭地图或移出面板后由原游戏显示鼠标，不修改全局鼠标状态。
+0.1.1 fixed the invisible cursor over the explorer panel: the native cursor was drawn before the mod panel and got covered; now a white pixel hand is drawn last, only inside the explorer panel and with the game in the foreground. The fingertip and the list click test use the same coordinates; on closing the map or leaving the panel the original game shows the cursor again — no global cursor-state changes.
 
-这版读取已有地图数据，不会根据种子生成远方地图，也没有完整区域边界预测。未出现在列表中不代表那里没有地点。城镇可比店主实体更早识别；挑战仅在原记录确实具有任务字段时列入，不能把所有地标都称为 Boss。原地图存档不保存实时任务状态，Boss 状态仍待游戏内核对。
+This version reads existing map data; it does not generate far-away maps from the seed and has no full region-boundary prediction. Not appearing in the list does not mean a place does not exist. Towns can be recognized earlier than shopkeeper entities; challenges are listed only when the original record actually has the quest field — not every landmark can be called a boss. The original map save holds no live quest state, and the boss state still needs in-game verification.
 
-## 使用
+## Usage
 
-1. 默认安装到 `playtest` 实验副本，正式副本不自动安装。游戏和启动器完全退出后运行根目录 `Install-RegionExplorer.ps1`。
-2. 在现有模组管理器中打开“区域探索”，使用原实验副本入口自行启动。不要向正在运行的游戏安装或热插拔。
-3. 进入角色和世界后按 M，选择“城镇”“挑战”或“地标”；左键列表中的地点设置目标。每两秒读取一次，翻页可看后续地点。
-4. 同时启用地图导航 0.3.6 时，共用原顶部方向栏和一个向下箭头；不增加地图名牌。地图兼容更新由 `Install-TownLabels.ps1` 独立进行，不由本安装脚本捆绑覆盖。
-5. 地图导航停用或未安装时，本模块独立显示右下方向/距离提示和地图单箭头。安装了旧地图导航时，请先单独更新地图到 0.3.6，再同时启用，避免旧版导航同时留下一个手动目标。
-6. 列表底部“取消探索目标”仅清除本功能的目标。与新版地图同时运行时，后来手动标记的位置优先；不会每帧抢回探索目标。
+1. Installs to the `playtest` copy by default; the formal copy is never auto-installed. After the game and launcher fully exit, run `Install-RegionExplorer.ps1` from the root.
+2. Turn on "区域探索" (Region Explorer) in the existing mod manager and start via the original playtest entry yourself. Do not install or hot-plug into a running game.
+3. After entering a character and world press M and pick "Towns", "Challenges", or "Landmarks"; left-click a place in the list to set the target. It reads once every two seconds, and paging shows more places.
+4. With Navigation 0.3.6 also enabled, they share the original top direction bar and one down arrow; no extra map nameplates. Map compatibility updates go through `Install-TownLabels.ps1` independently and are not bundled by this installer.
+5. With Navigation disabled or absent, this module shows its own bottom-right direction/distance hint and single map arrow. With the old Navigation installed, first update the map to 0.3.6 alone, then enable both, to avoid the old navigation leaving a manual target behind too.
+6. "Cancel explorer target" at the list bottom clears only this feature's target. When running together with the new map, a later manual marker wins; the explorer target is not re-seized every frame.
 
-地点名字读取原程序运行时的生成词表；本机汉化游戏截图已显示中文地点名，其他汉化组合是否一致仍需确认。没有另造翻译。数字沿用导航的游戏坐标单位 `m`，尚未校准成真实米数。目标为地点中心的 XY，不能保证是建筑入口或 Boss 实体的精确位置，也不提供绕障路径。
+Place names are read from the original program's runtime generation word lists; local Chinese-game screenshots already show Chinese place names, and other localization combos still need confirmation. No translation was invented. Numbers use Navigation's game coordinate unit `m`, not yet calibrated to real meters. Targets are the place center's XY — not guaranteed to be a building entrance or the boss entity's exact spot, and no obstacle pathing is provided.
 
-## 独立边界
+## Independent boundaries
 
-| 项目 | 值 |
+| Item | Value |
 | --- | --- |
 | DLL | `mods/region_explorer.dll` |
 | manifest ID | `local.cubeworld.region_explorer` |
-| 管理器 ID | `RegionExplorer`，中文名“区域探索” |
-| 开关 | `region_explorer.enabled`，位于共享 `mods.ini`，其他键不改 |
-| 数据 | `data/region_explorer/world_<seed>_<namehash>/target.bin` |
-| 能力 | 仅 Overlay、RawMem；不声明 Writes 或 RawHooks |
-| 读取上限 | 玩家周围 ±3 个地图存储块，至多 49 个块、每块 64 条记录 |
+| Manager ID | `RegionExplorer`, Chinese name "区域探索" |
+| Switch | `region_explorer.enabled`, in the shared `mods.ini`; the other keys are untouched |
+| Data | `data/region_explorer/world_<seed>_<namehash>/target.bin` |
+| Capabilities | Overlay, RawMem only; no Writes or RawHooks declared |
+| Read limits | ±3 map storage blocks around the player, at most 49 blocks of 64 records each |
 
-使用现有 `Manage-Mod.ps1 -Mod RegionExplorer -Action Disable/Enable/Uninstall`。停用保留 DLL；卸下将本 DLL 移入项目备份，保留数据和所有存档。地图、药水、区域探索各自启停。现有旧公共启动器仍要求地图 DLL 文件存在；地图可独立停用，直接卸下地图仍由原管理流程锁定，不能靠本模块绕过。
+Use the existing `Manage-Mod.ps1 -Mod RegionExplorer -Action Disable/Enable/Uninstall`. Disabling keeps the DLL; removal moves this DLL into the project backup, keeping the data and all saves. Map, potion, and explorer each toggle independently. The existing old shared launcher still requires the map DLL file; the map can be disabled on its own, and removing the map directly stays locked by the original management flow — this module cannot bypass it.
 
-## 构建与检查
+## Build and checks
 
-根目录运行 `Build-RegionExplorer.ps1`，仅构建和检查，不安装或启动游戏。`research/inspect_explorer.py --saved` 以 SQLite 只读模式核对实验地图存档；`--live` 只读已核实路径的游戏进程。来源和偏移依据见 [SOURCES.md](SOURCES.md)。当前证据与剩余游戏内验收见 `research/evidence/explorer-0.1.0-validation.md`。
+Run `Build-RegionExplorer.ps1` from the root — build and checks only, no install, no game start. `research/inspect_explorer.py --saved` checks the playtest map save read-only in SQLite mode; `--live` reads only the verified game-process path. Sources and offset basis in [SOURCES.md](SOURCES.md). Current evidence and the remaining in-game acceptance are in `research/evidence/explorer-0.1.0-validation.md`.

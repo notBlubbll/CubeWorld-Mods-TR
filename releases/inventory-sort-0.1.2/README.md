@@ -1,7 +1,7 @@
-# 背包分类 0.1.2
+# Inventory Sort 0.1.2
 
-分类标题只显示“胸甲”“手套”“武器”等名称，去掉标题旁的格数。分区、原版格子尺寸、每行容量、自动换行和物品操作沿用 0.1.1。
+The section titles show only names like "胸甲" (chestplate), "手套" (gloves), or "武器" (weapons), dropping the cell counts next to them. The sections, vanilla cell size, per-row capacity, auto-wrap, and item handling follow 0.1.1.
 
-沿用独立 `inventory_sort.dll`、管理器“背包分类”及 `inventory_sort.enabled`，没有新增条目或开关。正常退出实验游戏及启动器后，从项目根目录运行 `Install-InventorySort.ps1`；安装器核对版本和散列，备份旧 DLL、完整存档与配置，仅更新本模块，不启动游戏。正式目录需要单独明确授权。
+Reuses the standalone `inventory_sort.dll`, the manager's "背包分类" entry, and `inventory_sort.enabled`, with no new entries or switches. After fully exiting the playtest game and launcher, run `Install-InventorySort.ps1` from the project root; the installer verifies versions and hashes, backs up the old DLL, full saves, and configs, updates only this module, and never starts the game. The formal directory needs separate explicit authorization.
 
-构建信息与散列见 `release.json`，本次验证见 记录（本地验证记录未随源码发布），完整说明见 [背包分类](../../inventory_sort/README.md)。布局预览使用示意图标，真实游戏显示和操作仍待验收。
+Build info and hashes are in `release.json`; this round's validation is in the record (local validation records are not published with the source); the full notes are in [Inventory Sort](../../inventory_sort/README.md). The layout previews use illustrative icons; the real in-game display and operations are still pending acceptance.

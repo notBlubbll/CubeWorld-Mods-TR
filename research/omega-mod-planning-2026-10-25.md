@@ -1,176 +1,176 @@
-# Cube World Omega 与当前 Mod 的投入判断
+# Cube World Omega vs the Current Mods: Investment Judgment
 
-> 历史快照提示（2026-10-29）：本文及同日期 PDF 保留 10 月 25 日的核对结果。当前模组数量、照明安装状态和开发优先级已变化；Omega 也已于 10 月 28 日加入 Journal。新工作先读 [当前开发方向](development-direction-2026-10-29.md)，不要沿用本文“等待 Omega 试玩后再决定”或另起冒险日志的优先级。
+> Historical snapshot note (2026-10-29): this document and the same-date PDF keep the October 25 verification results. The current mod count, the light's install state, and the development priorities have changed; Omega also added the Journal on October 28. New work should first read the [current development direction](development-direction-2026-10-29.md) and not carry over this document's "decide after actually playtesting Omega" or the separate adventure-journal priorities.
 
-> 核对日期：2026-10-25，Asia/Shanghai。用途：新增 Mod 或扩展玩法前的决策参考。资料核对与建议：Codex。
+> Verification date: 2026-10-25, Asia/Shanghai. Purpose: a decision reference before adding mods or extending gameplay. Research check and recommendations: Codex.
 
-## 结论与阅读边界
+## Conclusions and reading boundaries
 
-建议保留当前五个 Mod 的实用修补，把新增大工程放到实际试玩 Omega 之后再决定。最有研究价值的新方向是冒险记录、个人挑战和阶段目标，但应先用很小的原型检验继续游玩的意愿。不要为了补充内容数量，立即重做整套成长、战斗或营地经营系统。
+Recommendation: keep the practical patches of the current five mods, and defer the big new projects until actually playtesting Omega. The most research-worthy new direction is adventure records, personal challenges, and staged goals — but first test the desire to keep playing with a very small prototype. Do not immediately rebuild the whole growth, combat, or camp-economy system just to add content quantity.
 
-“不重复造轮子”应落实为优先复用已经解决当前问题的可用方案，同时核算适配、维护和验证成本。有人在不同版本做过相似功能，只能证明有参考对象；还要判断自己现在能否使用、是否符合需求，以及为了使用它需要付出多少迁移成本。
+"Do not reinvent the wheel" should mean prioritizing the reusable solutions that already solve the current problem, while accounting for adaptation, maintenance, and verification costs. Someone having done a similar feature on a different version only proves a reference exists; you still have to judge whether you can use it now, whether it fits the need, and how much migration it costs.
 
-本报告聚焦会改变 Mod 开发取舍的版本演变和替代方案，不扩展成完整游戏历史或全功能评测。引用对话《申请试玩资格 email》能够读到用户的问题，但旧助手回答只返回引用占位符；本报告依据重新核对的来源形成判断。
+This report focuses on the version evolution and the alternatives that would change mod-development trade-offs, and does not expand into a complete game history or a full-feature review. The cited conversation "Beta-access application email" lets us read the user's questions, but the old assistant answers only returned citation placeholders; this report forms its judgment from the re-verified sources.
 
-官方首页明确 Omega 是独立的新版本，旧 Steam 版另有网站。2026-10-25 查询时，补丁索引列出的最新版本为 10 月 24 日 v0.1.12；该具体补丁页两次读取失败，因此不补写其详细机制。以下细节以成功读取的官方博客和补丁为准。[S1][S2]
+The official homepage clearly states Omega is a separate new version; the old Steam version has its own site. At the 2026-10-25 query, the patch index's latest was October 24's v0.1.12; that specific patch page failed to load twice, so its detailed mechanics are not written in. The details below follow the successfully read official blog and patches. [S1][S2]
 
-证据分为四种：官方已在补丁中交付；历史演示或计划；测试者的具体体验；当前尚未核实。所有“值得做”“可以等”的判断属于基于这些资料的开发建议，没有替代真实游戏内验收。
+Evidence splits into four kinds: officially delivered in a patch; a historical demo or plan; a tester's concrete experience; and currently unverified. All the "worth doing" / "can wait" judgments are development suggestions based on this material and do not replace real in-game acceptance.
 
-## 从 Alpha 到 Omega，投入价值发生了什么变化
+## From Alpha to Omega: how the investment value changed
 
-2013 Alpha 的吸引力在于带着同一个角色持续冒险。升级与技能点让战斗和旅行能力留下积累；城镇、宠物、制作、船与滑翔并非后来才出现的概念。它的不足同样明显：部分进展依赖刷怪，信息不够清楚，世界规模与可持续目标之间存在落差。保留成长是重要基础，但不能单独保证后期还有新鲜决定可做。[S3][S4]
+The 2013 Alpha's appeal was adventuring continuously with the same character. Leveling and skill points let combat and travel ability accumulate; towns, pets, crafting, boats, and gliders were not later inventions. Its shortcomings were just as clear: parts of the progress depended on grinding, information was unclear, and there was a gap between the world's scale and sustainable goals. Keeping growth is an important foundation but cannot alone guarantee fresh decisions remain late-game. [S3][S4]
 
-2019 Steam 版尝试把冒险组织为一个个区域内的装备获取与挑战过程。官方将神器设为主要目标，奖励滑翔、攀爬、游泳等探索能力；普通装备离开产地后变弱，“+装备”仍可用于相邻区域。这样的设计可以让新区域维持挑战，也可能让远行伴随明显的成长损失。两种体验取舍需要分开看：区域内更有事情做，不必然提高跨区继续探索的意愿。[S5]
+The 2019 Steam version tried to organize adventure as equipment acquisition and challenge within each region. The officials made artifacts the main goal, rewarding exploration abilities like gliding, climbing, and swimming; ordinary equipment weakened away from its origin region, though "+gear" remained usable in adjacent regions. Such a design keeps new regions challenging, but may make long trips come with a tangible growth loss. The two trade-offs must be viewed separately: having more to do within a region does not necessarily raise the desire to keep exploring across regions. [S5]
 
-Omega 于 2023 年宣布采用新引擎，并回到 Alpha 的开发精神。当时的经验、等级和技能树仍是计划；到 2026 年 10 月，人物与技能经验已经出现在实际 Beta 补丁中，不能继续把它描述为只有概念演示。官方目前展示的技能训练与里程碑，也不能简单等同于完整恢复 2013 的加点界面。[S6][S7][S8]
+Omega was announced in 2023 with a new engine and a return to Alpha's development spirit. Experience, levels, and skill trees were still plans then; by October 2026, character and skill experience had appeared in actual Beta patches, and it can no longer be described as a concept demo only. The officially shown skill training and milestones also cannot simply be equated with fully restoring 2013's point-allocation UI. [S6][S7][S8]
 
-早期测试者报告 Omega 已没有 2019 的装备区域限制，技能通过使用成长。这里的“无区域限制”来自 10 月 10 日的第一手玩家汇总，尚未找到同等完整的官方规则说明；实际进入 Beta 后仍应跨一次区域核对。官方恢复了成长反馈，但成长是否在较长时间后仍产生有趣选择，需要单独验证。[S9]
+Early testers report Omega has dropped 2019's equipment-region restrictions and skills grow through use. This "no region lock" comes from an October 10 first-hand player summary; no equally complete official rule statement was found, and once actually in Beta it should still be cross-checked across a region. The officials restored growth feedback, but whether growth still produces interesting choices over a longer stretch needs separate verification. [S9]
 
-当前 Beta 更新很快，早期经验容易失效。10 月 10 日玩家说 Spirit Cubes 当时没有玩法效果，10 月 24 日官方已加入六类触发效果；早期没有角色装备总览的问题也在同日得到补充。对一次开发决定而言，读最新具体补丁比收集更多旧印象更有价值。[S10]
+The current Beta updates fast, and early impressions expire quickly. On October 10 a player said Spirit Cubes had no gameplay effect then; by October 24 the officials had added six categories of trigger effects; the early lack of a character equipment overview was also addressed the same day. For a development decision, reading the latest specific patch beats collecting more old impressions. [S10]
 
-## Omega 已确认的体验变化
+## Confirmed Omega experience changes
 
-| 方面 | 当前证据 | 对体验的实际作用与边界 |
+| Aspect | Current evidence | Actual effect and boundary on the experience |
 | --- | --- | --- |
-| 持续成长 | 人物经验、技能训练经验；10 月 15 日加入训练提示，16 日支持两条技能经验显示。[S7][S11] | 使成长更容易感知。不能仅凭经验条证明后期目标充足。 |
-| 技能里程碑 | 战士部分技能在不同天赋等级获得流血、格挡或反伤等变化。[S8] | 升级可以改变战术，不只是提高面板数字；数值仍在调整。 |
-| 地图找回地点 | 10 月 13 日增加定位玩家、起点和最近十个村庄，村庄历史随人物保存。[S12] | 降低找回城镇的负担；不等于持续方向箭头、中文店铺说明或全部已探索地点目录。 |
-| 交易与背包 | 批量卖出未装备物品、跨页选择、等级提示、容量提示和更宽的列表。[S12] | 能减少整理战利品的操作；没有证据证明等同于本项目的中文装备分区和卖出留空位。 |
-| 可读性与操作 | 界面和小地图缩放、倾斜与晃动控制、Bloom 调整、详情避让、移动中切换轮盘。[S13][S14][S7] | 直接影响每日操作舒适度。与旧版体验修补有重叠，值得先试玩再决定是否重做。 |
-| 地点与遭遇 | 10 月 19 日加入法师塔和室内家具；21 日加入带瞭望报警的 Gnoll 聚落。[S15][S16] | 增加探索中的变化；新增地点并不自动形成长期目标体系。 |
-| 装备与构筑 | 体素编辑扩展、撤销重做；24 日实装六类 Spirit Cube 触发效果和角色装备总览。[S14][S10] | 带来外观与战斗选择，仍需测试平衡；不宜依据旧帖再为 Alpha 重建同等大系统。 |
-| 日常收集 | 长按继续拾取、背包满与堆叠限制提示、可部分拾取堆叠。[S12][S11] | 减少重复操作和失败原因不清的问题，不直接增加后期内容。 |
+| Continuous growth | Character experience, skill-training experience; training hints added October 15, two skill-experience bars supported on the 16th. [S7][S11] | Makes growth easier to perceive. An experience bar alone does not prove sufficient late-game goals. |
+| Skill milestones | Some warrior skills gain bleeding, blocking, or damage-reflection changes at different talent levels. [S8] | Leveling can change tactics, not just raise the sheet numbers; the values are still being tuned. |
+| Finding places on the map | October 13 added locating the player, the start point, and the ten nearest villages; village history saves per character. [S12] | Lowers the burden of finding towns again; not equal to a persistent direction arrow, Chinese shop notes, or a directory of all explored places. |
+| Trading and inventory | Bulk-selling unequipped items, cross-page selection, level hints, capacity hints, and a wider list. [S12] | Reduces loot-organizing chores; no evidence it equals this project's Chinese equipment sections and sale slot preservation. |
+| Readability and controls | UI and minimap scaling, tilt and sway controls, Bloom adjustment, detail yielding, switching the ring menu while moving. [S13][S14][S7] | Directly affects daily comfort. Overlaps with the old-version experience patches — worth playtesting before deciding to redo. |
+| Places and encounters | October 19 added mage towers and furnished interiors; the 21st added Gnoll settlements with watch alarms. [S15][S16] | Adds variety while exploring; new places do not automatically form a long-term goal system. |
+| Equipment and builds | Voxel-editing extensions, undo/redo; the 24th shipped six Spirit Cube trigger effects and a character equipment overview. [S14][S10] | Brings appearance and combat choices, balance still needs testing; not worth rebuilding an equally big system in Alpha based on old posts. |
+| Daily gathering | Hold-to-keep-picking, bag-full and stack-limit hints, partial stack pickup. [S12][S11] | Reduces repeated actions and unclear failures, without directly adding late-game content. |
 
-图形引擎、天气、程序生成模型和新界面属于官方从 2023 年持续开发的方向。历史文章可用于理解路线，不应把其中所有画面和设想都写成当前 Beta 已完整实现的功能。尤其是文章中的未来 NPC 行为设想，不能据此宣称现在有一套完整生活模拟系统。[S6][S17]
+The graphics engine, weather, procedural generation models, and the new UI are the officials' continuous direction since 2023. Historical articles help understand the route, but not every picture and idea in them should be written up as a fully implemented current-Beta feature. Especially the future NPC behavior envisioned in the articles cannot be claimed as a complete life-simulation system now. [S6][S17]
 
-对于地图照明，已读取的资料只能证明官方做过光照与可读性优化，不能证明夜间大地图一定满足本人的亮度需要。对于药水，官方修复说明确认了喝药和快捷使用；测试者确认炼金成长会解锁更强药水。尚未核实商店是否直接出售成品回血药，不能把“有炼金”直接推导为本项目药水商店已经重复。[S18][S19]
+For Map Light, the read material only proves the officials did lighting and readability optimizations — it does not prove the night world map meets my own brightness needs. For potions, the official fix notes confirm drinking and quick use; testers confirm alchemy growth unlocks stronger potions. Whether shops directly sell finished healing potions is unverified, so "there is alchemy" cannot be directly derived into "this project's Potion Shop is already redundant". [S18][S19]
 
-## 当前项目已经有哪些功能
+## What the current project already has
 
-当前工作目录与上一轮讨论相比已发生变化，共有五个独立 Mod。下表以各模块 README 和根目录 MODS.md 的当前说明为依据，不把源码版本、候选包、实验安装和游戏内验收混成一个状态。
+The working directory has changed since the last round of discussion; there are now five standalone mods. The table below follows each module's README and the root MODS.md as they stand, without mixing source versions, candidate packages, playtest installs, and in-game acceptance into one state.
 
-| 模块 | 当前能力与状态 | 建议 |
+| Module | Current capability and status | Recommendation |
 | --- | --- | --- |
-| 地图导航 0.3.7 | 手动标点、持续方向与距离、中文店铺标签和指南；支持可选探索目标交接。最近鼠标显示修复仍有游戏内待确认项。 | 保留并完成必要验收。短期不为模仿 Omega 重写地图系统。 |
-| 药水商店 0.2.0 | 读取实际解锁配方，售卖最高可制作药水的上一档；售价随回复量缓慢增长，保留自制最高档的价值。 | 保留设计，先玩出收入、消耗与制药取舍的数据。之前“固定只卖 10 铜基础药”已不是当前状态。 |
-| 区域探索 0.1.4 | 按周边已生成记录列城镇、挑战和地标，含原版难度参考和留存状态；最新译名与字体修复待重开验收。 | 修准现有信息即可。不要把周边记录数当成世界完成度，也不要顺势做全图剧透。 |
-| 地图照明 0.1.1 候选 | 仅夜间 M 地图补光、白天保留原版；实验副本仍为 0.1.0 且关闭，0.1.1 尚待安装。 | 按实际夜间读图需求决定。没有需求就保持关闭，不因有候选包而默认升级。 |
-| 背包分类 0.1.6 | 中文装备分区、原格子映射、详情避让、拿起可放回与卖出不补位。用户已确认后两项正常。 | 保留已验证成果。暂缓批量出售、完整装备面板或新背包交互的大扩展。 |
+| Navigation 0.3.7 | Manual waypoints, persistent direction and distance, Chinese shop labels and guide; optional explorer target handoff. The recent cursor-display fix still has in-game items pending confirmation. | Keep it and finish the necessary acceptance. Short term, do not rewrite the map system to imitate Omega. |
+| Potion Shop 0.2.0 | Reads the actually unlocked recipes and sells one tier below the best craftable; prices rise slowly with the heal amount, preserving the value of crafting the best tier yourself. | Keep the design; first play out data on income, consumption, and brewing trade-offs. The earlier "only sells 10-copper basic potions" is no longer the current state. |
+| Region Explorer 0.1.4 | Lists nearby generated towns, challenges, and landmarks with vanilla difficulty reference and retained states; the latest name and font fixes await relaunch acceptance. | Just make the existing info accurate. Do not treat nearby record counts as world completion, and do not slide into a whole-map spoiler. |
+| Map Light 0.1.1 candidate | Night-only M-map lighting, daytime vanilla; the playtest copy is still on 0.1.0 and off, 0.1.1 not yet installed. | Decide by the actual night map-reading need. With no need, keep it off; do not upgrade by default just because a candidate package exists. |
+| Inventory Sort 0.1.6 | Chinese equipment sections, original slot mapping, detail yielding, pickup put-back, and sale slots left empty. The user confirmed the latter two work. | Keep the verified results. Hold off on big expansions like bulk selling, a full equipment panel, or new inventory interactions. |
 
-药水的重点已经从“能买到基础药”变成“商店便利与炼金成长如何共存”。区域探索的重点也已从“列出地点”变成“信息准确、难度参考可靠、不要虚构通关历史”。这些当前事实优先于旧回答和旧截图。
+The potion focus has moved from "can buy basic potions" to "how shop convenience and alchemy growth coexist". The explorer's focus likewise moved from "listing places" to "accurate info, reliable difficulty reference, and no fabricated clear history". These current facts take priority over old answers and old screenshots.
 
-项目仍需要按原管理流程完成真实组合验收。独立 DLL、合成检查和用户确认某个修复，分别能证明不同范围的事情，不能据此宣称五个功能的全部开关组合已经实测兼容。
+The project still needs to finish the real combination acceptance per the original management flow. Standalone DLLs, synthetic checks, and the user confirming one fix each prove different scopes — none of them lets us claim all switch combinations of the five features are tested compatible.
 
-## 哪些现在做，哪些可以等，哪些暂不投入
+## What to do now, what can wait, what not to invest in yet
 
-| 候选工作 | 当前建议 | 判断理由与下一步 |
+| Candidate work | Current recommendation | Reasoning and next step |
 | --- | --- | --- |
-| 当前五项的明确 bug、缺字、误识别、错点、误操作 | 做必要修复 | 直接改善现在玩的版本；按最小范围修复并使用已有管理器。 |
-| 小的说明和可读性调整 | 有实际痛点就做 | 成本低且立即可用；确认原版操作没有被遮挡或误导。 |
-| 药水档位、价格继续微调 | 先记录再决定 | 已有动态方案，缺少长期平衡证据；不要只因为新版存在炼金就删掉它，也不要为了省事抹平自制价值。 |
-| 永久冒险记录、个人挑战、阶段目标 | 最值得验证的小原型 | 针对“下一次为什么上线”；先用少量记录或手动清单验证，不急着做完整任务引擎。 |
-| 通关历史自动统计 | 先核实数据再做 | 当前周边任务状态会消失或重置，不能从暂时加载记录补造历史。需要真实事件或明确手动确认。 |
-| 批量出售、重做人物装备面板、完整新 UI | 可以等 Omega 试玩 | 官方已有直接重叠；旧版仍可有即时价值，但继续投入前先比较实际差异和交易风险。 |
-| 全套成长、职业技能、附魔和体素编辑重做 | 暂缓 | 与 Omega 的主要投入方向重叠，涉及平衡、存档和大量兼容维护，当前收益尚未证明。 |
-| 把 2019 区域解锁 Mod 装到当前游戏 | 不做 | 当前是 2013 Alpha，问题与程序都不同。2019 的现成方案不能直接解决本地需求。 |
-| 重写引擎、渲染、全世界生成、复杂寻路 | 暂不投入 | 工程跨度远超当前体验修补；应先确认官方版本能否满足目标。 |
-| 营地、村民职业、生产链和防御 | 保留方向，先别整套开工 | 这可能形成独特的长期目标，但接口和持久化成本高；只在明确想玩这类过程时验证一个最小循环。 |
+| The five current items' clear bugs, missing glyphs, misrecognition, wrong points, mis-operations | Do the necessary fixes | Directly improves the version being played now; fix in minimal scope and use the existing manager. |
+| Small documentation and readability adjustments | Do them if there is a real pain point | Cheap and immediately useful; confirm the vanilla operations are not obscured or misled. |
+| Further potion tier/price tuning | Record first, decide later | A dynamic scheme exists but lacks long-term balance evidence; do not delete it just because the new version has alchemy, and do not flatten the crafting value for convenience. |
+| Permanent adventure records, personal challenges, staged goals | The small prototype most worth verifying | Aims at "why log in next time"; verify with a few records or a manual list first, no rush into a full quest engine. |
+| Automatic clear-history statistics | Verify the data first | The current nearby quest states vanish or reset; history cannot be fabricated from temporarily loaded records. Real events or explicit manual confirmation are needed. |
+| Bulk selling, redoing the character equipment panel, a full new UI | Can wait for the Omega playtest | The officials already have direct overlap; the old version can still have immediate value, but compare the real differences and trade risks before investing more. |
+| Full growth/skill/enchant/voxel-edit rewrites | Postpone | Overlaps Omega's main investment direction, involving balance, saves, and heavy compatibility maintenance; the current payoff is unproven. |
+| Installing a 2019 region-unlock mod into the current game | Do not | The current game is the 2013 Alpha — a different problem and program. 2019's ready-made solutions do not meet the local need. |
+| Rewriting the engine, rendering, whole-world generation, complex pathing | Do not invest yet | Far beyond the current experience patches; first confirm whether the official version can meet the goals. |
+| Camps, villager jobs, production chains, and defense | Keep the direction, do not start the whole build | Could form a unique long-term goal, but the interface and persistence costs are high; verify one minimal loop only if this process is genuinely wanted. |
 
-上述建议以当前正在申请 Omega 试玩、仍继续玩 Alpha 为前提。若实际决定长期留在 Alpha，已有相似官方功能不能否定本地改进价值；若试玩后愿意转向 Omega，则应减少只能服务旧版本的大工程。没有资料支持假设“马上能拿到资格”或“很快正式发布”，因此也不应无限期搁置所有小修复。
+The above assumes the current state of applying for Omega access while still playing Alpha. If the decision is to stay on Alpha long-term, existing similar official features do not negate the local improvements' value; if after playtesting you would rather move to Omega, the big projects serving only the old version should shrink. No data supports assuming "access will come soon" or "a formal release is near", so all small fixes should not be shelved indefinitely either.
 
-## 后期缺少目标，真正还需要验证什么
+## Lacking late-game goals: what really needs verifying
 
-10 月 10 日一名约 24 小时、更新到 32 级的联机测试者肯定了新怪和任务，但表示之后新的探索理由减少，找到几个好地牢后容易转为传送循环刷。这个反馈直接对应后期重复的担忧，但只是早期 Beta 的一个具体样本；它早于法师塔、Gnoll 聚落和六类 Spirit Cube 效果，不能用来证明 10 月 25 日所有玩家仍有同样体验。[S19]
+On October 10, a multiplayer tester with about 24 hours and level 32 praised the new monsters and quests but said reasons to explore anew dwindled afterwards, and after finding a few good dungeons it easily became a teleport-loop grind. This feedback directly matches the late-game repetition worry, but it is one specific early-Beta sample; it predates the mage towers, Gnoll settlements, and the six Spirit Cube effects, and cannot prove every player on October 25 still feels the same. [S19]
 
-更稳妥的判断是：Omega 已恢复持续成长并增加探索、制作和构筑内容，公开资料仍不足以确认后期目标已经解决。更多经验等级可以延长数值进度，更多地牢可以延长首次发现，更多装备效果可以增加搭配；这些都需要观察玩家是否真的产生不同计划。
+The safer judgment: Omega has restored continuous growth and added exploration, crafting, and build content, but the public material is still insufficient to confirm the late-game goal problem is solved. More experience levels can stretch numeric progress; more dungeons can stretch first discoveries; more equipment effects can add combinations — all of these still need watching whether players actually produce different plans.
 
-一个有用的目标最好同时回答三件事：我为什么想去、这次需要怎样准备、完成后下一次选择有什么变化。只把“击杀若干只”写进日志，可能只是增加待办；只给强装备，可能让后续战斗更快失去挑战；只显示全图百分比，可能将自由探索变成清理图标。
+A useful goal should ideally answer three things at once: why I want to go, how to prepare this time, and what changes in the next choice after finishing. Just writing "kill N of X" into a journal may only add chores; only handing out strong gear may make later fights lose challenge faster; only showing a whole-map percentage may turn free exploration into icon clearing.
 
-因此最小验证可以先不写新 DLL：选三次出征，各给一个自选目标，例如第一次发现新类型地点、挑战先前打不过的一处目标、收集一组自己在意的宠物或装备。允许放弃和更换，不设置每日打卡。结束后记录是否愿意再去，以及哪一段过程令人期待。
+So the minimal verification can skip writing a new DLL: pick three outings, each with a self-chosen goal — say, first discovering a new place type, challenging a target previously unbeatable, or collecting a set of pets or gear you care about. Allow abandoning and swapping; no daily check-ins. Afterwards, record whether you want to go again and which part felt engaging.
 
-如果这种简单安排也无法提高继续玩的意愿，正式目标系统不应直接开工，应先分辨是否已经厌倦战斗、掉落或赶路。如果有效，再考虑独立的冒险日志 Mod，优先记录真实首次发现、实际完成或玩家手动确认，保留角色与世界边界，不从距离、颜色或地点名字猜测完成状态。
+If even this simple arrangement does not raise the desire to keep playing, a formal goal system should not start; first distinguish whether combat, drops, or travel itself is what you are tired of. If it works, then consider a standalone adventure-journal mod — prioritizing real first discoveries, actual completions, or manual confirmation, keeping character and world boundaries, not guessing completion from distance, color, or place names.
 
-营地方向的价值不同：它可能让冒险带回的资源改变一个持续存在的地方，再通过补给影响下一次出征。真正要验证的是资源、选择与后果，而非界面是否显示村民数量。可以先用“带回一种材料，换一次有意义的整备”测试兴趣；这只是候选设计，不代表现有接口已能支持村民调度、生产或防御。
+The camp direction differs in value: it could let resources brought back from adventures change a persistent place, then influence the next outing through resupply. What needs verifying is resources, choice, and consequence — not whether the UI shows a villager count. Start by testing interest with "bring back one material, exchange it for one meaningful refit"; that is just a candidate design, not a claim the existing interfaces already support villager scheduling, production, or defense.
 
-## 复用前必须分清的兼容边界
+## Compatibility boundaries to separate before reuse
 
-当前 Alpha 工程使用已固定的 Qube Loader、32 位程序结构及本地逆向证据；2019 Mod 和 Omega 的社区加载器属于不同版本路线。可借鉴交互方案或在许可允许时适配源码，不能把 DLL、地址、数据布局和存档直接混用。
+The current Alpha project uses the pinned Qube Loader, the 32-bit program structure, and local reverse-engineering evidence; 2019 mods and Omega's community loaders are different version lines. Interaction ideas can be borrowed, or source adapted where the license allows — but DLLs, addresses, data layouts, and saves must never be mixed.
 
-Omega 的官方测试包含服务器架构调整。一个只修改客户端资源的加载器，并不自动具有改服务器任务、经济、成长或持久世界状态的能力。需要真正的玩法能力时，要先查它公开的接口及授权范围；不要用覆盖校验或强写未知版本来弥补接口缺失。[S20]
+Omega's official testing includes server-architecture changes. A loader that only modifies client resources does not automatically gain the ability to change server quests, economy, growth, or persistent world state. When real gameplay capability is needed, first check its public interfaces and authorization; do not paper over missing interfaces by overriding checks or hard-writing unknown versions. [S20]
 
-已有上游来源和当前各模块 SOURCES.md 应当是复用入口。对现成项目至少核对：适用游戏构建、所需框架、许可证、安装文件归属、是否占用相同钩子，以及存档与数据边界。检查后才能决定是直接用、借鉴、适配，还是为了明确缺口自行实现。
+The existing upstream sources and each module's SOURCES.md should be the reuse entry. For a ready-made project, at minimum check: the applicable game build, the required framework, the license, which files the install owns, whether it occupies the same hooks, and the save/data boundaries. Only after checking can you decide to use directly, borrow, adapt, or implement yourself for a clear gap.
 
-### 已找到的现成方案
+### Ready-made options found
 
-没有查到一套已经在本机验证、可以整体替换当前五个 Mod 的方案。下面是已核到的可用入口；“可下载候选”不代表已经通过本地组合验收。
+No option was found that is verified locally and can wholesale replace the current five mods. Below are the verified entry points; "downloadable candidate" does not mean it passed local combination acceptance.
 
-| 来源与目标版本 | 已核实能力 | 如何减少重复开发 |
+| Source and target version | Verified capability | How it reduces duplicate development |
 | --- | --- | --- |
-| Omega 社区 CWOML | GPL-3.0；v0.3.1 于北京时间 2026-10-18 发布，Release 针对游戏 0.1.4 修复。当前支持客户端文字、提示和资源等，代码 Mod 尚不支持。[S21] | 转到 Omega 后先评估现成资源加载框架；不能加载本地 Alpha DLL，也未证明兼容最新 v0.1.12。应用版本与文档中的 feature level 是两套编号。 |
-| CWOML 示例 | 发布附件含 Pet Food Labels 与 Rupees，分别提供宠物食物提示和钱币资源替换。[S22] | 宠物食物提示有明确可下载候选，先试候选。它是第三方 Mod，不能写成官方原生功能。 |
-| Alpha RegionReveal | MIT；v1.1.0 支持特定 Alpha 构建，提供代理 DLL 与 Classic Launcher 入口；标出已生成区域标签、到访及任务 Boss 状态。[S23] | 只要原地图标签时先评估现成包。本项目已经参考其数据研究，另外实现中文列表、难度和导航；它不能直接替代全部探索功能。 |
-| Alpha Item Scale Mod | MIT；v1.1.0 面向高分辨率物品图标溢出，要求 Classic Launcher v1.5。[S24] | 以后遇到同类图标问题先查它；不能把它当背包分类替代品，Qube 与本地绘制的集成尚未验证。 |
-| 现有 Qube 与逆向资料 | Qube 已提供当前 SDK、界面、配置和存储；CubeWorld-Reversal 是辅助资料，不能直接编译为完整游戏。[S25] | 新 Mod 继续使用项目已有基础设施，不另建加载器或日常管理入口。偏移仍按本地准确构建核实。 |
-| Building Mod legacy | 有 Alpha 方块操作和区块保存参考；仓库已归档，未确认明确代码许可证，且总仓库的最新 Release 属于 2019。[S26] | 先研究可行路径，不直接复制未获许可代码或安装错误版本。放方块不等于资源经济、村民分工或完整营地经营。 |
-| 2019 CubeMegaMod 与 PyroProgression | 前者有商店药水、金币用途、击杀目标等，仓库 MIT；后者有经验与成长改动，需匹配其说明的加载器和组合，未确认明确许可。[S27] | 可参考玩法与兼容教训。二进制不适用于本项目 Alpha 或 Omega，不能因为功能名字相同就直接安装。 |
+| Omega community CWOML | GPL-3.0; v0.3.1 released 2026-10-18 Beijing time, with the Release fixing game 0.1.4. Currently supports client text, hints, and resources; code mods are not yet supported. [S21] | When moving to Omega, evaluate the ready-made resource-loader framework first; it cannot load the local Alpha DLLs, and compatibility with the latest v0.1.12 is unproven. The game version and the docs' feature level are two different numbering schemes. |
+| CWOML examples | The release attachments include Pet Food Labels and Rupees, providing pet-food hints and coin-resource replacement. [S22] | Pet-food hints have a clear downloadable candidate — try it first. It is a third-party mod and must not be written up as an official native feature. |
+| Alpha RegionReveal | MIT; v1.1.0 supports specific Alpha builds, providing a proxy DLL and Classic Launcher entry; labels generated regions, visited places, and quest-boss states. [S23] | If only the original map labels are wanted, evaluate this package first. This project already referenced its data research and separately implemented the Chinese list, difficulty, and navigation; it cannot replace the whole explorer. |
+| Alpha Item Scale Mod | MIT; v1.1.0 targets high-resolution item-icon overflow and requires Classic Launcher v1.5. [S24] | Check it first when the same icon issue appears; it is not an Inventory Sort replacement, and the Qube/local-drawing integration is unverified. |
+| The existing Qube and reverse-engineering material | Qube already provides the current SDK, UI, config, and storage; CubeWorld-Reversal is auxiliary material and cannot be compiled into a complete game. [S25] | New mods keep using the project's existing infrastructure; do not build a second loader or daily management entry. Offsets are still verified against the exact local build. |
+| Building Mod legacy | Has Alpha block operations and chunk-save references; the repository is archived, with no confirmed explicit code license, and the overall repo's latest Release is for 2019. [S26] | Study the viable path first; do not copy unlicensed code or install the wrong version. Placing blocks is not a resource economy, villager division of labor, or a full camp economy. |
+| 2019 CubeMegaMod and PyroProgression | The former has shop potions, coin uses, kill targets, and an MIT repo; the latter has experience and growth changes, needs the loader and combinations stated in its docs, license unconfirmed. [S27] | Reference the gameplay and compatibility lessons. The binaries do not fit this project's Alpha or Omega — do not install just because the feature names match. |
 
-优先复用的收益不只在少写代码，也包括沿用已有测试与数据边界。反过来，换一套加载器来修一个小显示问题，可能增加比局部修复更多的冲突和维护成本。每次应比较完整使用成本，不预设“现成”一定更便宜，或“自研”一定更好。
+The payoff of prioritized reuse is not only writing less code; it also inherits existing tests and data boundaries. Conversely, swapping loaders to fix a small display issue may add more conflicts and maintenance than the local fix. Each time, compare the full cost of use — do not presuppose that "ready-made" is always cheaper, or that "in-house" is always better.
 
-## 试玩 Omega 后的最小核对路线
+## Minimal check route after playtesting Omega
 
-不需要为每个功能做长测试。用一名角色完成几次真实出征，优先核对会影响下一笔开发投入的问题。
+No long tests are needed per feature. Use one character for a few real outings, prioritizing the questions that affect the next development investment.
 
-| 实际行动 | 要解决的决策 |
+| Actual action | Decision it resolves |
 | --- | --- |
-| 去过两三个村庄后找回其中一处，离开地图继续走 | 最近村庄定位是否已经够用？还是否需要常驻方向与中文用途说明？ |
-| 查看道具店和炼金菜单，完成买瓶、制药、补给、战斗 | 成品药可否购买？炼金成长是否有趣？商店便利会不会绕过值得保留的过程？ |
-| 收一包战利品，比较装备并批量出售 | 新版背包是否真的解决分类与找物问题？不要把有批量卖出直接当作一切都好用。 |
-| 夜间打开大地图，切换界面尺寸与光照设置 | 是否仍有独立的夜间地图补光需求？ |
-| 跨区域并继续战斗，训练一项技能，试不同装备效果 | 成长能否随行、技能是否改变打法、构筑是否带来新选择？ |
-| 中期选一个新目标，结束后写下下一次想做的事 | 内容增加有没有转成长期计划，而非只提高刷取效率？ |
+| After visiting two or three villages, find one of them again and keep walking with the map closed | Is the nearest-village locating enough? Is a persistent direction arrow and Chinese purpose notes still needed? |
+| Check the item shop and alchemy menu; complete buying bottles, brewing, resupply, and combat | Can finished potions be bought? Is alchemy growth fun? Would shop convenience bypass a process worth keeping? |
+| Collect a bag of loot, compare gear, and bulk-sell | Does the new inventory really solve the sorting and finding problem? Do not treat having bulk-sell as everything being good. |
+| Open the world map at night, switching UI sizes and lighting settings | Is there still a standalone night map-lighting need? |
+| Cross a region and keep fighting, train one skill, try different equipment effects | Does growth travel with you, do skills change tactics, do builds bring new choices? |
+| Pick a new goal mid-way and write down what you want to do next after finishing | Has content growth turned into long-term plans, not just higher grind efficiency? |
 
-不同等级、职业、单人和联机体验可能不同，记录实际条件即可，不把几小时试玩概括为全版本结论。当前 Alpha 存档也没有被证实能迁移到 Omega，不能因为两者同名就默认兼容。
+Different levels, classes, solo, and multiplayer may differ; record the actual conditions and do not generalize a few hours of play into a whole-version conclusion. Nor has the current Alpha save been proven migratable to Omega — the shared name does not mean default compatibility.
 
-## 以后每次开工前的提醒方式
+## The reminder format before each future start
 
-新 Mod 或玩法大扩展前，先给出一段简短判断：要解决的实际痛点是什么；官方或现成 Mod 是否已经解决；当前版本能否直接使用；建议做、等还是暂不投入；若继续，最小能验证收益的范围是什么。
+Before a new mod or a big gameplay expansion, give a short judgment: what real pain point is being solved; whether the officials or an existing mod already solved it; whether it can be used directly in the current version; do / wait / do not invest yet; and if continuing, the minimal scope that can verify the payoff.
 
-例如：“这个需求解决回城后逐件卖装备的负担。Omega 已有跨页批量出售，当前 Alpha 尚不能直接使用；我们的背包分类已能保留操作位置。建议先试玩新版交易，再决定是否为旧版增加交易钩子；若仍长期玩 Alpha，再单独实现并验证误卖保护。”
+For example: "This need removes the chore of selling gear piece by piece after returning to town. Omega has cross-page bulk selling, not usable in the current Alpha directly; our Inventory Sort already preserves the operation positions. Recommendation: playtest the new trading first, then decide whether to add a trade hook for the old version; if Alpha remains the long-term game, implement it separately with mis-sale protection verified."
 
-普通 bug 修复不重复走一轮研究与确认。已经有授权且目标明确的修复继续推进；发现替代方案或明显重叠时先提醒，不擅自撤销用户的选择，不自动安装工具或切换版本。本次没有订阅周期监控，也没有修改全局记忆。
+Ordinary bug fixes do not repeat a round of research and confirmation. Fixes that are authorized and clearly scoped continue; when an alternative or clear overlap appears, remind first — do not cancel the user's choice on your own, do not auto-install tools or switch versions. This pass subscribed to no periodic monitoring and modified no global memory.
 
-## 来源与检查范围
+## Sources and check scope
 
-以下访问日期均为 2026-10-25。官方页面中的日期按页面署名记录；发布于 UTC 的工具版本如涉及本地日期，应转换为 Asia/Shanghai。
+All access dates below are 2026-10-25. Dates on official pages follow the page's own byline; tool versions published in UTC, where local dates matter, should be converted to Asia/Shanghai.
 
-- [S1] [Wollay 官方首页](https://wollay.com/)：Omega 是单独版本；首页入口与最新博客。
-- [S2] [官方补丁索引](https://wollay.com/patch-notes/)：最新索引 v0.1.12。具体 0.1.12 页未读取成功，不据其标题补造机制。
-- [S3] [GameStar 2013 Alpha 成长攻略](https://www.gamestar.de/artikel/cube-world-alpha-guide-einstiegshilfen-tipps-tricks-und-loesungen,3026211,seite3.html)：升级、技能点与旅行技能。已在本对话前一轮读取。
-- [S4] [2013 Alpha 实玩评述](https://jayisgames.com/review/cube-world.php)：探索、制作与当时刷怪和目标问题。已在本对话前一轮读取。
-- [S5] [旧版 Cube World 官方介绍](https://www.cubeworld.com/)：2019 的神器与区域装备成长。已在本对话前一轮读取。
-- [S6] [2023-05-25 Omega 项目公告](https://wollay.com/blog/new-blog-and-new-project-cube-world-omega/)：新引擎、模型及当时的成长计划。
-- [S7] [2026-10-15 技能训练提示与移动轮盘](https://wollay.com/blog/skill-progress-and-moving-with-the-ring-menu/)：已交付日常操作变化。
-- [S8] [2026-10-12 战士天赋补丁](https://wollay.com/patch-notes/2026-10-12-warrior-voxel-editor-and-tooltips/)：技能里程碑。
-- [S9] [2026-10-10 早期 Beta 玩家汇总](https://www.reddit.com/r/CubeWorld/comments/1x2atdh/info_regarding_the_closed_community_beta_tests/)：无区域锁、使用成长等玩家证据，部分当时功能状态已经过时。
-- [S10] [2026-10-24 v0.1.11](https://wollay.com/patch-notes/2026-10-24-0-1-11-character-view-and-spirit-cube-effects/)：角色总览与六类立方体效果，仍需平衡。
-- [S11] [2026-10-16 v0.1.3](https://wollay.com/patch-notes/2026-10-16-0-1-3-talent-progress-and-pickup-improvements/)：两条训练经验、部分拾取与限制提示。
-- [S12] [2026-10-13 地图与批量出售](https://wollay.com/patch-notes/2026-10-13-map-navigation-bulk-selling-and-bug-fixes/)：最近村庄、交易、物品提示和拾取。
-- [S13] [2026-10-10 界面选项](https://wollay.com/blog/interface-options-and-clearer-combat/)：大小、倾斜、晃动与 Bloom。
-- [S14] [2026-10-12 体素编辑与详情](https://wollay.com/patch-notes/2026-10-12-warrior-voxel-editor-and-tooltips/)：模型编辑与详情可读性；与 S8 是同一来源，合计摘要控制在来源限制内。
-- [S15] [2026-10-19 法师塔与室内](https://wollay.com/blog/mage-towers-and-furnished-interiors/)：新增探索地点与家具。
-- [S16] [2026-10-21 Gnoll 聚落与 HUD](https://wollay.com/blog/gnoll-settlements-and-a-clearer-hud/)：报警瞭望兵、人物宠物经验显示。
-- [S17] [2023-07-30 世界生成](https://wollay.com/blog/new-world-generation/)：地图结构生成思路及未证明实装的未来设想。
-- [S18] [2026-10-07 潜行、训练与药水修复](https://wollay.com/patch-notes/2026-10-07-stealth-skill-training-and-bug-fixes/)：药水确实实装，但不能证明成品药售卖情况。
-- [S19] [2026-10-10 约 24 小时、32 级测试者 AMA](https://www.reddit.com/r/CubeWorld/comments/1x2ai9i/hit_level_30_in_the_cubeworld_omega_beta_ama/)：后期重复与炼金成长的早期个案。
-- [S20] [2026-10-11 服务器架构测试](https://wollay.com/blog/beta-server-architecture-test/)：当前 Beta 的服务端变化。
-- [S21] [CWOML 仓库](https://github.com/DanBagh/Cube-World-Omega-Mod-Loader)与[v0.3.1 Release](https://github.com/DanBagh/Cube-World-Omega-Mod-Loader/releases/tag/v0.3.1)：社区加载器许可、能力、针对的游戏版本与发布时间。
-- [S22] [CWOML 示例](https://github.com/DanBagh/Cube-World-Omega-Mod-Loader/tree/main/example_mods)：第三方资源与提示示例；不是官方功能清单。
-- [S23] [RegionReveal](https://github.com/Jovinull/RegionReveal)与[v1.1.0](https://github.com/Jovinull/RegionReveal/releases/tag/v1.1.0)：Alpha 范围与版本入口；本地探索 SOURCES.md 也记录其参考关系。
-- [S24] [Item Scale Mod](https://github.com/SirLefti/Cube-World-Item-Scale-Mod)与[v1.1.0](https://github.com/SirLefti/Cube-World-Item-Scale-Mod/releases/tag/v1.1.0)：图标缩放，不能替代物品分区。
-- [S25] [Qube-Loader](https://github.com/qad3n/Qube-Loader)与[CubeWorld-Reversal](https://github.com/qad3n/CubeWorld-Reversal)：已有公共框架和逆向资料；本地固定提交见 navigation/README.md。
-- [S26] [Building Mod legacy](https://github.com/coremaze/Cube-World-Building-Mod/tree/legacy)：建造参考与归档边界，未将许可不明视为可自由复制。
-- [S27] [CubeMegaMod](https://github.com/gijsgroenewegen/CubeMegaMod)与[PyroProgression](https://github.com/gijsgroenewegen/PyroProgression)：2019 版本路线与能力；不能跨游戏版本混用。
+- [S1] [Wollay official homepage](https://wollay.com/): Omega is a separate version; the homepage entry and the latest blog.
+- [S2] [Official patch index](https://wollay.com/patch-notes/): latest index v0.1.12. The specific 0.1.12 page did not load; no mechanics are fabricated from its title.
+- [S3] [GameStar 2013 Alpha progression guide](https://www.gamestar.de/artikel/cube-world-alpha-guide-einstiegshilfen-tipps-tricks-und-loesungen,3026211,seite3.html): leveling, skill points, and travel skills. Read in this conversation's earlier round.
+- [S4] [2013 Alpha hands-on review](https://jayisgames.com/review/cube-world.php): exploration, crafting, and the grinding/goals issues of the time. Read in this conversation's earlier round.
+- [S5] [Old official Cube World site](https://www.cubeworld.com/): 2019's artifacts and regional equipment progression. Read in this conversation's earlier round.
+- [S6] [2023-05-25 Omega project announcement](https://wollay.com/blog/new-blog-and-new-project-cube-world-omega/): the new engine, models, and the growth plans of the time.
+- [S7] [2026-10-15 skill-training hints and the moving ring menu](https://wollay.com/blog/skill-progress-and-moving-with-the-ring-menu/): delivered daily-operation changes.
+- [S8] [2026-10-12 warrior talent patch](https://wollay.com/patch-notes/2026-10-12-warrior-voxel-editor-and-tooltips/): skill milestones.
+- [S9] [2026-10-10 early Beta player summary](https://www.reddit.com/r/CubeWorld/comments/1x2atdh/info_regarding_the_closed_community_beta_tests/): player evidence of no region lock and use-based growth; some feature states of the time are outdated.
+- [S10] [2026-10-24 v0.1.11](https://wollay.com/patch-notes/2026-10-24-0-1-11-character-view-and-spirit-cube-effects/): the character overview and the six cube effects, balance still pending.
+- [S11] [2026-10-16 v0.1.3](https://wollay.com/patch-notes/2026-10-16-0-1-3-talent-progress-and-pickup-improvements/): two training-experience bars, partial pickup, and limit hints.
+- [S12] [2026-10-13 map and bulk selling](https://wollay.com/patch-notes/2026-10-13-map-navigation-bulk-selling-and-bug-fixes/): nearest villages, trading, item hints, and pickup.
+- [S13] [2026-10-10 interface options](https://wollay.com/blog/interface-options-and-clearer-combat/): size, tilt, sway, and Bloom.
+- [S14] [2026-10-12 voxel editing and details](https://wollay.com/patch-notes/2026-10-12-warrior-voxel-editor-and-tooltips/): model editing and detail readability; the same source as S8, with the combined summary kept within the source's limits.
+- [S15] [2026-10-19 mage towers and interiors](https://wollay.com/blog/mage-towers-and-furnished-interiors/): new exploration places and furniture.
+- [S16] [2026-10-21 Gnoll settlements and the HUD](https://wollay.com/blog/gnoll-settlements-and-a-clearer-hud/): alarm watchmen, character/pet experience display.
+- [S17] [2023-07-30 world generation](https://wollay.com/blog/new-world-generation/): map-structure generation ideas and future visions not proven implemented.
+- [S18] [2026-10-07 stealth, training, and potion fixes](https://wollay.com/patch-notes/2026-10-07-stealth-skill-training-and-bug-fixes/): potions are indeed implemented, but finished-potion sales are unproven.
+- [S19] [2026-10-10 ~24-hour level-32 tester AMA](https://www.reddit.com/r/CubeWorld/comments/1x2ai9i/hit_level_30_in_the_cubeworld_omega_beta_ama/): an early case of late-game repetition and alchemy growth.
+- [S20] [2026-10-11 server architecture test](https://wollay.com/blog/beta-server-architecture-test/): the current Beta's server-side changes.
+- [S21] [CWOML repository](https://github.com/DanBagh/Cube-World-Omega-Mod-Loader) and [v0.3.1 Release](https://github.com/DanBagh/Cube-World-Omega-Mod-Loader/releases/tag/v0.3.1): the community loader's license, capabilities, target game version, and release date.
+- [S22] [CWOML examples](https://github.com/DanBagh/Cube-World-Omega-Mod-Loader/tree/main/example_mods): third-party resource and hint examples; not an official feature list.
+- [S23] [RegionReveal](https://github.com/Jovinull/RegionReveal) and [v1.1.0](https://github.com/Jovinull/RegionReveal/releases/tag/v1.1.0): the Alpha scope and version entry; the local explorer's SOURCES.md also records the reference.
+- [S24] [Item Scale Mod](https://github.com/SirLefti/Cube-World-Item-Scale-Mod) and [v1.1.0](https://github.com/SirLefti/Cube-World-Item-Scale-Mod/releases/tag/v1.1.0): icon scaling; not a replacement for item sections.
+- [S25] [Qube-Loader](https://github.com/qad3n/Qube-Loader) and [CubeWorld-Reversal](https://github.com/qad3n/CubeWorld-Reversal): the existing shared framework and reverse-engineering material; the local pinned commits are in navigation/README.md.
+- [S26] [Building Mod legacy](https://github.com/coremaze/Cube-World-Building-Mod/tree/legacy): building references and archive boundaries; an unclear license is not treated as free-to-copy.
+- [S27] [CubeMegaMod](https://github.com/gijsgroenewegen/CubeMegaMod) and [PyroProgression](https://github.com/gijsgroenewegen/PyroProgression): the 2019 version line and capabilities; not to be mixed across game versions.
 
-本地资料：根目录 AGENTS.md、README.md、MODS.md、navigation/README.md、potion_shop/README.md、region_explorer/README.md、map_light/README.md、inventory_sort/README.md 与管理器说明。核查了 Git 状态，保留原有未提交工作；没有运行、更新或安装游戏与 Mod，没有完成 Omega 亲自试玩。
+Local material: the root AGENTS.md, README.md, MODS.md, navigation/README.md, potion_shop/README.md, region_explorer/README.md, map_light/README.md, inventory_sort/README.md, and the manager notes. The Git status was checked and the existing uncommitted work kept; no game or mod was run, updated, or installed, and Omega was not personally playtested.
 
-方法参考 hv-analysis 的纵向版本演变与横向替代比较；研究范围按当前 Mod 决策收敛。公开资料不能替代具体版本的真实操作与长期游玩，本清单应在开始相关新功能前刷新。
+Method reference: hv-analysis's longitudinal version-evolution and horizontal alternative comparison; the research scope converges on the current mod decisions. Public material cannot replace real operation and long play of the specific version, and this list should be refreshed before starting related new features.

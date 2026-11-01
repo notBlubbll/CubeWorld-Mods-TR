@@ -1,13 +1,13 @@
-# 大地图光照的本地证据
+# Local evidence for the world-map lighting
 
-依据是本机已核实的 2013 Alpha `playtest/Cube.exe` 与本项目保存的 [CubeWorld-Reversal](https://github.com/qad3n/CubeWorld-Reversal) 代码。恢复名称属于分析辅助，偏移与调用约定以实际客户端字节核对；恢复代码不能当作可编译的完整原版源码。
+The basis is this machine's verified 2013 Alpha `playtest/Cube.exe` and the [CubeWorld-Reversal](https://github.com/qad3n/CubeWorld-Reversal) code kept by this project. The recovered names are analysis aids; the offsets and calling conventions were verified against the actual client bytes; the recovered code is not a compilable full vanilla source.
 
-- 客户端 SHA256：`84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`。
-- `external/CubeWorld-Reversal/cube/control/GameController.cpp` 中，原生帧绘制入口为 `0x4AC260`；原版以控制器 `+0x800440` 的时间计算日夜系数，再调用光照设置。大地图标志为 `+0x8006E4`，主光照对象指针为 `+0x800580`。
-- 主调用点 `0x4AD957` 调用 `0x448170`，四个指针分别为漫反射、环境色、方向、填充色；`thiscall`，被调用者 `ret 0x10`。原函数读取参数、在本地栈归一化方向，再由原生 Direct3D 设备上传常量。
-- M 打开时，帧绘制进入 `0x5FC1B0` 的世界地图绘制后返回；恢复文件误将这一函数命名为 `GameController_processNetworkTick`。原生小地图也会调用该函数，因此模组另核对完整 M 地图标志和主光照对象。
-- 原生大地图地标绘制一段（约 `0x5FFBB0` 附近；恢复源码约 91435 行）传入漫反射 `{1,1,1,1}`、环境色 `{.2,.3,.4,1}`、方向 `{0,.5,-1}`、填充色 `{.4,.4,.4,1}`。模组复用这组参数；“地形会更亮”是依据渲染路径的工程判断，仍需实际画面验收。
-- 运行时校验 PE 时间戳 `0x51EA955E`、SizeOfImage `0x3BC000`、入口 RVA `0x28E1E0`，并校验 `0x448170`、`0x448274`、`0x4AD931` 和 `0x4AD957` 的原始字节。构建期反汇编保存在本机 `build/map-light-native-disassembly.txt`、`build/map-light-main-call.txt`。
-- 现有药水商店钩子在 `0x44AD30`、`0x4C76E0`；导航与区域探索不修改该光照函数。这只证明已知挂接点不重叠，不能代替游戏内兼容验收。
+- Client SHA256: `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`.
+- In `external/CubeWorld-Reversal/cube/control/GameController.cpp`, the native frame-draw entry is `0x4AC260`; vanilla computes the day/night factor from the controller's `+0x800440` clock and then calls the lighting setup. The world-map flag is `+0x8006E4`; the main lighting object pointer is `+0x800580`.
+- The main call site `0x4AD957` calls `0x448170` with four pointers — diffuse, ambient, direction, and fill color; `thiscall`, the callee doing `ret 0x10`. The original function reads the arguments, normalizes the direction on its local stack, then uploads the constants through the native Direct3D device.
+- With M open, the frame draw returns after the world-map drawing at `0x5FC1B0`; the recovered sources mis-name that function `GameController_processNetworkTick`. The native minimap also calls it, so the mod additionally checks the full M-map flag and the main lighting object.
+- The vanilla world-map landmark draw section (around `0x5FFBB0`; recovered source around line 91435) passes diffuse `{1,1,1,1}`, ambient `{.2,.3,.4,1}`, direction `{0,.5,-1}`, fill `{.4,.4,.4,1}`. The mod reuses this parameter set; "the terrain will be brighter" is an engineering judgment from the render path and still needs acceptance on the actual picture.
+- The runtime checks verify the PE timestamp `0x51EA955E`, SizeOfImage `0x3BC000`, entry RVA `0x28E1E0`, and the raw bytes of `0x448170`, `0x448274`, `0x4AD931`, and `0x4AD957`. The build-time disassembly is kept locally in `build/map-light-native-disassembly.txt` and `build/map-light-main-call.txt`.
+- The existing potion-shop hooks are at `0x44AD30` and `0x4C76E0`; Navigation and Region Explorer do not touch this lighting function. This only proves the known hook points do not overlap; it does not replace in-game compatibility acceptance.
 
-实现没有修改 `+0x800440`，没有改游戏保存内容，也不调用时间设置接口。只让原生光照函数在完整大地图打开时读取 DLL 自有的固定数组；关图后不再替换参数。初版不修改像素着色器、天空物件或太阳/月亮。
+The implementation does not modify `+0x800440`, changes nothing in the game's saved data, and calls no time-setting interfaces. It only makes the native lighting function read the DLL's own fixed array while the full world map is open; after the map closes, parameters are no longer swapped. The first version modifies no pixel shaders, sky objects, or sun/moon.

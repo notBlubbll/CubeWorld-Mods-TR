@@ -1,12 +1,12 @@
-# 首次源码发布核对
+# First Source Release Validation
 
-日期：2026-10-31。对象为本次公开源码副本，不是正式游戏目录或原开发目录。
+Date: 2026-10-31. The subject is this public source copy — not the formal game directory and not the original development directory.
 
-- 使用随仓库保留的依赖源码，在新的 `build/` 中成功完成 Visual Studio 2022 / Win32 / Release 配置和默认目标构建。独立模组、公共加载器及启动器均生成成功。
-- `Build-ModManager.ps1` 成功生成 Windows 模组管理器及副本内的本机快捷方式。没有修改原管理器入口。
-- 按 `BUILDING.md` 中命令运行 26 项 CTest，全部通过。依赖四份未公开背包现场样本的 `inventory_module_checks` 正常模式未运行；不将这项现场回放算作通过。
-- 发布范围的文件清单、第三方许可、常见密钥格式及本机私人标识做过检查。没有加入游戏本体、存档、资源包、字体、现场数据、日志或编译结果。
-- 游戏玩法模块和公共框架保留原逻辑。公开副本的本机路径替换为统一示例目录；对应的目标路径、来源校验和管理器显示同步替换，严格校验仍保留。预览和离线夹具使用合成标识，个人安装与补偿记录不公开。
-- 隐私清理后重新编译管理器、旅行检查、补偿工具、受限 QA 模块与预览器，26 项离线检查再次全部通过；26 份 PowerShell 脚本语法检查无错误，Python 语法和 JSON 结构检查通过。未安装或运行 QA 模块，未启动游戏。
+- Using the dependency sources kept in the repository, the Visual Studio 2022 / Win32 / Release configuration and the default targets were built successfully in a fresh `build/`. The standalone mods, the shared loader, and the launcher all built.
+- `Build-ModManager.ps1` successfully produced the Windows mod manager and the local shortcut inside the copy. The original manager entry points were not modified.
+- The 26 CTest cases from the command in `BUILDING.md` all passed. The normal mode of `inventory_module_checks`, which depends on four unpublished live inventory samples, was not run; that live replay is not counted as passing.
+- The release file inventory, the third-party licenses, the common key formats, and the local private identifiers were checked. The game itself, saves, asset packs, fonts, live data, logs, and build outputs were not added.
+- The gameplay modules and the shared framework keep their original logic. The local paths in the public copy were replaced with unified example directories; the matching target paths, source verification, and manager displays were updated in sync, and the strict verification remains. The previews and offline fixtures use synthetic identifiers; personal install and compensation records are not public.
+- After the privacy cleanup, the manager, the travel checks, the compensation tools, the restricted QA module, and the previewers were recompiled, and all 26 offline checks passed again; the syntax check of the 26 PowerShell scripts reported no errors, and the Python syntax and JSON structure checks passed. No QA module was installed or run, and the game was not started.
 
-这是源码打包、编译及离线检查；没有启动游戏，没有替代真实游戏内验收或所有社区模组的兼容测试。管理器的示例目录、固定散列与当前对外安装限制见 `BUILDING.md`。
+This was source packaging, compiling, and offline checking; the game was never started, and this does not replace real in-game acceptance or compatibility testing of every community mod. For the manager's example directories, fixed hashes, and the current installation restrictions, see `BUILDING.md`.

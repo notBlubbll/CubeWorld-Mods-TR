@@ -1,138 +1,138 @@
-# 2013 Alpha 装备掉落：原程序逆向核查
+# 2013 Alpha Equipment Drops: Original-Program Reverse-Engineering Verification
 
-核查日期：2026-10-27，Asia/Shanghai。对象为当前实验副本的 32 位 `Cube.exe`。本次只研究，不安装 Mod、不调整掉率、不调用正在运行的游戏，也不读取或修改存档。
+Verification date: 2026-10-27, Asia/Shanghai. The subject is the current playtest copy's 32-bit `Cube.exe`. This pass was research only: no mods installed, no drop rates adjusted, no running game invoked, and no saves read or modified.
 
-## 给玩家的结论
+## Conclusions for the player
 
-这版的装备获取由几条独立路径叠加，没有一个统一的“每个 Boss 随机抽四职业装备”的总开关。
+This version's equipment acquisition is a stack of independent paths; there is no single master switch of "each boss randomly draws from four class equipments".
 
-1. **敌人身上已经穿戴的装备**：收集非空候选后抽一件。普通情况约四分之一触发；带 `0x200` 首领标记时跳过这次失败判定，候选非空就掉一件。这里的四分之一不是本职业占比。
-2. **额外随机装备**：符合怪物类别的实体约十分之一触发，先分武器或防具，再从通用候选池抽一件。这条没有优先照顾玩家职业。
-3. **有效任务完成奖励**：满足任务与参与条件时，另生成一件按领奖角色职业筛选的装备，包含可通用的首饰；本地领奖路径直接加入背包。不是每次击杀任意首领都会重新发一次。
-4. **未鉴定物品**：符合另一组标记的实体有单独掉落条件；鉴定时调用通用装备池，也不保证本职业。
+1. **Equipment the enemy is already wearing**: after the non-empty candidates are collected, one is drawn. Normally this triggers about one quarter of the time; with the `0x200` boss flag, that failure roll is skipped — if the candidates are non-empty, one drops. This "one quarter" is not your class's share.
+2. **Extra random equipment**: entities matching the monster category trigger about one tenth of the time; it first splits weapon or armor, then draws one from the general candidate pools. This path does not favor the player's class.
+3. **Valid quest-completion rewards**: when the quest and participation conditions are met, an extra piece filtered by the claiming character's class is generated, including universal jewelry; the local claiming path adds it straight to the bag. It is not re-issued for every arbitrary boss kill.
+4. **Unidentified items**: entities matching another set of flags have their own drop condition; identification calls the general equipment pools and does not guarantee your class either.
 
-因此，“打不同职业 Boss 却拿到自己的稀有装备”完全可能：额外随机装备与任务奖励都可以解释。反过来，名叫 Boss、体型巨大或者很难打，都不能单独证明它身上有可掉装备。
+So "fighting an off-class boss but getting your own rare gear" is entirely possible: both the extra random equipment and the quest reward can explain it. Conversely, being named Boss, being huge, or being hard to kill does not by itself prove it has droppable equipment.
 
-能为后续只读情报功能提供可靠依据的是：**识别具体实体、检查首领标记，读取它当前实际穿戴的候选装备、等级与品质**。不能仅凭名字给它编一张固定神器掉落表。
+What can give later read-only intel features a reliable basis is: **identifying the specific entity, checking the boss flag, and reading its currently worn candidate equipment, levels, and quality**. A fixed signature-drop table cannot be invented from the name alone.
 
-## 核查方法与适用范围
+## Verification method and scope
 
-以本机程序机器指令为准，恢复代码只用于定位。上游恢复工程不是原作者源码，一些函数名和函数体存在明显错误。
+The machine instructions of the local program are authoritative; the recovered code is used only for locating things. The upstream recovery project is not the original author's source, and some function names and bodies are plainly wrong.
 
-- `Cube.exe` SHA-256：`84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`。
-- `MSVCR110.dll` SHA-256：`B30160E759115E24425B9BCDF606EF6EBCE4657487525EDE7F1AC40B90FF7E49`。
-- 上游 CubeWorld-Reversal 提交：`e6e906e4b2644806ef19c2e1f12ebc636c347f7c`。
-- 不适用于 2019 Steam 或 Omega；专用服务器程序与联机权威端没有在本次分别验证。
+- `Cube.exe` SHA-256: `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`.
+- `MSVCR110.dll` SHA-256: `B30160E759115E24425B9BCDF606EF6EBCE4657487525EDE7F1AC40B90FF7E49`.
+- Upstream CubeWorld-Reversal commit: `e6e906e4b2644806ef19c2e1f12ebc636c347f7c`.
+- Not applicable to 2019 Steam or Omega; the dedicated server program and the multiplayer authority side were not separately verified this time.
 
-具体验证：
+Concrete verification:
 
-| 项目 | 实际覆盖 |
+| Item | Actual coverage |
 |---|---|
-| 原始武器、防具生成指令 | 10,000 组输入，涵盖通用池及四职业池 |
-| 生成时每一个候选 | 70,000 次字段比较 |
-| 原始品质生成指令 | 120,000 组输入，比较返回值、随机数状态与消耗次数 |
-| 版本拒绝 | 改动一个字节的隔离样本被散列校验拒绝，未执行复制指令 |
-| 名称前缀 | 从品质跳转表和种子跳转表恢复 5×10 个键 |
-| 品质分布 | 对 CRT 的全部有效状态做解析计数，详见概率口径 |
+| Original weapon and armor generation instructions | 10,000 input sets, covering the general pools and the four class pools |
+| Every candidate at generation time | 70,000 field comparisons |
+| Original quality-generation instructions | 120,000 input sets, comparing return values, RNG state, and consumption counts |
+| Version rejection | A one-byte-modified isolated sample was rejected by the hash check; the copy instruction was never executed |
+| Name prefixes | 5×10 keys recovered from the quality jump table and the seed jump table |
+| Quality distribution | Analytic counting over all valid CRT states; see the probability section for the exact basis |
 
-“原始指令比较”在独立的研究进程里执行经审计的函数副本。容器追加、物品复制、分配释放、随机数和研究进程内的安全 Cookie 辅助调用由本地替身接管；不加载游戏 DLL、不注入游戏。它确认了这些小函数的算法，不能替代完整战斗、任务结算和联机实测。
+"Original-instruction comparison" ran audited function copies inside a separate research process. Container appends, item copies, allocation frees, random numbers, and the in-process secure-cookie helper calls were taken over by local stand-ins; no game DLL was loaded and nothing was injected into the game. It confirms the algorithms of these small functions but cannot replace full combat, quest settlement, and multiplayer testing.
 
-结果见 native-checks.json (local evidence omitted from source publication)、analysis.json (local evidence omitted from source publication)。三个被读取的程序/运行库文件在研究脚本运行前后散列一致；脚本没有打开存档。用户自行运行游戏期间的存档变化不在本次文件一致性声明内。
+Results are in native-checks.json (local evidence omitted from source publication) and analysis.json (local evidence omitted from source publication). The three read program/runtime files hashed identically before and after the research scripts ran; the scripts opened no saves. Save changes while the user plays the game on their own are outside this file-consistency statement.
 
-## 1. 敌人自身装备：先看身上有什么，再按槽位抽
+## 1. The enemy's own equipment: look at what it wears first, then draw by slot
 
-入口 `0x59B180`。类别 0、类别 3 或带 `0x800` 标志的实体直接退出这条死亡掉落函数。类别 0 为玩家；类别 3 和标记的完整语义不在此擅自补名。
+Entry `0x59B180`. Category 0, category 3, or entities with the `0x800` flag exit this death-loot function directly. Category 0 is the player; the full semantics of category 3 and the flags are not named presumptuously here.
 
-候选按以下顺序收集，只接受类型字节不为 0 的物品：
+Candidates are collected in the following order, accepting only items whose type byte is not 0:
 
-| 实体偏移 | 常规对应物品 |
+| Entity offset | Normally corresponding item |
 |---|---|
-| `+0x990` | 副手 |
-| `+0xAA8` | 主手 |
-| `+0x530` | 胸甲 |
-| `+0x878` | 肩甲 |
-| `+0x760` | 手套 |
-| `+0x648` | 鞋子 |
-| `+0x418` | 项链 |
+| `+0x990` | Off-hand |
+| `+0xAA8` | Main hand |
+| `+0x530` | Chestplate |
+| `+0x878` | Pauldrons |
+| `+0x760` | Gloves |
+| `+0x648` | Boots |
+| `+0x418` | Amulet |
 
-这是程序显式枚举的七个槽位，**不包含两个戒指槽**。一件物品的类型、材质和其他字段仍以实际数据为准。
+These are the seven slots the program explicitly enumerates — **the two ring slots are not included**. An item's type, material, and other fields are still defined by the actual data.
 
-业务条件可写成：
+The business condition can be written as:
 
 ```text
-候选 = 上述七个槽中实际存在的物品
-如果候选非空，并且（rand()%4 == 0 或 flags 包含 0x200）：
-    抽取候选[rand()%候选数量]
-    将这件现有物品复制到掉落记录
+candidates = the items actually present in the seven slots above
+if the candidates are non-empty and (rand()%4 == 0 or the flags contain 0x200):
+    draw candidates[rand()%candidate_count]
+    copy this existing item into the drop record
 ```
 
-这里没有把物品转成玩家职业，也没有重新抽它的品质。双持时两个手部槽分别入池；没有穿鞋就不会凭空增加一个鞋子候选。
+Here the item is not converted to the player's class and its quality is not re-rolled. When dual-wielding, both hand slots enter the pool separately; no boots worn means no phantom boot candidate.
 
-举例：假设已核实的一名首领正好有主手、胸甲、肩甲、鞋子四个候选，那么这一路会掉一件，某个槽的名义机会约四分之一；不是“四件全部掉落”。普通非首领还要先过约四分之一的触发判定。
+Example: suppose a verified boss happens to have four candidates — main hand, chestplate, pauldrons, boots. This path drops one item, with each slot having a nominal chance of about one quarter; it is not "all four drop". A normal non-boss additionally has to pass the roughly one-in-four trigger first.
 
-证据：death.asm.txt (local evidence omitted from source publication)，重点 `0x59B20E..0x59B422`。恢复源码在收集候选后漏掉了这一整段，不能仅看伪 C 得出结论。
+Evidence: death.asm.txt (local evidence omitted from source publication), focus `0x59B20E..0x59B422`. The recovered source misses this entire segment after collecting the candidates — the conclusion cannot be drawn from the pseudo-C alone.
 
-## 2. 额外随机装备：约 10% 触发，四职业权重不相等
+## 2. Extra random equipment: ~10% trigger, and the four classes are not equally weighted
 
-同一死亡函数内，类别字节 `+0x60 == 1` 或物种 `+0x64 == 0x8F` 才进入这组额外随机判定。`rand()%10 == 0` 时产生一件随机装备：
+Inside the same death function, only category byte `+0x60 == 1` or species `+0x64 == 0x8F` enters this extra random check. When `rand()%10 == 0`, one random equipment piece is produced:
 
 ```text
-基础等级 = max(1, 敌人等级 - 1 + rand()%2)
-品质 = roll_quality(敌人阶级, 不强制最高)
-武器 / 防具 = 一次二选一
-从所有职业候选中生成一件
-对物品等级执行原版 ±0.05 曲线浮动
+base level = max(1, enemy level - 1 + rand()%2)
+quality = roll_quality(enemy rank, no force-max)
+weapon / armor = one binary choice
+generate one piece from all class candidates
+apply the vanilla ±0.05 curve jitter to the item level
 ```
 
-以上只描述业务条件，**省略了用于飞散位置、朝向等的随机调用，也简化了调用顺序，不能用它预测下一次击杀结果**。
+The above describes the business condition only — **it omits the random calls for scatter position, orientation, and the like, and simplifies the call order; it cannot predict the next kill's result**.
 
-### 武器池：11 个候选，不是每种武器等权
+### Weapon pool: 11 candidates, not every weapon equally weighted
 
-| 职业 | 候选个数 | 每个候选的生成规则 |
+| Class | Candidates | Generation rule per candidate |
 |---|---:|---|
-| 战士 | 3 | 单手剑/斧/锤三选一；双手剑/斧/锤三选一；盾牌 |
-| 盗贼 | 3 | 匕首；长剑；拳套 |
-| 游侠 | 2 | 弓；回旋镖 |
-| 法师 | 3 | 法杖；魔杖；手镯 |
+| Warrior | 3 | One-of-three among single-hand sword/axe/mace; one-of-three among two-hand sword/axe/mace; shield |
+| Rogue | 3 | Dagger; longsword; fist weapon |
+| Ranger | 2 | Bow; boomerang |
+| Mage | 3 | Staff; wand; bracelet |
 
-先建立这 11 项，再按候选索引抽一项。战士的“单手武器候选”本身还做三选一，所以不能把剑、斧、锤分别当成与盾牌同权的独立池项。
+These 11 entries are built first, then one is drawn by candidate index. The warrior's "single-hand weapon candidate" is itself a three-way pick, so swords, axes, and maces must not be treated as separate pool entries with the same weight as the shield.
 
-**这条生成器没有弩。** 原程序在游侠的第二个候选前消耗了一次随机数，但随后直接把武器类型设成回旋镖。敌人自身的游侠武器初始化却会在弓、弩、回旋镖之间选择，因此“已持弩的游侠敌人自身装备”是一条不同来源。此结论不等于断言商店、制作等其他系统都没有弩。
+**This generator has no crossbow.** The original program consumes a random number before the ranger's second candidate but then sets the weapon type directly to boomerang. The enemies' own ranger weapon initialization does choose among bow, crossbow, and boomerang, so "a ranger enemy's own equipment with a crossbow" is a different source. This conclusion is not an assertion that shops, crafting, or other systems have no crossbows.
 
-证据：weapon.asm.txt (local evidence omitted from source publication)，`0x5F8B79..0x5F8D9C`；native-equipment.asm.txt (local evidence omitted from source publication) 的游侠初始化。
+Evidence: weapon.asm.txt (local evidence omitted from source publication), `0x5F8B79..0x5F8D9C`; the ranger initialization in native-equipment.asm.txt (local evidence omitted from source publication).
 
-### 防具/首饰池：21 个候选
+### Armor/jewelry pool: 21 candidates
 
-| 职业/种类 | 材质 | 候选 |
+| Class / kind | Material | Candidates |
 |---|---|---|
-| 战士 | 铁 | 肩甲、胸甲、手套、鞋子，共 4 项 |
-| 法师 | 丝绸 | 肩甲、肩甲、胸甲、手套、鞋子，共 5 项 |
-| 游侠 | 亚麻 | 肩甲、肩甲、胸甲、手套、鞋子，共 5 项 |
-| 盗贼 | 棉 | 肩甲、肩甲、胸甲、手套、鞋子，共 5 项 |
-| 通用 | 金或银 | 项链、戒指，共 2 项 |
+| Warrior | Iron | Pauldrons, chestplate, gloves, boots — 4 entries |
+| Mage | Silk | Pauldrons, pauldrons, chestplate, gloves, boots — 5 entries |
+| Ranger | Linen | Pauldrons, pauldrons, chestplate, gloves, boots — 5 entries |
+| Rogue | Cotton | Pauldrons, pauldrons, chestplate, gloves, boots — 5 entries |
+| Universal | Gold or silver | Amulet, ring — 2 entries |
 
-三组布料防具的肩甲**实际被追加两次**，每次另生成种子；不是报告排版重复。没有证据说明这是作者有意的平衡选择，不能替作者解释动机。
+The three cloth-armor groups' pauldrons are **actually appended twice**, each with a fresh seed; it is not a layout duplication in the report. There is no evidence this is an intentional balance choice by the author, and the motive is not explained for them.
 
-证据：armor.asm.txt (local evidence omitted from source publication)，21 个追加调用已逐一核对；同一生成器限制为单职业时，仍保留通用首饰。
+Evidence: armor.asm.txt (local evidence omitted from source publication); the 21 append calls were verified one by one. When the same generator is restricted to a single class, the universal jewelry is still kept.
 
-### 已经生成随机装备后，职业分布是多少
+### After random equipment is generated, what is the class distribution
 
-以下是按候选等权计算的名义权重，忽略 CRT 取模偏差及进入该通道时的状态条件；**不是击杀任意 Boss 后的总概率**。
+The following are the nominal weights computed with equally weighted candidates, ignoring CRT modulo bias and the state conditions for entering this channel; **they are not the total probability after killing an arbitrary boss**.
 
-| 职业 | 该职业专属武器/防具 | 再计入不限职业的项链/戒指 |
+| Class | That class's exclusive weapon/armor | Plus the class-agnostic amulet/ring |
 |---|---:|---:|
-| 战士 | 23.16% | 27.92% |
-| 游侠 | 21.00% | 25.76% |
-| 法师 | 25.54% | 30.30% |
-| 盗贼 | 25.54% | 30.30% |
+| Warrior | 23.16% | 27.92% |
+| Ranger | 21.00% | 25.76% |
+| Mage | 25.54% | 30.30% |
+| Rogue | 25.54% | 30.30% |
 
-第二列四职业相加约 95.24%，剩余约 4.76% 是通用首饰。“能通过职业限制”也不代表等级足够、属性合适或比现有装备强。
+The second column sums to about 95.24% over the four classes; the remaining ~4.76% is universal jewelry. "Passes the class restriction" also does not mean the level is high enough, the stats are suitable, or it beats your current gear.
 
-## 3. 品质颜色和名称前缀到底怎么来
+## 3. Where quality colors and name prefixes really come from
 
-物品 `+0x0C` 为本次所说的品质 `q`；SDK 把字段叫 modifier，不能因命名把它误当成另一套独立品质。`+0x04` 是种子，`+0x10` 是内部等级。
+The item's `+0x0C` is what this report calls quality `q`; the SDK calls the field modifier — the naming must not make it a separate quality system. `+0x04` is the seed, `+0x10` the internal level.
 
-品质生成器 `0x5F8530` 的完整核心算法是：
+The full core algorithm of the quality generator `0x5F8530` is:
 
 ```python
 q = rand() % (rank + 1)
@@ -144,46 +144,46 @@ if force_max:
 return min(q, 4)
 ```
 
-即使 `force_max` 为真，前面四次随机数仍然被消耗，最后才覆盖结果。这也经过原指令对照。
+Even when `force_max` is true, the four random numbers are still consumed first, and the result is overwritten last. This too was checked against the original instructions.
 
-原生颜色函数 `0x4C7D20` 将 0/1/2/3/4 显示为白、绿、蓝、紫、黄。更高值另有显示处理，不代表本生成器会正常产出更高档。
+The native color function `0x4C7D20` displays 0/1/2/3/4 as white, green, blue, purple, yellow. Higher values have other display handling and do not mean this generator normally produces higher tiers.
 
-### 身上装备的初始品质与额外随机装备不是一回事
+### The worn equipment's initial quality is not the same thing as the extra random equipment
 
-初始世界生成路径 `0x5ED407..0x5ED6BB` 会从 Spawn 标志取 `0x200` 位，作为 `force_max`。因此，**这条初始化路径中的**首领装备品质为 `min(rank+1,4)`；普通实体则各槽分别抽取。
+The initial world-generation path `0x5ED407..0x5ED6BB` takes the `0x200` bit from the Spawn flags as `force_max`. So **in that initialization path**, a boss's equipment quality is `min(rank+1,4)`; ordinary entities draw each slot separately.
 
-但任务首领还有一次重新设定等级、阶级并重建武器/防具的流程，不能忽略初始化先后顺序。`0x5C7730` 的已核对流程不会重新覆盖这些槽位的品质字节。因此不能只看首领当前阶级，就宣称它最终身上每件装备必定是什么颜色。做情报时应该直接读取实际物品。
+But quest bosses also have a flow that re-sets the level and rank and rebuilds weapons/armor — the initialization order must not be ignored. The verified flow at `0x5C7730` does not re-overwrite those slots' quality bytes. So you cannot claim, from a boss's current rank alone, exactly what color every piece it wears must be. Intel features should read the actual items directly.
 
-证据：初始品质赋值节选 (local evidence omitted from source publication)、任务重新初始化 (local evidence omitted from source publication)、品质函数 (local evidence omitted from source publication)。
+Evidence: initial-quality assignment excerpt (local evidence omitted from source publication), quest re-initialization (local evidence omitted from source publication), quality function (local evidence omitted from source publication).
 
-### “破损、完好、完美”不是额外一根耐久条
+### "Shabby, intact, perfect" is not an extra durability bar
 
-实际名称构造在 `0x598A50`，不是恢复代码误称为 item_name_string_id 的那个模型编号函数。名称前缀由 `q` 与 `seed % 10` 选择；`seed==0` 时跳过前缀。
+The actual name construction is at `0x598A50`, not the model-number function the recovered code mis-names as item_name_string_id. The name prefix is chosen by `q` and `seed % 10`; with `seed==0` the prefix is skipped.
 
-| 品质颜色 | 原版键举例 |
+| Quality color | Example vanilla keys |
 |---|---|
-| 白 | `shabby`、`battered`、`scratched`、`worn`、`common` |
-| 绿 | `balanced`、`good`、`undamaged`、`flawless` |
-| 蓝 | `exceptional`、`polished`、`exquisite`、`superb` |
-| 紫 | 对应 `exceptional2`、`polished2` 等第二组键 |
-| 黄 | `brilliant`、`magnificent`、`legendary`、`fabulous` |
+| White | `shabby`, `battered`, `scratched`, `worn`, `common` |
+| Green | `balanced`, `good`, `undamaged`, `flawless` |
+| Blue | `exceptional`, `polished`, `exquisite`, `superb` |
+| Purple | the second key group like `exceptional2`, `polished2` |
+| Yellow | `brilliant`, `magnificent`, `legendary`, `fabulous` |
 
-**同一种颜色有多个前缀。** 不应把用户看到的每个形容词都当成一档独立、严格递增的装备等级。这里列原版键，不强行认定当前汉化里某个中文词必然对应哪个键。完整 50 项、两个跳转表与地址见 prefixes.json (local evidence omitted from source publication)。
+**The same color has several prefixes.** Each adjective the user sees must not be treated as an independent, strictly increasing gear tier. The vanilla keys are listed here; no claim is forced that a particular Chinese word in the current localization maps to a specific key. The full 50 entries, the two jump tables, and the addresses are in prefixes.json (local evidence omitted from source publication).
 
-这修正了前面口头解释中“破损档换破损档、完美档换完美档”的粗略说法。若以后真做转换，至少要保留内部品质、等级和种子含义，再研究各武器/材质的合法映射；不能只按中文字面换名。本次不做转换。
+This corrects the earlier verbal simplification of "shabby swaps for shabby, perfect swaps for perfect". If a conversion is ever really made, at minimum the internal quality, level, and seed meanings must be preserved, and the legal mappings per weapon/material studied; names must not be swapped by the Chinese wording alone. No conversion is done in this pass.
 
-## 4. 等级、Power 与强度
+## 4. Level, Power, and strength
 
-玩家界面显示的 Power 不是直接读取内部等级，而是：
+The player UI's Power is not a direct read of the internal level; it is:
 
 ```text
 C(L) = 1 - 1 / ((L-1)*0.05 + 1)
 Power = int(C(L)*100 + 1)
 ```
 
-额外随机装备先以敌人内部等级 `L-1` 或 `L` 为基准，再在这条曲线上上下浮动 0.05。不是固定上下五个角色等级。
+The extra random equipment bases on the enemy's internal level `L-1` or `L` first, then jitters ±0.05 along this curve. It is not a fixed ±5 character levels.
 
-| 敌人内部等级 | 敌人对应 Power | 该随机通道可能的装备内部等级范围 |
+| Enemy internal level | Enemy Power | Possible equipment internal-level range on this random channel |
 |---:|---:|---:|
 | 10 | 32 | 7–12 |
 | 20 | 49 | 15–24 |
@@ -191,50 +191,50 @@ Power = int(C(L)*100 + 1)
 | 50 | 72 | 39–64 |
 | 100 | 84 | 72–150 |
 
-范围来自按原指令逐步单精度计算的模型，不表示这些范围内每件装备都适合玩家。高等级处曲线趋平，所以内部等级的浮动范围会变宽。敌人自身已有装备直接复制，不再执行这条死亡时等级浮动；任务奖励与鉴定路径也不能直接套这个范围。
+The ranges come from a model stepping the original instructions in single precision; they do not mean every piece in the range suits the player. The curve flattens at high levels, so the internal-level jitter range widens. The enemy's already-worn equipment is copied directly, without this death-time level jitter; the quest-reward and identification paths also cannot directly reuse this range.
 
-通用基础属性缩放函数 `0x445F60` 为 `2^(3*C(L)) * 2^(q/4)`，各装备另乘部位、武器类型、材质和种子相关系数。它解释了为何比较提升时，要一起看等级、颜色和具体属性。不能把“更高等级”直接当成“每条属性必然更强”。
+The general base-stat scaling function `0x445F60` is `2^(3*C(L)) * 2^(q/4)`, with each piece further multiplied by slot-, weapon-type-, material-, and seed-related factors. That explains why level, color, and the concrete stats must be read together when comparing upgrades. "Higher level" must not be equated with "every stat necessarily stronger".
 
-证据：level-jitter.asm.txt (local evidence omitted from source publication)、level-curve.asm.txt (local evidence omitted from source publication)、stat-scaling.asm.txt (local evidence omitted from source publication)。
+Evidence: level-jitter.asm.txt (local evidence omitted from source publication), level-curve.asm.txt (local evidence omitted from source publication), stat-scaling.asm.txt (local evidence omitted from source publication).
 
-## 5. 任务奖励：按玩家职业，但要真的完成了有效任务
+## 5. Quest rewards: filtered by the player's class, but the quest must actually be validly completed
 
-本次核对的击杀结算路径会查询敌人对应地点的任务记录，检查任务尚未完成，并确认目标标记/任务条件与实际参与记录。部分任务类型立即完成，另一些累计击杀数后完成；这个任务进度计数不是“连续掉落失败”的保底计数。
+The kill-settlement path verified here queries the enemy's place's quest record, checks that the quest is not yet complete, and confirms the target flag/quest conditions against the actual participation records. Some quest types complete immediately; others complete after accumulating kills; this quest-progress counter is not a "consecutive drop-failure" pity counter.
 
-有效完成后，在参与玩家的结算循环里：
+After a valid completion, inside the settling loop for participating players:
 
-1. 生成白金币奖励记录。
-2. 二选一调用武器或防具生成器，第四个参数明确传入**领奖角色 `+0x140` 的职业**。
-3. 等级和品质使用任务记录携带的参数；此处没有再调用死亡随机装备的那次品质抽取及等级浮动。
-4. 当该领奖对象为本地玩家时，调用背包添加函数。因此不能只盯着地上寻找全部任务奖励。
+1. A platinum-coin reward record is generated.
+2. The weapon or armor generator is called as a two-way choice, the fourth parameter explicitly passing **the claiming character's class at `+0x140`**.
+3. The level and quality use the parameters carried by the quest record; the death-time random equipment's quality draw and level jitter are not re-called here.
+4. When the claiming party is the local player, the bag-add function is called. So not all quest rewards are found by staring at the ground.
 
-证据：mission.asm.txt (local evidence omitted from source publication)，`0x596439..0x596525`、`0x5968FA..0x596AD8`，特别是 `0x596A39` 的角色职业读取。生成器本身仍允许通用首饰，因此“按本职业筛选”不等于“必出一把本职业武器”。
+Evidence: mission.asm.txt (local evidence omitted from source publication), `0x596439..0x596525`, `0x5968FA..0x596AD8`, especially the character-class read at `0x596A39`. The generator itself still allows universal jewelry, so "filtered by your class" does not equal "guaranteed a weapon of your class".
 
-这条奖励针对任务完成，不是所有首领每次刷新后都必发。没有具体击杀现场和任务状态，不能回溯断言用户某次是否应拿到这条奖励。
+This reward targets quest completion; it is not issued on every respawn of every boss. Without the concrete kill scene and quest state, it is impossible to retroactively assert whether the user should have gotten this reward on some occasion.
 
-## 6. 未鉴定物品、配方、宠物食物等分支
+## 6. Unidentified items, recipes, pet food, and other branches
 
-| 分支 | 已核对的条件与结果 |
+| Branch | Verified conditions and results |
 |---|---|
-| 配方卷轴 | 符合上述怪物类别时，另做 `rand()%50==0`；按敌人阶级加一作为品质函数输入，再将生成的装备描述包装为物品类型 2。它不是未鉴定物品。 |
-| 宠物食物 | 发生额外随机装备后，再做 `rand()%5==0`，生成类型 `0x14`、数量 1 的宠物食物。约 2% 是两层触发的名义乘积；食物种类从控制器持有的列表选取，不是按玩家职业。 |
-| 未鉴定物品 | 进入 `(flags & 0x18)!=0` 的另一分支后，先抽品质，再做约 5% 判定；品质为零时不掉，生成物品类型 `0x0E`。这些标记的完整语义仍保留原值，不擅自统称某一种首领。 |
-| 库存内物品 | 类别 1 的实体死亡会另遍历自己的物品列表，按数量掉出非空物品，但显式跳过生命药水（类型 1、子类型 1）。这与七个穿戴槽的抽取分开。 |
-| 特定物种素材 | 函数还按物种分支生成蔬菜等物品，不能把素材误计为武器防具掉落。 |
+| Recipe scroll | When the monster category above matches, another `rand()%50==0`; the quality function takes the enemy's rank + 1 as input, and the generated equipment description is wrapped as item type 2. It is not an unidentified item. |
+| Pet food | After the extra random equipment occurs, another `rand()%5==0` generates pet food of type `0x14`, count 1. ~2% is the nominal product of the two layers; the food kind is chosen from the controller's list, not by the player's class. |
+| Unidentified item | After entering the separate `(flags & 0x18)!=0` branch, the quality is drawn first, then a ~5% check; zero quality drops nothing, generating item type `0x0E`. The full semantics of these flags are kept as-is — they are not lumped into some single boss kind. |
+| In-inventory items | A category-1 entity's death also walks its own item list, dropping non-empty items by count, but explicitly skipping health potions (type 1, subtype 1). This is separate from the seven wearable-slot draw. |
+| Species-specific materials | The function also branches by species to generate vegetables and the like; materials must not be miscounted as weapon/armor drops. |
 
-未鉴定物品的品质分支具体为：`v=rand()%1000 + rank*20`；`v<700` 得 0，`700..949` 得 1，`950..998` 得 2，`>=999` 得 3；若带 `0x200` 标志再加一、最高 3。随后要求 `rand()%20==0` 且品质不为零。等级取敌人等级。
+The unidentified item's quality branch is specifically: `v=rand()%1000 + rank*20`; `v<700` gives 0, `700..949` gives 1, `950..998` gives 2, `>=999` gives 3; with the `0x200` flag it gains one more, capped at 3. Then it requires `rand()%20==0` and a non-zero quality. The level is the enemy's level.
 
-鉴定时读取这件物品的等级、品质，再以职业参数 `-1` 调用通用武器或防具生成器；所以鉴定不保证本职业，且这条武器生成器同样没有弩候选。
+On identification, the item's level and quality are read, then the general weapon or armor generator is called with the class parameter `-1`; so identification does not guarantee your class, and this weapon generator likewise has no crossbow candidate.
 
-证据：death.asm.txt (local evidence omitted from source publication) `0x59BB28..0x59C163`；formula.asm.txt (local evidence omitted from source publication)；pet-food.asm.txt (local evidence omitted from source publication)；identify.asm.txt (local evidence omitted from source publication)。
+Evidence: death.asm.txt (local evidence omitted from source publication) `0x59BB28..0x59C163`; formula.asm.txt (local evidence omitted from source publication); pet-food.asm.txt (local evidence omitted from source publication); identify.asm.txt (local evidence omitted from source publication).
 
-## 7. 概率口径：不能把 rand() 当成独立的无限精度骰子
+## 7. Probability basis: rand() must not be treated as an independent, infinite-precision die
 
-本机 CRT 为：`state = state*214013 + 2531011`，返回 `(state>>16)&0x7FFF`。每个输出只有 0..32767；例如 `%100==0` 对应 328 个输出，单次均匀输出下是约 1.00098%，并非数学上精确 1%。连续输出还彼此相关。
+The local CRT is: `state = state*214013 + 2531011`, returning `(state>>16)&0x7FFF`. Each output is only 0..32767; e.g. `%100==0` corresponds to 328 outputs — about 1.00098% under uniform single outputs, not a mathematically exact 1%. Consecutive outputs are also correlated.
 
-本次对品质函数做了全部 `2^31=2,147,483,648` 个有效状态的解析计数：原 32 位状态的最高位不影响以后返回的低 31 位链路，所以可约去重复最高位。实现枚举三个稀有加档事件的并集，再从各阶级的基线分布调整，未逐个运行二十亿次游戏函数。
+This pass did an analytic count over all `2^31=2,147,483,648` valid states of the quality function: the top bit of the original 32-bit state does not affect the low 31-bit chain of later returns, so duplicated top bits are folded away. The implementation enumerates the union of the three rarity-bonus events and adjusts from each rank's baseline distribution; the game function was not run two billion times.
 
-| 品质函数输入 rank | 白 | 绿 | 蓝 | 紫 | 黄 |
+| Quality function input rank | White | Green | Blue | Purple | Yellow |
 |---:|---:|---:|---:|---:|---:|
 | 0 | 98.887252% | 1.111605% | 0.001143% | 0 | 0 |
 | 1 | 49.443580% | 49.999520% | 0.556329% | 0.000571% | 0 |
@@ -242,61 +242,61 @@ Power = int(C(L)*100 + 1)
 | 3 | 24.721779% | 24.999839% | 24.999887% | 24.999977% | 0.278518% |
 | 4 | 19.778664% | 20.000984% | 20.001214% | 19.998214% | 20.220925% |
 
-**此表假设进入这一个函数时，所有有效 CRT 状态等可能。** 它不是实测击杀率，不包含进入掉落通道的条件，也不适用于 force_max 覆盖输出。不能再机械地乘一个 10%，冒充某个具体首领的精确总掉率。
+**This table assumes all valid CRT states are equally likely when entering this one function.** It is not a measured kill rate, it excludes the conditions for entering the drop channels, and it does not apply to force_max overwriting the output. A mechanical ×10% must not be multiplied on top to fake a precise total drop rate for a specific boss.
 
-一个技术细节：本机连续三次返回值不能同时满足三个加档条件，解析计数为零。不能把代码中的三个判断直接视为互相独立，从而虚构 rank 0 在此函数里出紫装的极低非零概率。这一结论仅限定于该 CRT 与该调用顺序。
+One technicality: three consecutive returns from the local CRT cannot satisfy all three bonus conditions at once — the analytic count is zero. The three checks in the code must not be treated as mutually independent, fabricating a tiny non-zero purple chance for rank 0 in this function. This conclusion is limited to this CRT and this call order.
 
-## 8. 怎样选择值得打的目标
+## 8. How to pick targets worth fighting
 
-从已确认机制推导，优先级应是：
+Derived from the confirmed mechanics, the priority should be:
 
-1. 看目标实际有没有穿戴候选，以及是否具备这条必掉自身装备的标记。
-2. 看候选物品自身的等级、颜色、部位和职业限制；同职业是筛选线索，不能代替实际物品数据。
-3. 分清当前任务是否有效且未完成，因为任务奖励按领奖者职业筛选。
-4. 对其他额外随机掉落保持期待，但不把它当成必定提升的承诺。
+1. Check whether the target actually has worn candidates and carries the flag that makes its own equipment drop guaranteed.
+2. Check the candidates' own level, color, slot, and class restriction; a matching class is a filtering clue, not a substitute for the actual item data.
+3. Check whether the current quest is valid and unfinished, since the quest reward is filtered by the claimer's class.
+4. Keep expectations for the other extra random drops, but do not treat them as a promise of guaranteed upgrades.
 
-例如想要弩，已经持弩的游侠目标，比仅依靠这里已核实的通用武器生成器更有依据；想要更高品质法杖，则应关注实际持有法杖的首领装备，而非仅看地点名字、体型或敌人名称颜色。
+For example, wanting a crossbow: a ranger target already holding a crossbow is better-grounded than relying on the general weapon generator verified here; wanting a higher-quality staff, focus on the boss equipment actually holding staves, not just the place name, the size, or the enemy name's color.
 
-本次核对的死亡、随机生成、鉴定与任务奖励路径里，未发现按玩家背包补短板、按连续失败次数加权、或通用随机掉落优先本职业的逻辑。任务进度、首领自身装备必掉和正常配方等系统不能与上述不存在的“职业失败保底”混淆。
+In the death, random-generation, identification, and quest-reward paths verified here, no logic was found that fills the player bag's gaps, weights by consecutive failures, or prioritizes the player's class in the general random drops. The quest progress, the boss's guaranteed own-equipment drop, and the normal recipes must not be confused with the nonexistent "class-failure pity".
 
-## 9. 仍然不能宣称的内容
+## 9. What still cannot be claimed
 
-- 未追踪某一名用户实际击杀的首领，不能解释其所有历史空掉；没有制作游戏内统计样本。
-- 商店、制作、宝箱、地面生成与专用服务器的完整获取链路，不在本报告“Boss 死亡与任务奖励”核查范围内。
-- 不保证读取远方尚未加载的首领装备，也不预测下一次实际随机结果。
-- `0x18` 等原始标记的完整名称以及汉化所有前缀的最终显示映射尚未全面核实；报告保留原值、原键。
-- 一些特殊首领有不同生成分支。初始生成公式不能覆盖掉任务重建或具体实体实际字段。
+- No specific user's actually killed bosses were tracked, so all their historical empty drops cannot be explained; no in-game statistical sample was made.
+- Shops, crafting, chests, ground generation, and the dedicated server's full acquisition chains are outside this report's "boss death and quest rewards" scope.
+- Reading far-away, not-yet-loaded boss equipment is not guaranteed, and the next actual random result is not predicted.
+- The full names of the original flags like `0x18` and the final display mapping of every localization prefix are not yet fully verified; the report keeps the original values and keys.
+- Some special bosses have different generation branches. The initial-generation formulas cannot cover quest rebuilds or a specific entity's actual fields.
 
-## 复现与证据入口
+## Reproduction and evidence entry points
 
-重建离线探针（已安装的 Visual Studio x86 编译环境）：
+Rebuild the offline probe (with the installed Visual Studio x86 build environment):
 
 ```bat
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat x86
 cl /nologo /EHsc /O2 /MT /std:c++17 /Fe:build\loot_native_probe.exe /Fo:build\loot_native_probe.obj research\loot_native_probe.cpp
 ```
 
-重新提取本机指令、验证生成器与品质函数、生成分析 JSON：
+Re-extract the local instructions, verify the generators and quality function, and generate the analysis JSON:
 
 ```powershell
 python -X utf8 research/analyze_loot.py --disassemble --native
 ```
 
-源码：[loot_native_probe.cpp](loot_native_probe.cpp)、[analyze_loot.py](analyze_loot.py)。全部输出固定在 `research/evidence/loot-20261027/`，不写入游戏目录。运行不匹配的游戏文件会在复制执行任何指令前拒绝。
+Sources: [loot_native_probe.cpp](loot_native_probe.cpp), [analyze_loot.py](analyze_loot.py). All outputs are pinned to `research/evidence/loot-20261027/` and write nothing into the game directory. A mismatched game file is rejected before any instruction is copied and executed.
 
-关键地址对照：
+Key address map:
 
-| 地址 | 本次核实用途 | 上游误导性名称/注意事项 |
+| Address | Use in this verification | Misleading upstream name / notes |
 |---|---|---|
-| `0x59B180` | 死亡掉落主流程 | 恢复体漏掉自身装备抽取分支 |
-| `0x5F51E0` | 随机防具/首饰 | 被误称 buildDecalMesh |
-| `0x5F8AD0` | 随机武器 | 被误称 buildDecalMesh2 |
-| `0x5F8530` | 品质生成 | 被误称 vectorElementAt |
-| `0x5F6D50` | 配方包装 | 被误称 emitDecalOrParticle |
-| `0x5F79E0` | 宠物食物生成 | 被误称单纯 memset 初始化 |
-| `0x4C7E80` | 内部等级曲线浮动 | 被误称 rerollStackCount |
-| `0x4C76A0` | 显示 Power | 被误称 rarityScaled |
-| `0x598A50` | 实际物品名称构造 | 从两个跳转表恢复前缀 |
-| `0x51BE60` | 武器模型/图标编号 | 不是物品显示名称构造 |
+| `0x59B180` | Main death-loot flow | The recovered body misses the own-equipment draw branch |
+| `0x5F51E0` | Random armor/jewelry | Mis-named buildDecalMesh |
+| `0x5F8AD0` | Random weapons | Mis-named buildDecalMesh2 |
+| `0x5F8530` | Quality generation | Mis-named vectorElementAt |
+| `0x5F6D50` | Recipe wrapping | Mis-named emitDecalOrParticle |
+| `0x5F79E0` | Pet food generation | Mis-named as a plain memset init |
+| `0x4C7E80` | Internal level-curve jitter | Mis-named rerollStackCount |
+| `0x4C76A0` | Displayed Power | Mis-named rarityScaled |
+| `0x598A50` | Actual item name construction | Prefixes recovered from two jump tables |
+| `0x51BE60` | Weapon model/icon number | Not the item display-name construction |
 
-本次只新增研究工具、报告和证据；没有生成掉落 Mod，也没有更改现有管理器、加载器或模组。
+This pass only added research tools, the report, and the evidence; no drop mod was generated, and no existing manager, loader, or mod was changed.

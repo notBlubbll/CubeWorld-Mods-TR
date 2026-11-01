@@ -1,68 +1,68 @@
-# 首领抽奖的依据与实现边界
+# Boss Draw: basis and implementation boundaries
 
-核对日期：2026-10-30。用户已明确选择“原掉落照常，额外一抽”，并授权按 40/40/20 卡池、职业小保底、手动开奖开发。它是新的玩法选择，取代此前“当前只研究装备情报”的投入优先级，不改变原死亡掉落算法。
+Verification date: 2026-10-30. The user has clearly chosen "original loot as usual, plus one extra draw" and authorized development with the 40/40/20 card pool, the class pity, and manual draws. It is a new gameplay choice replacing the earlier "research equipment intel only" priority, and it does not change the vanilla death-loot algorithm.
 
-## 复用判断
+## Reuse decision
 
-本会话查询了 [Omega 官方补丁索引](https://wollay.com/patch-notes/)、[Alpha 模组资料](https://gist.github.com/Oifan/a83b6956f8f6774c1400a6d9001ef70d) 和相关 GitHub 结果，没有核实到能直接用于本机 Alpha 构建的同类成品；这不是宣称所有社区项目都没有该功能。官方另一版本的功能不能直接装入当前 32 位客户端。本轮直达部分新补丁页面失败，没有据此认定最新版本内容或兼容性。
+This session queried the [Omega official patch index](https://wollay.com/patch-notes/), the [Alpha mod notes](https://gist.github.com/Oifan/a83b6956f8f6774c1400a6d9001ef70d), and related GitHub results, and found no ready-made equivalent verified to run on the local Alpha build; that is not a claim that no community project has the feature. An official feature for a different version cannot be dropped into the current 32-bit client. This round's direct fetches of some new patch pages failed, and no conclusion was drawn about the latest version's content or compatibility.
 
-建议投入一个独立小版本，验证额外开奖是否改善刷装期待，暂不扩展付费货币、活动池、角色卡、强化系统或长期经营。已有本地 [掉落逆向报告](../research/loot-mechanics-2013-2026-10-27.md)、Qube SDK、独立字体助手、管理器与安装保护均可复用。
+The recommendation was to invest in one small standalone version, verifying whether the extra draw improves the equipment-grinding outlook, without expanding into paid currency, event pools, character cards, enhancement systems, or a long-term economy. The existing local [loot reverse-engineering report](../research/loot-mechanics-2013-2026-10-27.md), the Qube SDK, the independent font helper, and the manager and install protections are all reusable.
 
-## 原版行为核对
+## Vanilla behavior verification
 
-| 地址/数据 | 本次用途 |
+| Address / data | Use here |
 | --- | --- |
-| `0x59B180` | 原版死亡掉落流程；Thiscall，两个参数，`this` 为嵌入 World（GC+0x2E4），参数 0 为死亡实体。在 `0x59622E` 被击杀结算调用，已核对本机完整调用链。只订阅原调用，不取消或改参数。 |
-| `Creature+0x60/+0x7E` | 类别 1 且 `0x200` 首领位；`0x800` 排除。必须当前 HP 已到 0。 |
-| `Creature+0x13A4` | 原版贡献树，键在节点 `+0x10`，正伤害在 `+0x18`。必须存在本地玩家完整 64 位 ID。玩家 ID 可以是 0，不能错误地视为空指针。 |
-| 七个候选槽 | 仅原版自身装备分支使用的副手、主手、胸甲、肩甲、手套、鞋子、项链；不额外加入戒指槽。保存完整 `0x118` 字节 Item。 |
-| `0x46EBE0` | 原生背包加物方法；Thiscall，`this=player+0x11DC`，参数为 Item 指针与 `-1` 自动选分类。原任务奖励在 `0x596AD3` 同样调用。此方法不修改原版掉落算法。 |
-| `GC+0x800A0C` | 当前角色存档编号。恢复源码的保存调用将其作为 `saveEntityBlob` 的角色索引；同时将角色名与职业纳入存储范围。 |
-| `0x5F8530` / `0x4C7E80` | 已核实的品质公式与等级曲线浮动形状。新增卡池用本模块独立随机流，不执行原版生成器，不消耗全局 CRT 状态。 |
+| `0x59B180` | The vanilla death-loot flow; thiscall, two arguments, `this` is the embedded World (GC+0x2E4), argument 0 the dying entity. Called by the kill settlement at `0x59622E`; the local full call chain was verified. Only the original call is subscribed — never canceled or re-parameterized. |
+| `Creature+0x60/+0x7E` | Category 1 plus the `0x200` boss bit; `0x800` excluded. Current HP must already be 0. |
+| `Creature+0x13A4` | The vanilla contribution tree, keys at node `+0x10`, positive damage at `+0x18`. The local player's full 64-bit ID must exist. A player ID can be 0 and must not be mistaken for a null pointer. |
+| Seven candidate slots | Only the off-hand, main-hand, chestplate, pauldrons, gloves, boots, and amulet used by the vanilla own-equipment branch; no extra ring slot. The full `0x118`-byte Item is saved. |
+| `0x46EBE0` | The native inventory add-item method; thiscall, `this=player+0x11DC`, arguments an Item pointer and `-1` for the auto category. The vanilla quest reward calls it the same way at `0x596AD3`. This method does not modify the vanilla loot algorithm. |
+| `GC+0x800A0C` | The current character save number. The recovered source's save call uses it as the character index for `saveEntityBlob`; the character name and class are also included in the storage scope. |
+| `0x5F8530` / `0x4C7E80` | The verified quality formula and the level-curve float shape. The new card pool uses this module's independent random stream — it does not run the vanilla generator and does not consume global CRT state. |
 
-实际程序 SHA-256：`84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`。现有公共加载器 SHA-256：`D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`。安装器检查整文件散列，运行时另核对 PE 与关键函数字节；不关闭版本保护。
+Actual program SHA-256: `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`. Existing shared loader SHA-256: `D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`. The installer checks the whole-file hashes, and the runtime additionally verifies the PE and the key function bytes; version protection is never switched off.
 
-## 独立与异常处理
+## Independence and exception handling
 
-- 使用现有通用 Raw Hook 接口，只挂接原版死亡入口。当前导航、药水、探索、背包分类、旅行驿站与批量补给均未改该入口。初始检测或 READY 时发现入口冲突会拒绝启用；不升级加载器。
-- 死亡观察在原调用线程只读取得快照，带世界、角色与职业范围提交受锁保护的有界队列；FRAME 线程核对范围、去重和持久化，开奖与发奖仍在 FRAME 执行。只有单人且角色、世界、存档编号都可核实时处理。待机仅每半秒核对上下文及已处理死亡的少量身份，击杀和显式开奖/领奖时立即重查，避免每帧调用会遍历实体树的 session.get。绝不将“消失”当击杀。
-- 同次死亡去重；确认复活、实体重新生成或从当前实体树移除后允许新的有效击杀。重登不会根据历史地点、Boss 名字或目标距离补造奖励。
-- ledger 带格式号、边界和校验和，写前备份并回读验证；损坏时不自动回滚旧备份，以免重发已领取奖励。
-- 原生加物前保存 Claiming，之后核对 Item 语义字段对应数量恰好加一。失败/不确定均不重试。独立文件与原版角色存档不能一起原子提交；异常领奖会锁定该张卡，并保留证据供核对。
-- 关闭 UI、停用或卸下不删除抽奖记录；不同世界、角色范围分开。新增物品本身属于正常角色存档，卸下不回收。
+- Uses the existing generic Raw Hook interface and hooks only the vanilla death entry. The current Navigation, Potion Shop, Explorer, Inventory Sort, Fast Travel, and Batch Actions do not touch that entry. An entry conflict found during initial detection or at READY refuses to enable; the loader is not upgraded.
+- The death observer only takes a read-only snapshot on the original call's thread and submits it to a lock-protected bounded queue with world, character, and class scope; the FRAME thread verifies the scope, dedups, and persists — the draw and the grant still run on FRAME. Processing happens only in single-player with verifiable character, world, and save number. Idle rechecks of the context and the few identities of processed deaths run every half second; kills and explicit draw/claim recheck immediately, avoiding the per-frame session.get that walks the entity tree. A "disappearance" is never treated as a kill.
+- The same death is deduplicated; a new valid kill is allowed after revival, entity respawn, or removal from the current entity tree is confirmed. Re-logging does not fabricate rewards from historical places, boss names, or target distance.
+- The ledger has a format number, bounds, and a checksum, is backed up before writing, and is read back to verify; a corrupted ledger is not auto-rolled back to the old backup, to avoid re-granting already-claimed rewards.
+- Before the native add-item it saves Claiming, then verifies the item's semantic fields show exactly one added. Failures/uncertainty never retry. The independent files and the vanilla character save cannot be committed atomically together; an exceptional claim locks that card and keeps the evidence for verification.
+- Closing the UI, disabling, or removing deletes no draw records; different worlds and character scopes are kept apart. The added items themselves belong to the normal character save and are not recalled on removal.
 
-运行接口检查使用实际生成 DLL；业务与 UI 回调使用生产源码和模拟内存/原生调用。首次交付未启动游戏；0.1.1 修复后用户已重开并确认 F9 窗口可打开，真实 Boss 识别、背包发奖、正常保存重开和同时运行的性能仍未验收。
+The runtime interface checks use the actually built DLL; the business and UI callbacks use the production source with simulated memory/native calls. The first delivery did not start the game; after the 0.1.1 fix the user relaunched and confirmed the F9 window opens, while real boss recognition, inventory granting, normal save/restart, and performance while running together are still unaccepted.
 
-## 0.1.1：F9 无反应的现场定位
+## 0.1.1: locating the dead F9
 
-当前会话日志显示 0.1.0 在初始化时打印 unsupported Alpha build，尚未注册菜单或击杀观察；不是 F9 键位或玩家操作问题。对精确实验子进程只读核实：实际基址 `0x2C0000`，原优选基址 `0x400000`，死亡入口实际字节 `55 8B EC 6A FF 68 7B 20 5B 00`。除了已正确重定位的 SEH 处理函数地址，指令与版本均相符；背包加物入口和死亡调用点也相符。
+This session's logs show 0.1.0 printing unsupported Alpha build at init, before the menu or the kill observer registered; it was not an F9 keybinding or player error. Read-only verification against the exact playtest child process: actual image base `0x2C0000`, preferred base `0x400000`, death-entry actual bytes `55 8B EC 6A FF 68 7B 20 5B 00`. Apart from the SEH handler address — which was correctly relocated — the instructions and version all matched; the inventory add-item entry and the death call site also matched.
 
-0.1.0 把 `push 0x6F207B` 的绝对地址当成固定字节，导致正常重定位也被拒绝。0.1.1 在保持全部 10 字节检查的同时，将该操作数与 `rebase(0x6F207B)` 比较。仍拒绝未知版本、跳转覆盖、错误处理函数地址，不修改游戏程序、加载器或版本保护。加入低基址、高基址成功及错误操作数拒绝的实际 DLL 回归。见 现场证据（本地验证记录未随源码发布） 与 修复验证（本地验证记录未随源码发布）。
+0.1.0 treated the absolute address in `push 0x6F207B` as fixed bytes, so a normal relocation was rejected too. 0.1.1 keeps all 10 byte checks but compares that operand against `rebase(0x6F207B)`. Unknown versions, jump overwrites, and wrong handler addresses are still rejected; the game program, loader, and version protection are unchanged. Real-DLL regressions for low-base and high-base success and wrong-operand rejection were added. See live evidence (local validation records are not published with the source) and fix validation (local validation records are not published with the source).
 
-## 0.1.2：经授权的一次漏记补偿
+## 0.1.2: one authorized missed-record compensation
 
-离线工具复用 `loot::decode/credit/encode`，仅追加密封卡，不执行开奖或原生加物。提交脚本绑定本次世界、角色和观察记录，核对精确游戏/DLL/工具散列，经过真实进程退出检查；备份旧数据、先写一次性处理凭据，再原子替换 ledger，回读并核对其他文件。中断凭据不自动重试；已完成凭据拒绝再次追加。日志含原版旧编码名称，身份范围仅从 ASCII scope token 读取，不要求无关日志为 UTF-8。数据格式仍为 CWBOSS01，正常卡池算法未改。见 补偿验证（本地验证记录未随源码发布）。
+The offline tool reuses `loot::decode/credit/encode` and only appends a sealed card — no draw and no native add-item are executed. The submission script binds this world, character, and observation record, verifies the exact game/DLL/tool hashes, and passes the real process-exit check; it backs up the old data, writes a one-shot processing credential first, then atomically replaces the ledger and reads back and checks the other files. An interrupted credential is not auto-retried; a completed credential refuses to append again. The log contains the old vanilla-encoded names, the identity scope is read only from the ASCII scope token, and unrelated logs are not required to be UTF-8. The data format is still CWBOSS01 and the normal card-pool algorithm is unchanged. See compensation validation (local validation records are not published with the source).
 
-## 0.1.3：窗口内翻牌
+## 0.1.3: card flip inside the window
 
-沿用现有 `revealedAt` 时钟，用固定数量的 ImGui DrawList 图元进行 1.1 秒宽度插值、少量光点和扫光；没有游戏状态写入、全局随机数或后台动画任务。领取按钮使用同一时长，结果持久化和原生发奖路径不变。新增检查只覆盖动画各阶段几何有效性与奖励数据不变；真实帧率尚未实测，见 验证记录（本地验证记录未随源码发布）。
+Reusing the existing `revealedAt` clock, it interpolates the width over 1.1 s with a fixed count of ImGui DrawList primitives, a few light dots, and a sweep; no game-state writes, no global random numbers, no background animation tasks. The claim button uses the same duration; result persistence and the native grant path are unchanged. The new checks cover only the geometry validity of each animation stage and the reward data staying unchanged; the real frame rate is not yet measured — see validation record (local validation records are not published with the source).
 
-## 0.1.4：持续转动的品质卡面
+## 0.1.4: the continuously rotating quality card
 
-只扩充原显示函数：卡面按真实品质填色，固定数量图元做八秒循环透视投影，信息固定在四周。继续复用 revealedAt，不新增后台任务；领取延迟仍为最初的 1.1 秒，持续转动不影响领取。九个关键时刻的几何与数据不变检查通过。装备模型方向未实施，见 记录（本地验证记录未随源码发布）。
+Only the existing display function was extended: the card face is colored by its real quality, a fixed count of primitives does the eight-second loop in perspective projection, and the info stays fixed around it. It still reuses revealedAt with no new background tasks; the claim delay stays at the original 1.1 s, and the continuous spin does not block claiming. The geometry-and-data-unchanged checks at nine key moments passed. The equipment-model direction was not implemented — see record (local validation records are not published with the source).
 
-## 0.1.5：统一 UI 与字体清晰度
+## 0.1.5: unified UI and font clarity
 
-依据本机 frontend-design 设计技能和用户明确的常规字重要求，使用本机 msyh.ttc face 0（Microsoft YaHei Regular）作为抽奖专用字体，20px、PixelSnapH与默认笔画浓度。新增font.hpp沿用context变化、atlas锁定、RendererHasTextures保护；不改全局字体或其他Mod。UI只读取recordsValid，区分损坏记录与正常空态，保留原动作和禁用条件。预览器按每个命令的动态纹理渲染多字号，避免软件预览伪影；详见 验证记录（本地验证记录未随源码发布）。
+Per the local frontend-design skill and the user's explicit regular-weight requirement, the local msyh.ttc face 0 (Microsoft YaHei Regular) is the draw's dedicated font — 20px, PixelSnapH, default stroke weight. The new font.hpp keeps the context-change, atlas-lock, and RendererHasTextures protections; the global font and the other mods are untouched. The UI reads only recordsValid, distinguishing corrupted records from a normal empty state, keeping the original actions and disable conditions. The previewer renders multiple sizes from per-command dynamic textures to avoid software-preview artifacts; see validation record (local validation records are not published with the source).
 
-## 0.1.6：死亡观察与渲染线程分离
+## 0.1.6: separating death observation from the render thread
 
-2026-10-29 用户确认 F9 可以打开但击杀后无次数。现场 0.1.5 已加载且 scope 有效，没有 credited 或 granted，ledger 校验有效、pending=0、nextSerial=2，证明本次未记入或发放额外抽奖。原版有效任务奖励按玩家职业生成并直接入包，见 [逆向报告第5节](../research/loot-mechanics-2013-2026-10-27.md)；不能仅凭本职业金装归因于 Mod，也不能据空记录还原具体 Boss。
+2026-10-29 the user confirmed F9 opens but a kill adds no draw. Live 0.1.5 was loaded with a valid scope, nothing credited or granted, the ledger checksum valid, pending=0, nextSerial=2 — proving this kill was neither recorded nor granted. Vanilla valid quest rewards are generated by player class and go straight to the bag — see [the reverse-engineering report, section 5](../research/loot-mechanics-2013-2026-10-27.md); class-matching gold gear alone cannot be attributed to the mod, and the empty record cannot reconstruct the specific boss.
 
-SDK 的 FRAME 源自 D3D9 render（lifecycle.cpp、gameevents.cpp），Raw Hook 在原函数线程同步分发（rawpool.cpp）。旧版以首次 FRAME 绑定线程，death 在读取快照前拒绝其他线程；不同死亡线程会静默漏记，真实现场线程编号未被旧版记录，因此尚不能证明这是该次漏记的唯一原因。0.1.6 移除这项前提，队列带 scope 与实体身份，所有 scope、ledger、已处理死亡表仅由 FRAME 管理。SDK framecache 的启用标记为 thread_local，死亡线程会实时读取上下文，不读渲染缓存。新增真实第二线程回调检查和首领快照拒绝原因日志。详见 本次验证（本地验证记录未随源码发布）。
+The SDK's FRAME comes from D3D9 render (lifecycle.cpp, gameevents.cpp), and Raw Hooks dispatch synchronously on the original function's thread (rawpool.cpp). The old version bound the thread at the first FRAME, and death rejected other threads before reading the snapshot; deaths on different threads were silently missed, and the live thread id was not recorded by the old version, so it cannot be proven this was the only cause of that miss. 0.1.6 removes that precondition: the queue carries scope and entity identity, and all scope, ledger, and processed-death tables are managed by FRAME only. The SDK framecache's enabled flag is thread_local; the death thread reads the context live and does not read the render cache. A real second-thread callback check and a boss-snapshot rejection-reason log were added. See this validation (local validation records are not published with the source).
 
-## 0.1.7：按原调用链校验嵌入 World
+## 0.1.7: verifying the embedded World per the original call chain
 
-2026-10-30 新现场 0.1.6 的死亡与 FRAME 都是线程 30172，首领候选在 context/receiver 检查被拒绝，未进入贡献/装备快照阶段。此前线程限制并非该次原因。原程序从 GC+0x2E4 取得 World，经 0x60C510、0x595A60 将同一 ECX 传给 0x59B180；SDK CubeSession.address 为 GC。旧代码错误地要求 World==GC，测试夹具同样错误地以 GC 调用，因此离线检查未发现真实调用偏差。现改为严格要求 self==GC+0x2E4，不放宽单人、贡献或版本校验；context 失败与 receiver 失败分开打印。
+2026-10-30's new live case: 0.1.6's death and FRAME were both thread 30172; the boss candidate was rejected by the context/receiver check and never reached the contribution/equipment snapshot stage. The earlier thread restriction was not the cause this time. The original program takes the World from GC+0x2E4 and passes the same ECX to `0x59B180` via `0x60C510` and `0x595A60`; the SDK's CubeSession.address is the GC. The old code wrongly required World==GC, and the test fixture made the same wrong call with GC, so the offline checks never caught the real-call deviation. It now strictly requires self==GC+0x2E4, without loosening the single-player, contribution, or version checks; context failure and receiver failure print separately.
 
-完整证据绑定本机程序散列，41条原指令字节匹配，见 接收对象依据（本地验证记录未随源码发布）。测试按该调用链使用独立的字面偏移，旧源码失败、新源码通过，同时保留错误控制器、生成世界、去重和跨线程检查。见 0.1.7 验证（本地验证记录未随源码发布）。
+The full evidence is bound to the local program's hash with 41 original instruction bytes matching — see the receiver-object basis (local validation records are not published with the source). The tests use independent literal offsets along that call chain: the old source fails, the new source passes, while the wrong-controller, spawned-world, dedup, and cross-thread checks are kept. See 0.1.7 validation (local validation records are not published with the source).

@@ -1,76 +1,76 @@
-# 当前开发方向：让刷装备更有依据
+# Current development direction: making equipment grinding better-grounded
 
-> 更新日期：2026-10-29，Asia/Shanghai。范围：开发方向与下一项功能的边界；不是新 Mod 的完成记录。
+> Update date: 2026-10-29, Asia/Shanghai. Scope: the development direction and the next feature's boundaries; not a completion record of a new mod.
 
-## 最新选择：原掉落加额外抽奖
+## Latest choice: original loot plus an extra draw
 
-2026-10-29，用户在本对话明确选择“Boss 原本掉的一件照常给，另外获得一次抽装备机会”，并授权按讨论方案开发。**当前优先转为独立的首领抽奖小版本**：40% 本职业专属、40% 本次 Boss 实际穿戴候选、20% 其他职业或通用首饰；连续三次未出本职业专属，第四次只保职业；等级、品质以击杀时 Boss 为依据，手动开奖。无穿戴候选时按 2:1 分配到另外两池。规则与实现边界见 [首领抽奖](../boss_draw/README.md)。
+2026-10-29, in this conversation the user explicitly chose "the boss's original drop still comes as usual, plus one extra equipment draw", and authorized development per the discussed plan. **The current priority shifts to the standalone Boss Draw small version**: 40% your class's exclusive, 40% this boss's actually-worn candidates, 20% other classes or universal jewelry; after three consecutive misses of your class's exclusive, the fourth only guarantees the class; the level and quality are based on the boss at kill time, with a manual draw. With no worn candidates, the shares split 2:1 into the other two pools. For the rules and implementation boundaries see [Boss Draw](../boss_draw/README.md).
 
-原版死亡掉落与任务奖励继续保留。此项不转换原装备、不改原版概率，不开发付费货币、角色卡或大型长期玩法。Boss 情报仍可作为后续参考，但不再把“只能先做情报”当成阻止本次已授权开发的理由。下文原方案保留为此前决策和研究背景；其中“尚未选择职业保底”等表述已经被本段最新选择更新。构建与实际安装状态以本次验证记录为准，不从设计文档推断游戏内验收已完成。
+The vanilla death loot and quest rewards stay. This item converts no equipment, changes no vanilla probabilities, and develops no paid currency, character cards, or big long-term gameplay. Boss intel remains useful as a later reference, but "intel first" is no longer a reason to block this authorized development. The original plan below is kept as the prior decision and research background; statements there like "the class pity has not been chosen" have been superseded by this latest choice. The build and actual install state are defined by this validation record — in-game acceptance is not inferred from design docs.
 
-## 当前目标与已经明确的选择
+## Current goal and the choices already made
 
-用户尚未取得 Omega 内测资格，继续以现有 2013 Alpha 和当前角色的实际游玩为基础。Omega 用作功能和取舍参考，不将获得资格或切换版本设为当前开发前提。
+The user has not gotten Omega beta access and continues from actual play in the existing 2013 Alpha with the current character. Omega serves as a feature and trade-off reference; gaining access or switching versions is not a development prerequisite.
 
-本轮用户明确优先“刷装备”，痛点是打过许多 Boss 后，很少得到本职业合用的装备。此前在《查明职业装备掉落概率》中，用户已选择先弄清哪些 Boss 更值得刷，保留原版掉落机制；随后已完成本机程序的深入掉落核查。不能忽略已有选择，重新从“是否要改掉率”开始提问。
+This round the user explicitly prioritized "equipment grinding" — the pain point being that after beating many bosses, gear suited to their class rarely drops. Earlier, in "Find out the class-equipment drop probabilities", the user chose to first figure out which bosses are worth farming, keeping the vanilla drop mechanics; the deep loot verification of the local program has since been completed. That existing choice cannot be ignored by restarting from "should the drop rates change?".
 
-已有对话定位：`01a17882-5e69-7bf0-9638-d8d8bbaa0861`，标题《查明职业装备掉落概率》；补充上下文为《地图标记开发区域》，`01a163c6-fa2d-7b01-9c28-f640504284bb`。对话用于确认用户选择，技术事实以已核实报告和当前实现为准。
+Existing conversation anchor: `01a17882-5e69-7bf0-9638-d8d8bbaa0861`, title "Find out the class-equipment drop probabilities"; supplementary context "Map-marker development area", `01a163c6-fa2d-7b01-9c28-f640504284bb`. The conversations confirm the user's choices; technical facts follow the verified reports and the current implementation.
 
-核心依据：[2013 Alpha 装备掉落逆向核查](loot-mechanics-2013-2026-10-27.md)。它已分清敌人自身装备、额外随机装备、有效任务奖励和鉴定物品，不能再次笼统概括为“四个职业各占四分之一”。报告的原指令离线对照不等于所有真实战斗结算已经验收。
+Core basis: [2013 Alpha equipment-drop reverse-engineering report](loot-mechanics-2013-2026-10-27.md). It separates the enemies' own equipment, extra random equipment, valid quest rewards, and identified items — it must not be lumped together again as "one quarter per class". The report's offline comparison of original instructions does not mean every real combat settlement has been accepted.
 
-## 接下来优先做什么
+## What to prioritize next
 
-下一项功能优先研究并扩充**区域探索中的 Boss 实际装备情报**。目前区域探索 0.1.5 已能显示首领职业的确认、有限预测或未知，尚未提供完整的实际装备候选展示。单看同职业不足以证明值得刷，下一步应让选择依据落在实际物品上。
+The next feature prioritizes researching and expanding **the boss's actual equipment intel in Region Explorer**. Region Explorer 0.1.5 can already show the boss class's confirmed, limited prediction, or unknown, but not yet a full display of the actual equipment candidates. A matching class alone does not prove worth farming; the next step is to ground the choice in the actual items.
 
-最小范围：
+Minimum scope:
 
-1. 沿用现有已核实的地点与首领身份关联，读取已生成且能可靠确认的实体；不生成远方 Boss，不替换游戏随机数。
-2. 列出死亡掉落路径实际使用的非空穿戴槽候选，显示物品种类、品质颜色、等级或 Power，以及原版职业适用性。界面职业判断应依据当前角色与原版限制，不需要用户重复填写职业。
-3. 核对该实体是否满足自身装备掉落分支条件。只有具备足够证据时描述该分支的抽取规则；候选不是保证下一次一定掉的清单，更不是某具名 Boss 的固定专属神器表。
-4. 清楚区分自身装备候选、额外随机掉落和任务完成奖励。有效任务奖励可能直接进入背包，不能把地面未出现装备自动记录为全无奖励。
-5. 远处未加载、读取失败、多候选身份不唯一时显示未知；职业可以预测不代表装备已经得到确认。不在首版增加整张世界的装备预测。
+1. Reuse the existing verified place–boss identity links and read generated, reliably confirmable entities; generate no far-away bosses and replace no game random numbers.
+2. List the non-empty wearable-slot candidates actually used by the death-loot path, showing the item kind, quality color, level or Power, and the vanilla class fit. The UI's class judgment should use the current character and the vanilla restrictions — the user should not re-enter a class.
+3. Check whether the entity satisfies the own-equipment drop branch's conditions. Describe that branch's draw rules only with sufficient evidence; the candidates are not a guaranteed next-drop list, let alone a fixed signature-artifact table for a specific named boss.
+4. Clearly separate own-equipment candidates, extra random drops, and quest-completion rewards. Valid quest rewards may go straight to the bag; no gear appearing on the ground must not be recorded as no reward at all.
+5. Show unknown when far and unloaded, reads fail, or multiple candidate identities are ambiguous; a predictable class does not mean confirmed equipment. The first version adds no whole-world equipment prediction.
 
-首先解决“这个目标有没有我想要的装备，值不值得去打”。首版无需同时开发复杂愿望单、自动配装、路线优化或精确总掉率预测；后续是否需要由实际刷装反馈决定。
+First solve "does this target have the gear I want, and is it worth fighting?". The first version need not also build a complex wish list, auto loadouts, route optimization, or precise total drop-rate prediction; whether those are needed is decided by the real grinding feedback.
 
-复用当前区域探索的入口、地点列表、字体和原管理器条目，作为已有功能的增量更新。地图导航继续负责指路，旅行驿站继续负责已到访地点和个人备注，不把这三项合成一个必须同时启用的大 Mod。具体装备情报展示和跨模块持久记录若需要新的通信，应单独评估，不能为写规划就顺手修改现有数据格式。
+Reuse the current Region Explorer's entry, place list, fonts, and manager entry as an increment of the existing feature. Navigation keeps handling directions, Fast Travel keeps handling visited places and personal notes — these three are not merged into one big mod that must be enabled together. If the equipment-intel display and cross-module persistent records need new messaging, evaluate that separately; existing data formats are not casually changed just to write a plan.
 
-## 当前六项在用功能如何取舍
+## How to weigh the current six active features
 
-项目保留七个独立功能的源码和管理条目；根据最新安装记录，实验副本已卸下地图照明，其余六项保留。以下是文档与安装记录核对结果，不是本轮重新运行游戏的结果。
+The project keeps the source and manager entries of seven standalone features; per the latest install record, the playtest copy has Map Light removed and the other six kept. The following is the doc-vs-install-record reconciliation, not a re-run of the game this round.
 
-| 功能 | 当前记录 | 接下来投入 |
+| Feature | Current record | Next investment |
 | --- | --- | --- |
-| 区域探索 0.1.5 | 职业确认、有限预测、难度与地点信息 | 作为刷装情报的主要增量入口；沿用原开关。 |
-| 旅行驿站 0.1.3 | F8 传送、地点与 Boss 观察、多行个人备注 | 保证现场信息可靠、传送与保存可用；先利用现有备注记想刷的目标。观察过不等于击杀过。 |
-| 地图导航 0.3.7 | 方向距离、店铺指南、可选探索目标交接 | 保持可用，必要时修指针和选点；暂不再扩展装饰或重写地图交互。 |
-| 药水商店 0.2.0 | 售卖最高可制作药水的上一档，随成长定价 | 支持持续刷装，保持已有规则；价格和成长不在本轮调整。 |
-| 批量补给 0.1.1 | 买空瓶、做水瓶和药水的数量窗口 | 优先补实际交易、材料消耗和保存重开的验收；不因界面或 DLL 检查通过就写成真实交易通过。 |
-| 背包分类 0.1.6 | 中文分区、详情避让、取放及卖出留空位 | 已确认的操作保留，必要修复继续；不同时另做一套交易或完整配装系统。 |
-| 地图照明 | 2026-10-28 已按用户要求卸下 | 留档，恢复由用户另行提出。不能沿用旧表格中“已装 0.1.0、只需升级”的说法。 |
+| Region Explorer 0.1.5 | Class confirmation, limited prediction, difficulty and place info | The main incremental entry for grinding intel; keeps the original switch. |
+| Fast Travel 0.1.3 | F8 teleport, places and boss observation, multi-line personal notes | Keep the live info reliable and the teleport/saving usable; use the existing notes first to record targets worth farming. Observed is not killed. |
+| Navigation 0.3.7 | Direction and distance, shop guide, optional explorer target handoff | Keep it working; fix the cursor and picking if needed; no more decoration or map-interaction rewrites for now. |
+| Potion Shop 0.2.0 | Sells one tier below the best craftable, priced with progression | Supports continuous grinding, keeps the existing rules; prices and progression are not adjusted this round. |
+| Batch Actions 0.1.1 | Quantity windows for empty bottles, water, and potions | Prioritize the acceptance of real trades, material consumption, and save/restart; passing UI or DLL checks is not a passing real trade. |
+| Inventory Sort 0.1.6 | Chinese sections, detail yielding, take/place and sale slot preservation | The confirmed operations are kept, necessary fixes continue; no parallel trading or full loadout system alongside. |
+| Map Light | Removed 2026-10-28 at the user's request | Kept on record; reinstalling is up to the user. The old table's "0.1.0 installed, just upgrade" no longer applies. |
 
-旅行驿站、区域探索和批量补给仍有文档中列出的真实游戏待验收项。相关阻塞按实际反馈修复，避免以“先把所有模组全测完”为由无限期推迟刷装情报。新的情报功能也必须做与读取、身份、显示和现有模块组合相称的验证。
+Fast Travel, Region Explorer, and Batch Actions still have the real-game acceptance items listed in their docs. Fix blocking issues per actual feedback; do not indefinitely postpone the grinding intel behind "finish testing every mod first". New intel features must also be verified proportionally for reading, identity, display, and combination with the existing modules.
 
-## 先不扩展的方向
+## Directions not to expand yet
 
-- 通用职业智能掉落、失败次数保底、物品职业转换、提高品质或等级：都不是当前已选择的方案。只有情报改善后仍出现明确问题，且用户重新选择改玩法时，再具体讨论。
-- 另起一个独立冒险日志：现有驿站已经有地点、Boss 观察和个人备注，先使用现有能力，不为同一记录需求重新做存储和界面。
-- 大型技能树、世界生成、完整营地村民经营：当前痛点不在这里，暂不投入。
-- 自动筛掉所有异职业 Boss：通用首饰、额外随机装备与任务奖励仍可能有价值；优先提供依据，让用户自己选，不把不匹配职业的地点悄悄隐藏。
+- Universal smart class drops, failure-count pity, item class conversion, quality/level boosts: none of these is the currently chosen plan. Only if clear problems remain after the intel improves, and the user re-chooses gameplay changes, are they discussed concretely.
+- A separate adventure journal: the existing stations already have places, boss observations, and personal notes; use the existing capability first — no new storage and UI for the same recording need.
+- Big skill trees, world generation, full camp/villager economy: not the current pain point; no investment for now.
+- Auto-hiding all off-class bosses: universal jewelry, extra random equipment, and quest rewards may still be valuable; provide the basis and let the user choose — off-class places are not silently hidden.
 
-便利功能已经减少补给和重复跑图，现在需要验证这些时间是否转成更有依据的装备追求。更快打更多 Boss 仍可能缺少有效提升；目标信息是否足够有用，应看用户能否挑出值得挑战、值得回访的对象。
+The convenience features have already cut resupply and repeated map runs; now verify whether that time converts into better-grounded equipment pursuits. Killing more bosses faster can still lack effective upgrades; whether target info is useful enough is measured by whether the user can pick out targets worth challenging and worth revisiting.
 
-## Omega 最新变化如何影响判断
+## How Omega's latest changes affect the judgment
 
-2026-10-29 查询官方补丁索引，最新列为 10 月 28 日 **v0.2.0**。它已加入 Journal：入门指南，以及通过探索、交谈、阅读等逐步积累的知识；发现记录在同一账号的所有角色之间共享。作者同时说明背景故事和日志还会继续扩充。这使 10 月 25 日“日志可能是尚未覆盖的新方向”的建议需要更新，但不证明后期目标或装备获取问题已经解决。
+2026-10-29, querying the official patch index, the latest is October 28's **v0.2.0**. It added the Journal: a starter guide plus knowledge gradually accumulated through exploring, talking, and reading; the discovery records are shared across all characters of the same account. The author also says the backstory and journal will keep growing. This updates the October 25 suggestion that "the journal might be an uncovered new direction", but it does not prove the late-game goal or equipment-acquisition problems are solved.
 
-来源：[官方 v0.2.0 补丁](https://wollay.com/patch-notes/2026-10-28-0-2-0-journal-and-world-lore/)、[日志说明](https://wollay.com/blog/a-journal-for-your-adventures/)。均于 2026-10-29 读取。没有据此声称 Omega 已具备同等 Boss 实际装备情报，也没有将无法试玩的版本视为本地现成替代。
+Sources: [official v0.2.0 patch](https://wollay.com/patch-notes/2026-10-28-0-2-0-journal-and-world-lore/), [journal notes](https://wollay.com/blog/a-journal-for-your-adventures/). Both read on 2026-10-29. No claim is made that Omega has equivalent boss actual-equipment intel, and no unplayable version is treated as a local ready-made substitute.
 
-[10 月 25 日对照与 PDF](omega-mod-planning-2026-10-25.md)保留为历史快照，不能继续按五个 Mod 或旧版 Omega 状态排当前优先级。之后新增功能前仍按项目约定刷新相关官方与现成方案；同一游戏构建的兼容性、许可和实际适用范围核实后再复用。
+The [October 25 comparison and PDF](omega-mod-planning-2026-10-25.md) remain a historical snapshot and must no longer set current priorities by five mods or the old Omega state. Before adding features, the official and ready-made options are still refreshed per the project conventions; compatibility, licenses, and actual applicability of the same game build are verified before reuse.
 
-## 验收这一方向是否有效
+## Accepting whether this direction works
 
-选少量有代表性的目标，在出发和击杀前查看情报：能否知道候选是否适合自己，能否区分“没有相关候选”和“有候选但没抽中”，是否找到愿意回访的目标。已经存在的任务奖励与背包变化也要核对。
+Pick a few representative targets and check the intel before setting out and before the kill: can you tell whether a candidate suits you, distinguish "no relevant candidates" from "candidates existed but weren't drawn", and find targets you are willing to revisit? The existing quest rewards and bag changes are also checked.
 
-实际掉落没有抽中想要的一件，不自动构成情报功能失败；情报与真实候选不符、身份关联错、把未知说成确定，则必须修复。这个阶段先验证信息能否改善选择，不承诺几次击杀必出提升。
+Not drawing the one item you wanted does not automatically make the intel a failure; intel contradicting the real candidates, wrong identity links, or stating the unknown as certain must be fixed. This stage first verifies whether the information improves choices; no number of kills is promised to yield an upgrade.
 
-本轮只更新开发方向与资料入口。没有修改掉落代码、装备数据、现有模组 DLL 或存档，没有重新构建或安装，也没有运行游戏。本文件中“最小范围”是下一项功能的边界，尚不能称为已完成。
+This round only updates the development direction and reference entries. No drop code, equipment data, existing mod DLLs, or saves were modified; nothing was rebuilt, installed, or run. The "minimum scope" in this file is the next feature's boundary and cannot yet be called complete.

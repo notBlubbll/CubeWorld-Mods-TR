@@ -1,95 +1,95 @@
-# 魔方世界模组管理器
+# Cube World Mod Manager
 
-本地 Windows 桌面应用，供用户独立启用或停用地图、药水、区域探索、地图照明、背包分类、旅行驿站、批量补给与首领抽奖 Mod。界面保留深蓝配色、金发图标和少量方块元素，使用紧凑列表与细线控件。
+A local Windows desktop app that lets the user independently enable or disable the Navigation, Potion Shop, Region Explorer, Map Light, Inventory Sort, Fast Travel, Batch Actions, and Boss Draw mods. The interface keeps the deep-blue palette, the blond icon, and a few blocky elements, with a compact list and thin-line controls.
 
-## 使用
+## Usage
 
-双击项目根目录的 `魔方世界模组管理器.lnk`，或 `启动模组管理器.cmd`。默认管理实验副本，可以明确选择正式游玩副本。
+Double-click the project root's `魔方世界模组管理器.lnk`, or `启动模组管理器.cmd`. It manages the playtest copy by default; the formal play copy can be selected explicitly.
 
-2026-10-29 起支持普通桌面窗口：拖动边缘调整大小，标题栏可最小化、最大化或还原。点击“全屏 F11”或按 F11 进入全屏，Esc 或 F11 返回进入前的窗口位置、尺寸与最大化状态。
+Since 2026-10-29 it supports an ordinary desktop window: drag the edges to resize; the title bar minimizes, maximizes, or restores. Click "Fullscreen F11" or press F11 for fullscreen; Esc or F11 returns to the window position, size, and maximized state from before entering.
 
-文字、图标和开关按 Windows 显示比例保持大小，不随模组数量或窗口尺寸缩小。模组列表独立滚动，宽窗口自动排成两列；副本选择、状态提示与底部“启动游戏”栏固定显示。模组增加后只增加列表内容，不再拉长整张固定界面。
+Text, icons, and switches keep their size with the Windows display scale and do not shrink with the mod count or window size. The mod list scrolls independently and auto-flows into two columns in wide windows; the copy selector, status hints, and the bottom "start game" bar stay fixed. Adding mods only grows the list — the fixed UI no longer stretches.
 
-同日按界面反馈收紧为默认 920 × 700、最小 680 × 480 的逻辑窗口：模组行高 88，模组标题 17、正文 13、状态 12 个逻辑像素。说明只在列表中显示一份，移除重复悬停提示；开关直接表达正常启停状态，缺文件、未知和锁定原因仍就地显示。运行中的旧窗口需要关闭后从原入口重开，才能显示新版界面。紧凑版验证见 `../research/evidence/mod-manager-compact-20261029.md`。
+The same day it was tightened per UI feedback to a default 920 × 700, minimum 680 × 480 logical window: mod rows 88 high, mod titles 17, body 13, status 12 logical pixels. Descriptions appear once in the list, removing duplicate hover tooltips; the switch directly shows the normal on/off state, with missing-file, unknown, and lock reasons still shown in place. A running old window must be closed and reopened from the original entry to show the new UI. Compact-version validation is in `../research/evidence/mod-manager-compact-20261029.md`.
 
-开关显示目标目录中已保存的配置。切换后重新读取实际状态；无法确认时显示未知并锁定，不提前显示成功。更改在下一次启动游戏时生效。
+The switches show the saved config in the target directory. After toggling, the actual state is re-read; when it cannot be confirmed it shows unknown and locks — success is not shown early. Changes take effect on the next game start.
 
-调整开关后，点击右下角金色的“启动游戏”，即可通过当前所选副本的 `NavigationLauncher.exe` 启动游戏并加载已启用的 Mod。打开管理器或切换副本不会自动启动游戏。游戏已运行、进程状态不明、启动器缺失或校验不通过时，按钮锁定并显示原因。启动后可关闭管理器，游戏继续运行；管理器不会终止游戏。
+After adjusting the switches, click the gold "启动游戏" (start game) at the bottom-right to start the game through the selected copy's `NavigationLauncher.exe` and load the enabled mods. Opening the manager or switching copies never starts the game. When the game is running, the process state is unclear, the launcher is missing, or checks fail, the button locks with a reason. After starting, the manager can be closed — the game keeps running; the manager never terminates the game.
 
-启动检查兼容当前实验副本的旧启动器、正式副本已记录的 740 修复版及支持独立 Mod 的新启动器，均按固定 SHA256 核对。两个旧版本仍要求地图 DLL 文件存在；识别兼容版本不会顺带升级启动器。
+The start check recognizes the playtest copy's old launcher, the formal copy's recorded 740-fix build, and the new standalone-mod-capable launcher — all verified by fixed SHA256. The two old builds still require the map DLL file; recognizing a compatible version never upgrades the launcher along the way.
 
-缺少 DLL 的功能不能启用。运行中、状态不明或校验不通过时锁定开关。停用保留模组文件、配置、数据和存档，更改前由现有管理脚本独立备份。
+A feature whose DLL is missing cannot be enabled. While running, unclear, or failing checks, the switch locks. Disabling keeps the mod files, config, data, and saves; the existing management script backs up independently before changes.
 
-药水商店 0.2.0 沿用原有“药水商店”条目和 `potion_shop.enabled` 开关。每次开店出售比角色最高可制作药水低一档的生命药水，随成长自动更新；具体档位与价格见 `../potion_shop/README.md`。管理器不另存角色等级或药水档位。
+Potion Shop 0.2.0 keeps the original "药水商店" entry and the `potion_shop.enabled` switch. Each shop opening sells the health potion one tier below the character's best craftable, auto-updating with progression; the tiers and prices are in `../potion_shop/README.md`. The manager stores no character level or potion tier.
 
-区域探索 0.1.5 继续使用原 `RegionExplorer` 条目、`mods/region_explorer.dll` 和 `region_explorer.enabled`。挑战页新增首领职业的确认、有限预测和未知；此次只更新探索 DLL，没有新增管理器条目或改动管理器程序。更新前后实际核对五项模组与原开关一致，照明仍关闭，停用/卸下流程沿用。
+Region Explorer 0.1.5 keeps the original `RegionExplorer` entry, `mods/region_explorer.dll`, and `region_explorer.enabled`. The Challenges page adds the boss class's confirmed, limited prediction, and unknown; this pass updated only the explorer DLL, adding no manager entry and changing no manager code. Before and after, the five mods' original switches were verified unchanged, Map Light stays off, and the disable/remove flow is unchanged.
 
-区域探索 0.1.2 沿用“区域探索”条目，管理 ID 为 `RegionExplorer`，对应 `mods/region_explorer.dll`、`region_explorer.enabled`。新增原版地区等级的白/青/红难度色，原有路径和启停流程继续匹配，不新增开关或修改管理器程序；地图和药水沿用各自原开关。该功能的范围与局限见 `../region_explorer/README.md`。
+Region Explorer 0.1.2 kept the "区域探索" entry with manager ID `RegionExplorer`, mapping to `mods/region_explorer.dll` and `region_explorer.enabled`. The vanilla region-level white/cyan/red difficulty colors were added; the original paths and toggling still match, with no new switches and no manager-program changes; the map and potion keep their own original switches. The feature's scope and limits are in `../region_explorer/README.md`.
 
-地图照明使用第四个“地图照明”条目，管理 ID 为 `MapLight`，对应 `mods/map_light.dll`、`map_light.enabled`。0.1.0 已接入并重建原入口。0.1.1 沿用同一条目，改为夜间大地图自动补光、白天保留原版光照；关图恢复原版夜景。照明 0.1.1 候选管理器保留在 `../releases/map-light-0.1.1/ModManager.exe`。背包分类接入时已将原管理器重建为五行开关；游戏中的照明 DLL 仍是 0.1.0，本次没有替换。详情见 `../map_light/README.md`。
+Map Light uses the fourth entry, "地图照明", manager ID `MapLight`, mapping to `mods/map_light.dll` and `map_light.enabled`. 0.1.0 was wired in and the original entry rebuilt. 0.1.1 keeps the same entry, switching to automatic night-time lighting for the world map with daytime vanilla; closing the map restores the vanilla night. The 0.1.1 candidate manager is kept at `../releases/map-light-0.1.1/ModManager.exe`. The Inventory Sort integration rebuilt the original manager into a five-row switch panel; the in-game light DLL is still 0.1.0 and was not replaced this time. Details in `../map_light/README.md`.
 
-## 实现与构建
+## Implementation and build
 
-背包分类 0.1.6 沿用第五个“背包分类”条目，管理 ID `InventorySort`，对应 `mods/inventory_sort.dll` 与 `inventory_sort.enabled`。胸甲、手套等显示独立中文标题，拿起可放回可见空位，卖出留空不补位；位置保留于当前游戏会话，原版格子尺寸、每行容量及换行保留。原双击入口现包含八项功能和各自开关，不重复增加背包条目。当前使用可调整大小的窗口及独立滚动列表；此前六行固定界面的检查保留在旅行驿站历史验证记录中。源码、说明见 `../inventory_sort/README.md`。
+Inventory Sort 0.1.6 keeps the fifth entry, "背包分类", manager ID `InventorySort`, mapping to `mods/inventory_sort.dll` and `inventory_sort.enabled`. Chestplates, gloves, and so on show independent Chinese titles; pickups can be placed back into visible slots, and sales leave the empty slot without fill-in; positions persist for the current game session, and the vanilla cell size, per-row capacity, and wrapping are kept. The original double-click entry now contains eight features with their own switches, without duplicating the inventory entry. The current window is resizable with an independently scrolling list; the checks for the earlier six-row fixed UI are kept in the Fast Travel historical validation record. Source and notes in `../inventory_sort/README.md`.
 
-- `ModManager.cs`：Windows Forms 界面，使用 Windows 自带 .NET Framework，不需要浏览器或本地网络服务。
-- `Get-ModManagerState.ps1`：只读 JSON 状态接口；按当前加载器的缺省与布尔值规则解释配置。
-- `Start-ModGame.ps1`：每次点击重新检查状态，仅调用目标目录中已验证的公共启动器；不修改配置或更新启动器。返回启动请求结果，不把请求成功等同于游戏已进入主菜单。
-- `../Manage-Mod.ps1`：Mod 配置的唯一写入入口。界面不另写一套配置修改流程，也不直接加载游戏或 Mod DLL。
-- `../Build-ModManager.ps1`：使用系统自带 C# 编译器构建无控制台程序，并创建本机快捷方式。
+- `ModManager.cs`: the Windows Forms UI, using the Windows-bundled .NET Framework — no browser or local network service needed.
+- `Get-ModManagerState.ps1`: the read-only JSON status interface; interprets the config per the current loader's defaults and boolean rules.
+- `Start-ModGame.ps1`: re-checks the state on each click and calls only the verified shared launcher in the target directory; it changes no config and updates no launcher. It returns the launch-request result — a successful request is not the same as the game reaching its main menu.
+- `../Manage-Mod.ps1`: the single write entry for mod configs. The UI implements no parallel config-changing flow and loads no game or mod DLLs itself.
+- `../Build-ModManager.ps1`: builds the windowless program with the system C# compiler and creates the local shortcut.
 
-应用动态查找已安装的 PowerShell 7，包括本机现有 Codex 运行环境。没有找到时回退 Windows PowerShell 5.1 只读查询，并锁定写操作；不会下载软件或更改系统安全设置。
+The app dynamically finds the installed PowerShell 7, including the machine's existing Codex runtime. When not found it falls back to Windows PowerShell 5.1 read-only queries and locks writes; it downloads nothing and changes no system security settings.
 
-主标题字体可读取本机 `playtest/resource1.dat`，仅作为本进程私有字体，不复制或分发该资源，也不安装系统字体。列表标题、说明和按钮均使用系统中文字体，便于紧凑排版和阅读。
+The main title font may read the local `playtest/resource1.dat` — used only as this process's private font; the resource is never copied or distributed, and no system font is installed. The list titles, descriptions, and buttons use system Chinese fonts for compact layout and readability.
 
-启动器使用参考 Picroma 官网角色与标志制作的体素冒险者图标，应用于程序、快捷方式、任务栏与窗口页首。透明原图、多尺寸 ICO、参考来源和生成提示词保存在 `assets/`；构建时嵌入资源，不依赖本机图像生成目录。
+The launcher uses a voxel-adventurer icon made referencing Picroma's official site characters and logo, applied to the program, shortcut, taskbar, and window header. The transparent original, multi-size ICO, reference sources, and generation prompt are kept in `assets/`; the build embeds the resource and does not depend on the local image-generation directory.
 
-## 新 Mod 的接入职责
+## Integration duties for new mods
 
-新增独立 Mod 时，负责该功能的开发者必须同时完成现有管理器接入。这是项目的默认交付范围，不等待用户额外提醒。交付标准见根目录 `AGENTS.md` 与 `MODS.md` 的“新增 Mod 的默认交付要求”。
+When adding a standalone mod, the developer responsible for that feature must also complete the existing manager integration. That is the project's default delivery scope, not waiting for the user to remind. The delivery standard is in the root `AGENTS.md` and in `MODS.md`'s "Default delivery requirements for new mods".
 
-当前实现中的接入位置：
+The integration points in the current implementation:
 
-| 位置 | 需要同步的内容 |
+| Location | What must be kept in sync |
 | --- | --- |
-| `Get-ModManagerState.ps1` | 允许的模块、DLL 路径校验、中文名称/说明、安装与启停状态、安全锁定原因。 |
-| `../Manage-Mod.ps1` | 允许的模块和固定文件映射；只更改选定模块的开关键，沿用备份、退出游戏和数据保留检查。 |
-| `ModManager.cs` | 新条目、独立开关事件与状态更新；把新行加入 `modRows`，由滚动列表自动排列。不得按条目总数降低 `Skin.Scale` 或增加固定窗口总高度。 |
-| 对应构建/安装脚本及 `../Prepare-Playtest.ps1` | 生成独立 DLL、提供选定组件的准备与安装流程，保留其他组件。 |
-| `../Build-ModManager.ps1` | 重新构建管理器，核对原双击入口仍然有效。 |
+| `Get-ModManagerState.ps1` | Allowed modules, DLL path checks, Chinese names/descriptions, install and on/off states, safe-lock reasons. |
+| `../Manage-Mod.ps1` | Allowed modules and the fixed file mapping; change only the selected module's toggle key, keeping the backup, game-exit, and data-preservation checks. |
+| `ModManager.cs` | New entry, independent switch events, and status updates; add the new row to `modRows` and let the scrolling list lay it out. Do not lower `Skin.Scale` by entry count or grow the fixed window height. |
+| The matching build/install scripts and `../Prepare-Playtest.ps1` | Build the standalone DLL, provide the selected components' preparation and install flow, keep the other components. |
+| `../Build-ModManager.ps1` | Rebuild the manager and verify the original double-click entry still works. |
 
-接入后验证新功能的独立启停、原有功能不被更改、缺文件和运行中锁定、备份及配置/数据保留。源码或 DLL 完成但尚无管理器开关时，仍属于未完成的交付；不得让用户自己补登记。已有 Mod 的普通更新沿用其原条目。
+After integration, verify the new feature's independent toggling, the original features staying unchanged, the missing-file and running locks, and the backup and config/data preservation. Source or a DLL without a manager switch is still an unfinished delivery; the user must not be made to do the registration. Ordinary updates to existing mods reuse their original entries.
 
-## 验证边界
+## Validation boundaries
 
-2026-10-29 窗口布局修正：Release 重建、466 项隐藏窗口检查通过，覆盖三种窗口尺寸、100%/125%/150%/200% 布局比例、八项与二十项列表、全屏还原，以及缺文件、未知、运行中开关和启动锁定。另在真实窗口检查滚轮到最后一项、原生最大化/还原、普通窗口与最大化窗口的 F11/Esc 往返，未执行实际模组切换或启动游戏。记录及复现入口见 `../research/evidence/mod-manager-window-20261029.md`；多显示器不同 DPI 间拖动未验证。
+2026-10-29 window layout fix: Release rebuild and 466 hidden-window checks passed, covering three window sizes, 100%/125%/150%/200% layout scales, eight- and twenty-item lists, fullscreen restore, and missing-file, unknown, running switches and start locks. A real window additionally checked scrolling to the last row, native maximize/restore, and F11/Esc round trips in normal and maximized windows — no actual mod toggling and no game start. Records and the reproduction entry are in `../research/evidence/mod-manager-window-20261029.md`; dragging between monitors with different DPI is unverified.
 
-2026-10-24 区域探索接入：状态接口扩充为 101 项检查，覆盖三项 Mod 的八种配置组合及缺失文件、未知状态和运行锁定；单模块管理扩充为 54 项检查，覆盖探索的独立启停、卸下备份与保留地图/药水/数据。重新构建管理器并用自身绘制方法检查三行开关及窗口边界，没有在该预览中启动游戏或操作用户窗口。实验副本实际状态已只读核对三项均安装且启用。游戏内组合验收仍待进行，见 `../research/evidence/explorer-0.1.0-validation.md`。
+2026-10-24 Region Explorer integration: the status interface grew to 101 checks covering three mods' eight config combinations plus missing files, unknown states, and running locks; single-mod management grew to 54 checks covering the explorer's independent toggling, removal backup, and keeping the map/potion/data. The manager was rebuilt and its own drawing methods checked the three switch rows and window bounds — no game start and no user-window manipulation in that preview. The playtest copy's actual state was read-only verified with all three installed and enabled. In-game combination acceptance is still pending — see `../research/evidence/explorer-0.1.0-validation.md`.
 
-状态接口已通过 82 项隔离检查，包括默认配置、独立开关、非法配置、缺失文件、安全标记、只读不写和 Windows PowerShell 5.1 中文 JSON。隔离进程与链接场景使用受控模拟数据；真实游戏目录的开关状态不在这些测试中修改。
+The status interface passed 82 isolated checks, including default configs, independent switches, illegal configs, missing files, safety markers, read-only-no-write, and Windows PowerShell 5.1 Chinese JSON. The isolated process and shortcut scenarios use controlled simulated data; the real game directory's switch states are not modified in those tests.
 
-2026-10-24 已完成真实 Windows 窗口的视觉检查和隔离副本点击验证：四种开关组合均正确保存，4 次切换产生4份备份，16 个受保护文件散列未变；错误目标会锁定，返回实验副本后恢复读取。详见 `../research/evidence/mod-manager-validation.md`。
+2026-10-24 completed the visual check of a real Windows window and click verification on an isolated copy: all four switch combinations saved correctly, 4 toggles produced 4 backups, and 16 protected file hashes were unchanged; a wrong target locks and reading recovers after returning to the playtest copy. Details in `../research/evidence/mod-manager-validation.md`.
 
-同日新增“启动游戏”后，82 项状态回归及 25 项启动检查通过。实际窗口中验证了按钮布局、点击反馈和运行后锁定；启动调用在隔离副本中仅记录请求，不执行程序，18 个受保护文件与完整 Mod 配置保持不变。真实游戏启动尚未实测。
+The same day, after adding "start game", the 82 status regressions and 25 start checks passed. The real window verified the button layout, click feedback, and the post-run lock; the start call on the isolated copy only logged the request, executing nothing — 18 protected files and the full mod config stayed unchanged. A real game start has not been measured.
 
-后续复查补充 `research/check_mod_manager_launch_process.ps1`：通过实际管理器调用链启动无害的测试窗口，确认返回及时、窗口可见、工作目录和进程编号正确，且不改动游戏/Mod 占位文件。用户随后从管理器启动实验副本并确认可以启动；已只读核对目标进程与启动日志。此前一次无反应的原因尚未确定。游戏内全部 Mod 组合的兼容性仍未完成验收。
+A later review added `research/check_mod_manager_launch_process.ps1`: it launches a harmless test window through the manager's real call chain, confirming a timely return, a visible window, the correct working directory and process id, and no changes to the game/mod placeholder files. The user then started the playtest copy from the manager and confirmed it launches; the target process and launch log were verified read-only. The cause of one earlier non-response was never determined. In-game compatibility of all mod combinations is still not accepted.
 
-当前自动化沙箱不允许查询 CIM 时，生产状态接口会正常锁定开关；这不能解释为游戏已退出，也不能通过忽略进程检查来解锁。真实游戏副本只做过只读查询，没有通过本次验证改动其开关，也没有进行游戏内兼容性验收。
+When the current automation sandbox forbids CIM queries, the production status interface locks the switches normally; that must not be read as the game having exited, and it cannot be unlocked by ignoring the process checks. The real game copies have only been queried read-only — this validation changed none of their switches and performed no in-game compatibility acceptance.
 
-## 旅行驿站接入（2026-10-25）
+## Fast Travel integration (2026-10-25)
 
-新增第六项“旅行驿站”，ID `FastTravel`，DLL `fast_travel.dll`，开关 `fast_travel.enabled`。名称、说明、安装检测、未知/缺文件/运行中锁定、独立管理与准备副本选项同步接通。沿用原入口，六行按屏幕工作区缩放；新增行没有改变其他五项状态或升级其DLL。离线检查及游戏内待验收项见 `../research/evidence/fast-travel-0.1.0-validation.md`。
+Added the sixth entry, "旅行驿站" (Fast Travel), ID `FastTravel`, DLL `fast_travel.dll`, switch `fast_travel.enabled`. Name, description, install detection, unknown/missing/running locks, independent management, and the copy-preparation option were wired together. The original entry is kept, with the six rows scaled to the screen work area; the new row changed none of the other five states or upgraded their DLLs. Offline checks and the pending in-game items are in `../research/evidence/fast-travel-0.1.0-validation.md`.
 
-0.1.1 增加地点改名和多行备注，管理器沿用本条目、路径和开关，只更新说明并重新构建，不增加重复功能项。记录见 `../research/evidence/fast-travel-0.1.1-validation.md`。
+0.1.1 added place renaming and multi-line notes; the manager keeps this entry, path, and switch — only the description was updated and the manager rebuilt, with no duplicate feature entries. Record in `../research/evidence/fast-travel-0.1.1-validation.md`.
 
-0.1.2（2026-10-26）增加到访地标和可确认的 Boss 名字、职业自动登记，个人备注独立保留；沿用同一条目、路径和开关，同步状态说明与界面文案并重建管理器。记录见 `../research/evidence/fast-travel-0.1.2-validation.md`。
+0.1.2 (2026-10-26) added visited landmarks and confirmable boss name/class auto-registration, with personal notes kept separately; it reuses the same entry, path, and switch, syncing the status descriptions and UI copy and rebuilding the manager. Record in `../research/evidence/fast-travel-0.1.2-validation.md`.
 
-0.1.3（2026-10-26）修复F8已交战Boss漏记，观察独立于移动和施法，不要求所有首领都有任务类型5；站稳仍用于登记落点。沿用本条目和开关，描述更新为“交战也记Boss，停稳登记落点”，管理器已重新构建。记录见 `../research/evidence/fast-travel-0.1.3-validation.md`。
+0.1.3 (2026-10-26) fixed the missed F8 records for already-fought bosses; observation is independent of moving and casting and does not require every boss to have quest type 5; standing still is still what registers landing points. Keeping this entry and switch, the description was updated to "fights also record the boss; standing still registers the landing point", and the manager was rebuilt. Record in `../research/evidence/fast-travel-0.1.3-validation.md`.
 
-## 首领抽奖接入（2026-10-29）
+## Boss Draw integration (2026-10-29)
 
-第八项“首领抽奖”，管理 ID `BossDraw`，DLL `boss_draw.dll`，开关 `boss_draw.enabled`。同步独立状态、安装检测、缺文件/未知/运行中锁定、管理与准备副本入口；原双击入口已重建为八项。F9 手动开奖，保留原版掉落。该行现纳入滚动列表，模块图标为装备卡；不恢复已卸下的地图照明，不修改其他模块配置。离线验证与真实游戏待验收分别见首领抽奖交付记录。
+The eighth entry, "首领抽奖" (Boss Draw), manager ID `BossDraw`, DLL `boss_draw.dll`, switch `boss_draw.enabled`. Independent status, install detection, missing/unknown/running locks, management, and copy-preparation entries were synced; the original double-click entry was rebuilt with eight items. F9 manual draw, vanilla loot preserved. The row now sits in the scrolling list with an equipment-card icon; the removed Map Light is not restored, and no other module config is changed. Offline validation and the pending real-game acceptance are in the Boss Draw delivery records.
 
-首领抽奖 0.1.1 修复游戏地址重定位引起的初始化拒绝，沿用同一条目、DLL 路径与开关；本次 DLL 修复不要求重建管理器。已备份更新实验副本，用户确认 F9 窗口可打开；真实击杀、发奖及保存重开仍待验收，见 修复记录（本地验证记录未随源码发布）。
+Boss Draw 0.1.1 fixed the initialization rejection caused by the game's address relocation, reusing the same entry, DLL path, and switch; this DLL fix needed no manager rebuild. The playtest copy was updated as a backup; the user confirmed the F9 window opens; real kills, granting, and save/restart are still pending — see fix record (local validation records are not published with the source).
 
-首领抽奖 0.1.2 沿用本条目、路径和开关，仅更新补偿卡说明并经授权补入一次机会，无需重建管理器；不包含管理器窗口的其他修改。见 补偿记录（本地验证记录未随源码发布）。
+Boss Draw 0.1.2 reuses this entry, path, and switch, only updating the compensation-card description and, with authorization, appending one chance — no manager rebuild needed; it includes no other manager-window changes. See compensation record (local validation records are not published with the source).

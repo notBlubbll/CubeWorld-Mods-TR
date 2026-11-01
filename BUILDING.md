@@ -1,17 +1,17 @@
-# 构建与当前限制
+# Building and Current Limitations
 
-## 环境
+## Environment
 
-- Windows，Visual Studio 2022，安装“使用 C++ 的桌面开发”、MSVC x86 编译工具及 Windows SDK。
-- CMake 3.20 或更高。项目使用 Win32；不支持把游戏 Mod 编译成 x64。
-- 管理器使用 Windows 自带 .NET Framework 4.x 的 C# 编译器，不使用 npm。
-- 管理器当前优先使用 PowerShell 7；找不到时回退 Windows PowerShell 5.1 只读查询并锁定写操作。
+- Windows, Visual Studio 2022 with the "Desktop development with C++" workload, the MSVC x86 build tools, and the Windows SDK.
+- CMake 3.20 or later. The project uses Win32; compiling the game mods as x64 is not supported.
+- The manager uses the .NET Framework 4.x C# compiler that ships with Windows; npm is not used.
+- The manager currently prefers PowerShell 7; when it cannot be found, it falls back to read-only queries via Windows PowerShell 5.1 and locks write operations.
 
-依赖源码已随仓库放在 `external/Qube-Loader/`。本仓库使用普通文件保存固定版本的构建依赖，不需要运行子模块下载命令；请保留该目录中的许可证和 `LOCAL_CHANGES` 记录。
+The dependency sources are kept in the repository under `external/Qube-Loader/`. This repository stores the pinned build dependencies as plain files, so no submodule download commands are needed; please keep the licenses and the `LOCAL_CHANGES` record in that directory.
 
-## C++ 构建
+## Building the C++ mods
 
-在仓库根目录、能够找到 CMake 的 PowerShell 中运行：
+From the repository root, in a PowerShell that can find CMake, run:
 
 ```powershell
 cmake -S . -B build -G "Visual Studio 17 2022" -A Win32 -DCMAKE_TRY_COMPILE_CONFIGURATION=Release
@@ -19,26 +19,26 @@ cmake --build build --config Release --parallel 1 -- /nodeReuse:false
 ctest --test-dir build -C Release --output-on-failure -E "^inventory_module_checks$"
 ```
 
-产物在 `build/bin/`。可通过 `--target waypoint`、`--target potion_shop` 等分别构建单个 Mod。公共框架和启动器目标为 `cube_mod`、`NavigationLauncher`。
+The artifacts land in `build/bin/`. Single mods can be built separately with `--target waypoint`, `--target potion_shop`, and so on. The shared framework and launcher targets are `cube_mod` and `NavigationLauncher`.
 
-`inventory_module_checks` 的正常模式会读取维护者本机采集的四份背包二进制样本。这些样本未公开，因此上述命令明确排除这一项现场回放；其源码仍保留，其他不需要样本的背包异常模式照常运行。不要把这项排除描述为该回放已经通过。
+The normal mode of `inventory_module_checks` reads four inventory binary samples captured on the maintainer's machine. Those samples are not published, so the command above explicitly excludes that live replay; its source is still kept, and the other inventory anomaly modes that need no samples still run. Do not describe this exclusion as that replay having passed.
 
-仓库中的 `Build-*.ps1` 保留原构建流程，CMake 路径已替换为 Visual Studio 常见安装目录示例。其他电脑优先使用上面的标准 CMake 命令，不要直接照搬示例绝对路径。
+The `Build-*.ps1` scripts in the repository keep the original build flow, with the CMake paths replaced by example paths for a common Visual Studio install directory. On other machines, prefer the standard CMake commands above instead of copying the example absolute paths.
 
-## 管理器构建
+## Building the manager
 
 ```powershell
 .\Build-ModManager.ps1
 ```
 
-生成 `build/bin/ModManager.exe` 与仓库内的本机快捷方式。构建不会启动游戏。
+This produces `build/bin/ModManager.exe` plus the local shortcut inside the repository. Building does not start the game.
 
-## 安装流程尚未通用化
+## The install flow is not yet generalized
 
-公开副本中，管理与安装脚本的游戏目录统一为示例 `C:\Games\CubeWorld`，项目路径示例为 `C:\Projects\CubeWorld-Mods`，均不代表维护者真实目录。实验副本为仓库下 `playtest/`；实验标记的来源路径仍会严格检查。原安装器读取 `releases/` 中固定版本的 DLL 及散列，而源码仓库只包含文字说明与必要元数据，没有这些预编译文件。
+In the public copy, the game directories used by the management and install scripts are unified to the example `C:\Games\CubeWorld`, and the example project path is `C:\Projects\CubeWorld-Mods`; neither represents the maintainer's real directories. The playtest copy lives in `playtest/` inside the repository; source paths marked for the playtest copy are still strictly verified. The original installer reads pinned DLL versions and their hashes from `releases/`, while the source repository only contains the text notes and the necessary metadata — not those prebuilt files.
 
-自行重新编译的加载器或启动器未必与现有写死的 SHA-256 相同，管理器可能据此锁定。**不要删除散列检查、忽略冲突或开启版本不匹配开关来运行。** 对外安装包需要另行完成路径配置、可信构建清单和安装验收，再发布匹配的二进制文件。
+A loader or launcher you rebuild yourself will not necessarily match the hard-coded SHA-256 values, and the manager may lock itself accordingly. **Do not remove the hash checks, ignore conflicts, or flip a version-mismatch switch to force it to run.** A public installer package additionally requires path configuration, a trusted build manifest, and install acceptance before matching binaries can be published.
 
-因此，这次源码发布供阅读、研究、构建及离线检查。不是“下载后在任意电脑双击即可安装”的成品承诺，也不要求将游戏放到维护者相同的磁盘路径。
+So this source release is meant for reading, research, building, and offline checks. It is not a promise of a finished product that installs with a double-click on any computer, and it does not require placing the game at the same disk path as the maintainer.
 
-模块说明保留必要的技术历史，具体个人游玩与安装记录已移除。历史包的示例路径和本地验证记录不代表公开仓库里已有对应附件；安装状态以实际文件和安全检查为准。
+The module docs keep the necessary technical history; specific personal gameplay and install records have been removed. The example paths and local verification records in the historical packages do not mean the public repository contains the matching attachments; install state is defined by the actual files and the safety checks.

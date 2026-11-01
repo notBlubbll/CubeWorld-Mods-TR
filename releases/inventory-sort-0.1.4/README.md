@@ -1,7 +1,7 @@
-# 背包分类 0.1.4
+# Inventory Sort 0.1.4
 
-修正上一版详情避让坐标错误：将原生详情和装备对比的局部边界，通过节点当前变换换算为屏幕边界后裁切分类条。背景、标题和分隔线一起避让；详情关闭后标题恢复。沿用原格子尺寸、列数、换行、分区及只显示分类名称的要求。
+Fixes the previous version's detail-yield coordinate error: the local bounds of the native details and the equipment comparison are converted to screen bounds through the node's current transform before clipping the section titles. Background, titles, and separators yield together; the titles restore when the detail closes. The original cell size, column count, wrapping, sections, and the names-only requirement are kept.
 
-沿用原管理器“背包分类”、`inventory_sort.enabled` 和独立 `inventory_sort.dll`。根目录 `Install-InventorySort.ps1` 要求正常保存并完全退出目标游戏和启动器，核验已知旧版并备份旧 DLL、完整存档和配置后更新。默认仅实验副本，不改其他模块或公共框架，不自动启动游戏。正式目录需要单独明确授权。
+Reuses the original manager's "背包分类" entry, `inventory_sort.enabled`, and the standalone `inventory_sort.dll`. The root's `Install-InventorySort.ps1` requires a normal save and a full exit of the target game and launcher, verifying the known old versions and backing up the old DLL, full saves, and configs before updating. Playtest copy only by default; no other module or shared framework is changed, and the game is never started. The formal directory needs separate explicit authorization.
 
-真实悬停坐标回放、DLL 合成检查和安装保护范围见 验证记录（本地验证记录未随源码发布）。回放预览使用示意图标与详情，不等于新版本已完成真实游戏验收。首次成功测得主详情或装备对比时各记录一次屏幕边界，便于重开核对。
+The real hover-coordinate replay, the DLL's synthetic checks, and the install protection scope are in the validation record (local validation records are not published with the source). The replay previews use illustrative icons and details — that does not mean the new version passed real in-game acceptance. One screen bound is logged on the first successful read of the main detail or the equipment comparison, for relaunch verification.

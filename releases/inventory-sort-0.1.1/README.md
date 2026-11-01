@@ -1,9 +1,9 @@
-# 背包分类 0.1.1
+# Inventory Sort 0.1.1
 
-每类单独起行，显示胸甲、手套、鞋子、肩甲、武器等中文标题。区域随实际物品数量增减；格子尺寸、每行几格、自动换行和原页签均沿用游戏当前布局，没有固定每类容量。
+Each category starts its own row with Chinese titles like chestplate, gloves, boots, pauldrons, and weapons. The sections grow and shrink with the actual item count; the cell size, cells per row, auto-wrap, and original tabs all follow the game's current layout — no fixed per-category capacity.
 
-更新已有独立 `inventory_sort.dll`，沿用管理器“背包分类”和 `inventory_sort.enabled`。显示副本与鼠标位置相互映射，不重排真实背包、不修改价格、物品或存档；停用后恢复原版显示。标题及对齐空白不能当作可交易或拖放的物品格。
+Updates the existing standalone `inventory_sort.dll`, reusing the manager's "背包分类" entry and `inventory_sort.enabled`. The display copy and the mouse position map to each other; the real inventory is not reordered, and prices, items, and saves are untouched; disabling restores the vanilla display. Titles and alignment blanks must not be treated as tradeable or droppable item cells.
 
-正常退出实验副本游戏及启动器后，从项目根目录运行 `Install-InventorySort.ps1`。安装器核验固定 Alpha 游戏和公共框架，支持更新已核实的 0.1.0，备份旧 DLL、完整存档及配置，保留其他 Mod，不自动启动游戏。正式副本需要单独明确授权。
+After fully exiting the playtest game and launcher, run `Install-InventorySort.ps1` from the project root. The installer verifies the pinned Alpha game and shared framework, supports updating from verified 0.1.0, backs up the old DLL, full saves, and configs, keeps the other mods, and never starts the game. The formal copy needs separate explicit authorization.
 
-本包只含独立功能 DLL 与许可证，不升级公共框架。构建记录及 SHA256 见 `release.json`；管理器和安装入口在项目根目录。实际 DLL、失败保护与安装检查通过；布局示意已检查，真实游戏显示、交易及组合兼容仍待验收。详情见 [功能说明](../../inventory_sort/README.md) 与 验证记录（本地验证记录未随源码发布）。
+This package contains only the standalone feature DLL and license, upgrading no shared framework. Build records and SHA256 are in `release.json`; the manager and install entry are in the project root. The real DLL, failure protections, and install checks passed; the layout mockup was checked; the real in-game display, trading, and combination compatibility are still pending acceptance. See the [feature notes](../../inventory_sort/README.md) and the validation record (local validation records are not published with the source).

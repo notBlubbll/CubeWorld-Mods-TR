@@ -1,14 +1,14 @@
-# 药水商店 0.2.0 待测版
+# Potion Shop 0.2.0 pending-test version
 
-用户确定：商店生命药水永远比角色最高可制作档低一档，价格温和增长。每次开店读取当前角色实际解锁的配方；13／14 级且已解锁 13 级药水时，出售 9 级药水、15 铜币。解锁 17 级后重新开店，改卖 13 级药水、16 铜币；更高等级继续由同一公式计算。
+The user's decision: the shop's health potion is always one tier below the character's best craftable, with gently rising prices. Each shop opening reads the recipes this character has actually unlocked; at level 13/14 with the level-13 potion unlocked, it sells the level-9 potion for 15 copper. After unlocking level 17, the shop next opens selling the level-13 potion for 16 copper; higher tiers keep being computed by the same formula.
 
-- 只有基础配方、尚无上一档时不新增药水。
-- 延续原版效果、材料、携带与使用规则，背包已有药水保留原等级。
-- 沿用独立 `potion_shop.dll`、模块 ID 和管理器“药水商店”开关。
-- 不替换地图、公共框架或启动器，不重置启停键和其他 Mod 数据。
+- With only the basic recipe there is no lower tier, so no potion is added.
+- The vanilla effects, materials, carry, and usage rules continue; potions already in the bag keep their original level.
+- Reuses the standalone `potion_shop.dll`, the module ID, and the manager's "Potion Shop" switch.
+- Replaces no map, shared framework, or launcher, and resets no toggle keys or other mods' data.
 
-构建目标：`potion_shop`、`potion_checks`、`potion_module_checks`，Win32 Release。候选 DLL 散列、构建与安装状态以同目录 `release.json` 为准；检查记录在 `../../research/evidence/potion-shop-0.2.0-validation.md`。
+Build targets: `potion_shop`, `potion_checks`, `potion_module_checks`, Win32 Release. The candidate DLL hash, build, and install state are defined by the sibling `release.json`; the check records are in `../../research/evidence/potion-shop-0.2.0-validation.md`.
 
-在项目根目录执行 `Install-PotionShop.ps1 -Target Experiment` 更新实验副本。安装必须核实游戏和启动器完全退出，备份完整存档与旧药水 DLL；正式副本需要另外得到用户明确授权。脚本不会自动启动游戏。
+Run `Install-PotionShop.ps1 -Target Experiment` from the project root to update the playtest copy. The install must verify the game and launcher fully exited and back up the full saves and the old potion DLL; the formal copy needs the user's separate explicit authorization. The script never starts the game.
 
-游戏内的上架、购买扣款、堆叠、升级更新、保存重开和地图组合兼容仍待验收。离线检查与实际加载不代替这些验收。
+In-game stocking, purchase charging, stacking, the level-up update, save/restart, and the map combination compatibility are still pending acceptance. Offline checks and the actual load do not replace them.

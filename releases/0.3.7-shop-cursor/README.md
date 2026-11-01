@@ -1,9 +1,9 @@
-# 地图导航 0.3.7：右侧店铺列表指针
+# Navigation 0.3.7: right shop-list pointer
 
-修复按 M 打开地图后，鼠标移到右侧商店、旅馆等“店铺指南”列表时被面板遮住的问题。现在在该面板内且游戏处于前台时，最后补画白色像素手形；位置沿用选点命中坐标，右键导航保持原样。指针外观与左侧探索现有指针一致。
+Fixes the cursor being covered by the panel when hovering the right-side "shop guide" list of shops, inns, and so on after opening the map with M. Now, inside that panel and with the game in the foreground, a white pixel hand is drawn last; its position uses the pick hit-test coordinates, and right-click navigation is unchanged. The pointer looks the same as the existing one in the left explorer panel.
 
-这是现有 `waypoint.dll` 的更新，沿用“地图导航”条目及 `waypoint.enabled` 开关，不添加新 Mod 或强制依赖。不改店名、用途、标点、存储格式、药水价格或系统鼠标状态。关闭地图和面板外不绘制这个手形。
+This is an update to the existing `waypoint.dll`, keeping the "Navigation" entry and the `waypoint.enabled` switch, adding no new mod and forcing no dependency. It changes no shop names, purposes, waypoints, storage format, potion prices, or the system cursor state. The hand is not drawn with the map closed or outside the panel.
 
-使用根目录 `Install-TownLabels.ps1` 更新，默认仅实验副本，要求游戏和启动器完全退出、备份完整存档及原地图数据，并保留其他 Mod、配置及开关。正式目录另需明确授权。用户已停用地图照明，本次继续保留关闭，不捆绑升级它或公共框架。
+Update with the root `Install-TownLabels.ps1` — playtest copy only by default, requiring the game and launcher fully exited, backing up the full saves and original map data, and keeping the other mods, config, and switches. The formal directory additionally needs explicit authorization. The user had disabled Map Light; it stays off — no bundled upgrade of it or the shared framework.
 
-2026-10-24 23:15 +08:00 已安装实验副本。离线逻辑、实际 DLL 交接、安装保护及 1280×800 / 1920×1200 自有隐藏绘制预览通过，游戏内鼠标效果仍待用户确认。完整记录见项目 `research/evidence/town-0.3.7-validation.md`。
+2026-10-24 23:15 +08:00 — installed into the playtest copy. The offline logic, the real-DLL handoff, the install protections, and the 1280×800 / 1920×1200 hidden-drawing previews passed; the in-game cursor effect still awaits the user's confirmation. The full record is in the project's `research/evidence/town-0.3.7-validation.md`.

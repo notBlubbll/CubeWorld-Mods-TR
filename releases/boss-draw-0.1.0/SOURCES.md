@@ -1,34 +1,34 @@
-# 首领抽奖的依据与实现边界
+# Boss Draw: basis and implementation boundaries
 
-核对日期：2026-10-29。用户已明确选择“原掉落照常，额外一抽”，并授权按 40/40/20 卡池、职业小保底、手动开奖开发。它是新的玩法选择，取代此前“当前只研究装备情报”的投入优先级，不改变原死亡掉落算法。
+Verification date: 2026-10-29. The user has clearly chosen "original loot as usual, plus one extra draw" and authorized development with the 40/40/20 card pool, the class pity, and manual draws. It is a new gameplay choice replacing the earlier "research equipment intel only" priority, and it does not change the vanilla death-loot algorithm.
 
-## 复用判断
+## Reuse decision
 
-本会话查询了 [Omega 官方补丁索引](https://wollay.com/patch-notes/)、[Alpha 模组资料](https://gist.github.com/Oifan/a83b6956f8f6774c1400a6d9001ef70d) 和相关 GitHub 结果，没有核实到能直接用于本机 Alpha 构建的同类成品；这不是宣称所有社区项目都没有该功能。官方另一版本的功能不能直接装入当前 32 位客户端。本轮直达部分新补丁页面失败，没有据此认定最新版本内容或兼容性。
+This session queried the [Omega official patch index](https://wollay.com/patch-notes/), the [Alpha mod notes](https://gist.github.com/Oifan/a83b6956f8f6774c1400a6d9001ef70d), and related GitHub results, and found no ready-made equivalent verified to run on the local Alpha build; that is not a claim that no community project has the feature. An official feature for a different version cannot be dropped into the current 32-bit client. This round's direct fetches of some new patch pages failed, and no conclusion was drawn about the latest version's content or compatibility.
 
-建议投入一个独立小版本，验证额外开奖是否改善刷装期待，暂不扩展付费货币、活动池、角色卡、强化系统或长期经营。已有本地 [掉落逆向报告](../../research/loot-mechanics-2013-2026-10-27.md)、Qube SDK、独立字体助手、管理器与安装保护均可复用。
+The recommendation was to invest in one small standalone version, verifying whether the extra draw improves the equipment-grinding outlook, without expanding into paid currency, event pools, character cards, enhancement systems, or a long-term economy. The existing local [loot reverse-engineering report](../../research/loot-mechanics-2013-2026-10-27.md), the Qube SDK, the independent font helper, and the manager and install protections are all reusable.
 
-## 原版行为核对
+## Vanilla behavior verification
 
-| 地址/数据 | 本次用途 |
+| Address / data | Use here |
 | --- | --- |
-| `0x59B180` | 原版死亡掉落流程；Thiscall，两个参数，`this` 为 GC，参数 0 为死亡实体。在 `0x59622E` 被击杀结算调用，已核对本机字节。只订阅原调用，不取消或改参数。 |
-| `Creature+0x60/+0x7E` | 类别 1 且 `0x200` 首领位；`0x800` 排除。必须当前 HP 已到 0。 |
-| `Creature+0x13A4` | 原版贡献树，键在节点 `+0x10`，正伤害在 `+0x18`。必须存在本地玩家完整 64 位 ID。玩家 ID 可以是 0，不能错误地视为空指针。 |
-| 七个候选槽 | 仅原版自身装备分支使用的副手、主手、胸甲、肩甲、手套、鞋子、项链；不额外加入戒指槽。保存完整 `0x118` 字节 Item。 |
-| `0x46EBE0` | 原生背包加物方法；Thiscall，`this=player+0x11DC`，参数为 Item 指针与 `-1` 自动选分类。原任务奖励在 `0x596AD3` 同样调用。此方法不修改原版掉落算法。 |
-| `GC+0x800A0C` | 当前角色存档编号。恢复源码的保存调用将其作为 `saveEntityBlob` 的角色索引；同时将角色名与职业纳入存储范围。 |
-| `0x5F8530` / `0x4C7E80` | 已核实的品质公式与等级曲线浮动形状。新增卡池用本模块独立随机流，不执行原版生成器，不消耗全局 CRT 状态。 |
+| `0x59B180` | The vanilla death-loot flow; thiscall, two arguments, `this` is the GC, argument 0 the dying entity. Called by the kill settlement at `0x59622E`; verified against the local bytes. Only the original call is subscribed — never canceled or re-parameterized. |
+| `Creature+0x60/+0x7E` | Category 1 plus the `0x200` boss bit; `0x800` excluded. Current HP must already be 0. |
+| `Creature+0x13A4` | The vanilla contribution tree, keys at node `+0x10`, positive damage at `+0x18`. The local player's full 64-bit ID must exist. A player ID can be 0 and must not be mistaken for a null pointer. |
+| Seven candidate slots | Only the off-hand, main-hand, chestplate, pauldrons, gloves, boots, and amulet used by the vanilla own-equipment branch; no extra ring slot. The full `0x118`-byte Item is saved. |
+| `0x46EBE0` | The native inventory add-item method; thiscall, `this=player+0x11DC`, arguments an Item pointer and `-1` for the auto category. The vanilla quest reward calls it the same way at `0x596AD3`. This method does not modify the vanilla loot algorithm. |
+| `GC+0x800A0C` | The current character save number. The recovered source's save call uses it as the character index for `saveEntityBlob`; the character name and class are also included in the storage scope. |
+| `0x5F8530` / `0x4C7E80` | The verified quality formula and the level-curve float shape. The new card pool uses this module's independent random stream — it does not run the vanilla generator and does not consume global CRT state. |
 
-实际程序 SHA-256：`84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`。现有公共加载器 SHA-256：`D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`。安装器检查整文件散列，运行时另核对 PE 与关键函数字节；不关闭版本保护。
+Actual program SHA-256: `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`. Existing shared loader SHA-256: `D729D26FF4F91EED453160FBE4D24D9430043AE6A7165CF3A3AF8A92C24B7A31`. The installer checks the whole-file hashes, and the runtime additionally verifies the PE and the key function bytes; version protection is never switched off.
 
-## 独立与异常处理
+## Independence and exception handling
 
-- 使用现有通用 Raw Hook 接口，只挂接原版死亡入口。当前导航、药水、探索、背包分类、旅行驿站与批量补给均未改该入口。初始检测或 READY 时发现入口冲突会拒绝启用；不升级加载器。
-- 击杀观察与发奖必须在已绑定的 FRAME 线程，跨线程回调被拒绝；只有单人且角色、世界、存档编号都可核实时处理。待机仅每半秒核对上下文及已处理死亡的少量身份，击杀和显式开奖/领奖时立即重查，避免每帧调用会遍历实体树的 session.get。绝不将“消失”当击杀。
-- 同次死亡去重；确认复活、实体重新生成或从当前实体树移除后允许新的有效击杀。重登不会根据历史地点、Boss 名字或目标距离补造奖励。
-- ledger 带格式号、边界和校验和，写前备份并回读验证；损坏时不自动回滚旧备份，以免重发已领取奖励。
-- 原生加物前保存 Claiming，之后核对 Item 语义字段对应数量恰好加一。失败/不确定均不重试。独立文件与原版角色存档不能一起原子提交；异常领奖会锁定该张卡，并保留证据供核对。
-- 关闭 UI、停用或卸下不删除抽奖记录；不同世界、角色范围分开。新增物品本身属于正常角色存档，卸下不回收。
+- Uses the existing generic Raw Hook interface and hooks only the vanilla death entry. The current Navigation, Potion Shop, Explorer, Inventory Sort, Fast Travel, and Batch Actions do not touch that entry. An entry conflict found during initial detection or at READY refuses to enable; the loader is not upgraded.
+- Kill observation and granting must happen on the bound FRAME thread; cross-thread callbacks are rejected. Processing happens only in single-player with verifiable character, world, and save number. Idle rechecks of the context and the few identities of processed deaths run every half second; kills and explicit draw/claim recheck immediately, avoiding the per-frame session.get that walks the entity tree. A "disappearance" is never treated as a kill.
+- The same death is deduplicated; a new valid kill is allowed after revival, entity respawn, or removal from the current entity tree is confirmed. Re-logging does not fabricate rewards from historical places, boss names, or target distance.
+- The ledger has a format number, bounds, and a checksum, is backed up before writing, and is read back to verify; a corrupted ledger is not auto-rolled back to the old backup, to avoid re-granting already-claimed rewards.
+- Before the native add-item it saves Claiming, then verifies the item's semantic fields show exactly one added. Failures/uncertainty never retry. The independent files and the vanilla character save cannot be committed atomically together; an exceptional claim locks that card and keeps the evidence for verification.
+- Closing the UI, disabling, or removing deletes no draw records; different worlds and character scopes are kept apart. The added items themselves belong to the normal character save and are not recalled on removal.
 
-运行接口检查使用实际生成 DLL；业务与 UI 回调使用生产源码和模拟内存/原生调用。尚未在本轮启动游戏，因此不声称真实 Boss 识别、背包显示、正常保存重开或同时运行的性能已经验收。
+The runtime interface checks use the actually built DLL; the business and UI callbacks use the production source with simulated memory/native calls. The game has not been started in this round, so real boss recognition, inventory display, normal save/restart, and performance while running together are not claimed as accepted.

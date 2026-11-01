@@ -1,9 +1,9 @@
-# 地图向下箭头 0.3.4
+# Map Down Arrow 0.3.4
 
-选中地图目标时，金色像素箭头放在目标上方，尖端向下落到目标位置。箭杆从 3 格加粗至 5 格，整体尺寸随现有界面比例适度放大。仍不增加任何目标名称或第二块名牌。
+When a map target is selected, a gold pixel arrow sits above the target with its tip pointing down onto the target position. The shaft thickens from 3 to 5 cells, and the overall size scales up modestly with the existing UI ratio. Still no target name is added and no second nameplate.
 
-店铺原有的一块名称自动避开箭头范围，避免换成向下箭头后遮住文字；侧栏与顶部导航保持原样。只调整地图视觉和名牌避让，不改导航坐标、距离、存储或药水功能。
+The shop's single name automatically yields to the arrow's area, so switching to the down arrow does not cover the text; the sidebar and top navigation stay as they were. Only the map visuals and nameplate yielding are adjusted — no changes to navigation coordinates, distance, storage, or the potion feature.
 
-候选版已通过 Win32 Release 编译、32 项城镇检查和 1280×800、800×480 的独立预览。预览采用实际绘制代码及示意数据，不是真实游戏截图。
+The candidate passed the Win32 Release build, the 32 town checks, and standalone previews at 1280×800 and 800×480. The previews use the actual drawing code with illustrative data — not real game screenshots.
 
-2026-10-23 22:14 +08:00，核实实验游戏进程结束后，已备份完整存档与旧导航并安装本版本；药水模组保持原样，正式副本未更新。入口仍是实验副本原来的“导航启动”，下次启动生效，游戏内效果待用户确认。安装记录见 `research/evidence/town-0.3.4-experiment-install.json`。
+2026-10-23 22:14 +08:00, after verifying the playtest game process had ended, the full saves and old navigation were backed up and this version installed; the potion mod stayed as-is and the formal copy was not updated. The entry is still the playtest copy's original "导航启动" (navigation launch); it takes effect on the next start, and the in-game effect awaits the user's confirmation. The install record is in `research/evidence/town-0.3.4-experiment-install.json`.

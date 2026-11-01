@@ -1,30 +1,30 @@
-# 城镇店铺标签 0.3.0 候选版
+# Town Shop Labels 0.3.0 candidate
 
-已编译，尚未安装到正在游玩的游戏。需要正常退出目标游戏后再更新。
+Compiled, not yet installed into the game currently being played. The target game must be exited normally before updating.
 
-## 新功能
+## New features
 
-- 打开大地图，自动显示附近已发现的店铺和工坊名称。
-- 识别旅馆、道具店、武器店、防具店、鉴定店、铁匠铺、木工坊、纺织坊。
-- 识别熔炉、铁砧、纺车、织布机、锯木台、工作台、改造台。
-- 地图右侧提供“城镇设施”列表，显示附近每类设施中最近的一处及距离。
-- 右键地图上的店名，或右键设施列表中的一行，即可直接导航；在地图其他位置右键仍可自由标点。
-- 按世界保存发现过的设施；原有导航标点继续保留。
+- Open the world map and nearby discovered shops and workshops are automatically named.
+- Recognizes the inn, item shop, weapon shop, armor shop, identifier's shop, smithy, workshop, and clothier.
+- Recognizes the furnace, anvil, spinning wheel, loom, saw, workbench, and customization bench.
+- A "town facilities" list on the map's right shows the nearest facility of each nearby type and its distance.
+- Right-click a shop name on the map, or a row in the facility list, to navigate directly; right-clicking elsewhere on the map still places free waypoints.
+- Discovered facilities are saved per world; the existing navigation waypoints are kept.
 
-首次走近城镇后打开地图，模组才能读取并记住该范围的店铺。尚未发现的远处城镇不会凭空出现店名。缩小时优先保留商店名称，密集设施的文字会避让；可放大地图或使用右侧列表。
+The mod can only read and remember a town's shops after you first walk close to the town and open the map. Undiscovered distant towns do not get shop names out of thin air. When zoomed out, shop names take priority and dense facility text yields; zoom in or use the right-side list.
 
-显示的是“武器店、铁匠铺”等设施类别，不能当成店主的姓名或尚未验证的专有店名。这里使用固定招牌和设施位置，不跟踪行走的居民。
+What is shown is the facility category like "weapon shop" or "smithy" — not the shopkeeper's name or an unverified proper shop name. It uses fixed signs and facility positions and does not track walking residents.
 
-## 更新与回退
+## Update and rollback
 
-项目根目录的 `Install-TownLabels.ps1` 用于更新实验版，`-Target Formal` 用于正式版。脚本会检查游戏已退出、校验版本、备份旧模组与标点，只替换 `mods/waypoint.dll`，不会启动游戏。当前两份游戏仍是 0.2.0，未执行此脚本。
+`Install-TownLabels.ps1` in the project root updates the playtest version; `-Target Formal` is for the formal one. The script checks the game has exited, verifies versions, backs up the old mod and waypoints, replaces only `mods/waypoint.dll`, and never starts the game. Both current game copies are still 0.2.0; this script has not been run.
 
-更新后仍从原来的导航入口启动。回退时正常退出游戏，将此次脚本记录的备份 `waypoint.dll` 放回 `mods` 目录；不用恢复角色存档。标点和店铺记录各自保存在模组的数据目录。
+After updating, keep launching from the original navigation entry. To roll back, exit the game normally and put this script's recorded backup `waypoint.dll` back into `mods`; the character saves do not need restoring. Waypoints and shop records are stored separately in the mod's data directory.
 
-## 已验证与待验证
+## Verified and pending
 
-已通过 51 项原导航检查、28 项城镇标签检查，完成常规窗口、小窗口和无设施状态的独立图片预览及列表命中检查。
+Passed the 51 original navigation checks and the 28 town-label checks, plus standalone image previews and list hit-tests for the regular window, the small window, and the no-facilities state.
 
-真实城镇里的招牌坐标、地图缩放后与建筑的对齐、右键导航、退出重进后的恢复和运行性能，仍需安装后测试。当前只读采样没有读到商店招牌，不能据此声称城镇实测通过。
+Sign coordinates in a real town, alignment with buildings after map zoom, right-click navigation, restoration after exit and re-entry, and running performance still need post-install testing. The current read-only sampling saw no shop signs, so a real-town test cannot be claimed.
 
-预览图使用示意数据，并非游戏截图。字体读取本地游戏已有文件，不随此候选包分发。
+The preview images use illustrative data, not game screenshots. The font is read from the local game's existing files and not distributed with this candidate package.

@@ -1,7 +1,7 @@
-# 背包分类 0.1.3
+# Inventory Sort 0.1.3
 
-修复分类标题盖住卷轴详情、物品属性及装备对比的问题。按两个原生详情节点的实际范围裁切标题，保留详情文字和边框；其他分类继续显示，详情关闭后恢复。边界无法核实时本帧隐藏标题。格子尺寸、换行、分区、鼠标操作及“不显示格数”沿用原行为。
+Fixes the section titles covering scroll details, item stats, and the equipment comparison. The titles are clipped against the actual bounds of the two native detail nodes, keeping the detail text and borders; the other sections keep drawing, and it restores when the detail closes. When the bounds cannot be verified, the titles hide for that frame. The cell size, wrapping, sections, mouse behavior, and the names-only display follow the original behavior.
 
-沿用原管理器“背包分类”、`inventory_sort.enabled` 和独立 `inventory_sort.dll`。从项目根目录运行 `Install-InventorySort.ps1`，要求正常保存并完全退出实验游戏和启动器；精确核验已知旧版、备份旧 DLL、完整存档和配置后更新，不替换其他 Mod、公共框架或启动器，不自动启动游戏。正式目录须单独明确授权。
+Reuses the original manager's "背包分类" entry, `inventory_sort.enabled`, and the standalone `inventory_sort.dll`. Run `Install-InventorySort.ps1` from the project root — it requires a normal save and a full exit of the playtest game and launcher; it precisely verifies the known old versions, backs up the old DLL, full saves, and configs, then updates, replacing no other mods, the shared framework, or the launcher, and never starting the game. The formal directory needs separate explicit authorization.
 
-构建与散列见 `release.json`，验证范围见 记录（本地验证记录未随源码发布）。软件预览使用示意详情和图标，真实游戏修复效果及操作仍待验收。
+Builds and hashes are in `release.json`; the validation scope is in the record (local validation records are not published with the source). The software previews use illustrative details and icons; the real in-game fix effect and operations are still pending acceptance.

@@ -1,7 +1,7 @@
-# 背包分类 0.1.5
+# Inventory Sort 0.1.5
 
-修复装备页在数据跨越相邻可读内存区域时退回原版混排的问题。整块读取不成功时，按 Windows 页边界分段通过原加载器校验读取；任一段不可读仍停止分类。恢复胸甲、手套、鞋子、肩甲、武器、项链、戒指等中文分区，继续沿用原格子尺寸、列数、换行与物品操作，标题只显示类别名称。0.1.4 的详情避让修复保留。
+Fixes the equipment page falling back to the vanilla mixed layout when the data crosses an adjacent readable memory region. When a whole-block read fails, it re-reads in segments split at Windows page boundaries through the original loader's verified reads; any unreadable segment still stops the sectioning. Restores the Chinese sections for chestplates, gloves, boots, pauldrons, weapons, amulets, and rings, keeping the original cell size, column count, wrapping, and item handling, with titles showing only the category names. The 0.1.4 detail-yield fix is kept.
 
-沿用原管理器“背包分类”、`inventory_sort.enabled` 和独立 `inventory_sort.dll`。根目录 `Install-InventorySort.ps1` 要求正常保存并完全退出目标游戏和启动器，核验已知旧版并备份旧 DLL、完整存档和配置后更新。默认仅实验副本，不自动启动游戏；正式目录需要单独明确授权。
+Reuses the original manager's "背包分类" entry, `inventory_sort.enabled`, and the standalone `inventory_sort.dll`. The root's `Install-InventorySort.ps1` requires a normal save and a full exit of the target game and launcher, verifying the known old versions and backing up the old DLL, full saves, and configs before updating. Playtest copy only by default; the game is never started; the formal directory needs separate explicit authorization.
 
-已用现场 104 件装备完整字节及内存边界回放，检查分类、悬停、选择、过期位置保护与不可读尾段。验证和真实游戏状态见 记录（本地验证记录未随源码发布）。
+Replayed with the live 104-item equipment's full bytes and memory bounds, checking the sections, hover, selection, stale-position protection, and the unreadable tail segment. The validation and real-game state are in the record (local validation records are not published with the source).

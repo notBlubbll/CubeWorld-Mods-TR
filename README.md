@@ -1,59 +1,59 @@
 # CubeWorld-Mods
 
-《魔方世界》2013 Alpha 独立模组和 Windows 管理器源码，包含公共启动器。
+Source code for the standalone Cube World 2013 Alpha mods and the Windows mod manager, including the shared launcher.
 
-**当前为开发版源码快照。** 功能可以分别构建和管理，管理器为各模组提供独立开关。公开副本中的安装路径已统一为示例目录，仍保留严格的文件散列校验，尚未改为面向所有玩家的通用安装工具。当前不提供通用安装包。
+**This is a development source snapshot.** Each feature can be built and managed separately, and the manager gives every mod its own on/off switch. Install paths in the public copy have been unified to example directories; strict file hash verification is still in place, and this has not yet become a general-purpose installer for all players. No universal installer package is currently provided.
 
-## 功能
+## Features
 
-| Mod | 当前源码版本 | 功能 | DLL |
+| Mod | Current source version | Features | DLL |
 | --- | --- | --- | --- |
-| [地图导航](navigation/README.md) | 0.3.8 | 地图标点、方向距离、城镇店名与店铺指南 | `waypoint.dll` |
-| [药水商店](potion_shop/README.md) | 0.2.0 | 随角色已解锁配方调整出售的生命药水档位 | `potion_shop.dll` |
-| [区域探索](region_explorer/README.md) | 0.1.6 | 周边已加载城镇、地标、挑战及有限首领职业信息 | `region_explorer.dll` |
-| [地图照明](map_light/README.md) | 0.1.1 | 夜间完整大地图补光 | `map_light.dll` |
-| [背包分类](inventory_sort/README.md) | 0.1.7 | 装备分类显示、中文分区与空位保留 | `inventory_sort.dll` |
-| [旅行驿站](fast_travel/README.md) | 0.1.4 | 到访记录、地点名称与备注，F8 选择落脚点 | `fast_travel.dll` |
-| [批量补给](batch_actions/README.md) | 0.1.2 | 空瓶购买、水瓶及生命药水制作数量选择 | `batch_actions.dll` |
-| [首领抽奖](boss_draw/README.md) | 0.1.7 | 保留原掉落，参与首领击杀后额外抽奖，F9 手动开奖 | `boss_draw.dll` |
+| [Navigation](navigation/README.md) | 0.3.8 | Map waypoints, direction and distance, town labels and the shop guide | `waypoint.dll` |
+| [Potion Shop](potion_shop/README.md) | 0.2.0 | Sells health potion tiers that follow the recipes the character has unlocked | `potion_shop.dll` |
+| [Region Explorer](region_explorer/README.md) | 0.1.6 | Nearby loaded towns, landmarks, challenges, and limited boss class info | `region_explorer.dll` |
+| [Map Light](map_light/README.md) | 0.1.1 | Lights up the full world map when opened at night | `map_light.dll` |
+| [Inventory Sort](inventory_sort/README.md) | 0.1.7 | Grouped equipment display, Chinese section labels, and preserved empty slots | `inventory_sort.dll` |
+| [Fast Travel](fast_travel/README.md) | 0.1.4 | Visit history, place names and notes; F8 to pick a destination | `fast_travel.dll` |
+| [Batch Actions](batch_actions/README.md) | 0.1.2 | Quantity selection when buying empty bottles or crafting water/health potions | `batch_actions.dll` |
+| [Boss Draw](boss_draw/README.md) | 0.1.7 | Keeps original loot, adds an extra draw after boss kills; F9 manual draw | `boss_draw.dll` |
 
-[模组管理器](mod_manager/README.md)使用 C# Windows Forms，负责查看已登记模组、独立启停、备份入口及调用启动器。它本身不注入 DLL，也不自动识别任意社区 Mod。
+The [Mod Manager](mod_manager/README.md) is a C# Windows Forms application that lists registered mods, toggles each one independently, provides backup entries, and invokes the launcher. It does not inject DLLs itself, and it does not auto-detect arbitrary community mods.
 
-## 架构与兼容范围
+## Architecture and compatibility scope
 
-公共部分使用 [Qube-Loader](https://github.com/qad3n/Qube-Loader) 及本项目的 `NavigationLauncher.exe`。功能各自为独立 DLL；其中一个停用不应成为其他功能的必要条件。Qube-Loader、Dear ImGui 和 MinHook 的固定版本源码已随仓库保留，含原许可及本地改动记录。
+The shared parts use [Qube-Loader](https://github.com/qad3n/Qube-Loader) and this project's `NavigationLauncher.exe`. Each feature is a standalone DLL; turning one of them off must not stop the others from working. Pinned source versions of Qube-Loader, Dear ImGui, and MinHook are kept in the repository, together with their original licenses and a record of local changes.
 
-只针对已核实的 Windows 32 位 **2013 Alpha** 客户端开发。实际客户端 SHA-256：
+This targets only the verified Windows 32-bit **2013 Alpha** client. Actual client SHA-256:
 
 ```text
 84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF
 ```
 
-不适用于 2019 Steam 版或 Omega。未验证的客户端、加载器和函数冲突会被拒绝。没有承诺经典 Mod Launcher 的 DLL 或其他社区 Mod 可以直接放入本框架。
+Not compatible with the 2019 Steam version or Omega. Unverified clients, loaders, and function conflicts are rejected. There is no promise that the classic Mod Launcher's DLLs or other community mods can be dropped into this framework as-is.
 
-## 构建与使用
+## Building and usage
 
-见 [构建说明与当前限制](BUILDING.md)。需要 Windows、Visual Studio 2022 C++ 桌面开发工具和 CMake；管理器使用 Windows 自带的 .NET Framework C# 编译器。
+See [Build notes and current limitations](BUILDING.md). You need Windows, the Visual Studio 2022 C++ desktop development tools, and CMake; the manager uses the .NET Framework C# compiler that ships with Windows.
 
-源码仓库不包含游戏本体、游戏资源、字体、存档、玩家地点、现场内存数据、私有日志或预编译 DLL/EXE。模块在运行时读取玩家已安装的游戏资源或系统字体。编译产物应另放 GitHub Releases，并与对应源码版本匹配。
+The source repository does not include the game itself, game assets, fonts, saves, player locations, live memory data, private logs, or prebuilt DLLs/EXEs. Modules read the player's installed game assets or system fonts at runtime. Build artifacts belong in GitHub Releases and must match the corresponding source version.
 
-首领抽奖 0.1.7 的真实新击杀登记、领奖与保存重开，以及全部模组的真实组合运行仍有待验收；离线检查通过不等于这些项目已经完成。各模块说明保留必要的技术历史，个人角色、世界、补偿和安装记录不公开；目录仅为示例。
+For Boss Draw 0.1.7, real new-kill registration, prize claiming, and the save/restart round trip — as well as real combined runs of all mods — are still pending acceptance; passing offline checks does not mean those are done. Each module's docs keep the necessary technical history; personal characters, worlds, compensation records, and install logs are not public; directories are examples only.
 
-## 目录
+## Directory layout
 
 ```text
 navigation/ potion_shop/ region_explorer/ map_light/
 inventory_sort/ fast_travel/ batch_actions/ boss_draw/
-mod_manager/             Windows 管理器
-external/Qube-Loader/    构建所需的固定版本依赖及许可
-research/               预览、检查工具和必要研究说明
-releases/               历史版本文字说明、安装校验元数据与许可
-Build-*.ps1             维护者现有构建入口
-Install-*.ps1           维护者现有安装入口，依赖本机目录及发布包
-Manage-Mod.ps1          单模块启停、备份与卸下入口
-SOURCE_SNAPSHOT.json    本次工作区快照及依赖版本
+mod_manager/             Windows mod manager
+external/Qube-Loader/    pinned dependency sources and licenses required for the build
+research/               previews, check tools, and necessary research notes
+releases/               historical version notes, install verification metadata, and licenses
+Build-*.ps1             the maintainer's existing build entry points
+Install-*.ps1           the maintainer's existing install entry points; depend on local directories and release packages
+Manage-Mod.ps1          per-mod enable/disable, backup, and removal entry point
+SOURCE_SNAPSHOT.json    snapshot of this workspace and its dependency versions
 ```
 
-## 许可与来源
+## License and sources
 
-本仓库自有程序源码按 [GNU GPLv3](LICENSE) 发布；第三方组件保留各自许可和署名，见 [第三方来源](THIRD_PARTY.md)。游戏本体、资源及商标属于其各自权利人，不在本仓库的许可范围内。本项目为非官方社区项目。
+This repository's own program source code is released under [GNU GPLv3](LICENSE); third-party components keep their respective licenses and attribution, see [Third-party sources](THIRD_PARTY.md). The game itself, its assets, and its trademarks belong to their respective rights holders and are not covered by this repository's license. This is an unofficial community project.

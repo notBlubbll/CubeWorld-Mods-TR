@@ -1,7 +1,7 @@
-# 旅行驿站 0.1.0 实验包
+# Fast Travel 0.1.0 playtest package
 
-游戏和启动器完全退出后，运行根目录 `Install-FastTravel.ps1` 安装实验副本。原模组管理器有独立“旅行驿站”开关；其他Mod和原开关保留。
+After the game and launcher fully exit, run the root's `Install-FastTravel.ps1` to install the playtest copy. The original mod manager has an independent "旅行驿站" (Fast Travel) switch; the other mods and the original switches are kept.
 
-沿用 Trader Fast Travel 的流程：城镇商店旁站稳自动记录，F8 → 返回最近城镇或选驿站 → 确认传送。野外可手动登记。完整64位坐标通过原框架保护写入；旧启动器和旧DLL未安装。每个角色与世界独立记录，最多32个点。只支持单人、下坐骑后使用，没有新增建筑或NPC，不收费。真实远距加载、宠物跟随和全部组合仍待游戏内验收。
+It follows the Trader Fast Travel flow: standing still next to a town shop records the place automatically; F8 → return to the nearest town or pick a station → confirm the teleport. Wild places can be registered manually. The full 64-bit coordinates are written through the original framework's protected interface; the old launcher and old DLL were not installed. Records are kept per character and world, at most 32 points. Single-player only, after dismounting; no new buildings or NPCs, and no fee. Real far-distance loading, pet following, and all combinations are still pending in-game acceptance.
 
-构建后必须更新 `release.json` 的 DLL 散列，不能只替换DLL。完整说明见 `../../fast_travel/README.md`，验证边界见 `../../research/evidence/fast-travel-0.1.0-validation.md`。
+After building you must update `release.json`'s DLL hash — do not just replace the DLL. The full notes are in `../../fast_travel/README.md`; the validation boundaries are in `../../research/evidence/fast-travel-0.1.0-validation.md`.

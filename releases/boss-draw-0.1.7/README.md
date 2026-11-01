@@ -1,53 +1,53 @@
-# 首领抽奖 0.1.7
+# Boss Draw 0.1.7
 
-每次参与击败原版首领，保留原版全部掉落，额外获得一次抽装备机会。单人世界站稳、关闭原生菜单、放下手中物品后按 **F9**，点击“翻开装备卡”，查看结果，再点击“领取这件装备”。领取后在背包查看完整属性、与现有装备比较。开启窗口不会自动花掉抽奖机会。
+Every time you help defeat a vanilla boss, all the original loot is kept and you get one extra equipment draw. Stand still in a single-player world, close the native menus, put down what you are holding, then press **F9**, click "flip the equipment card", view the result, then click "claim this equipment". After claiming, check the full stats in your inventory and compare with your current gear. Opening the window does not spend a draw by itself.
 
-0.1.7 修复真实击杀被对象身份校验拒绝的问题：原版死亡函数接收控制器内的 World（GC+0x2E4），此前错误地与控制器本身比较。已按本机程序完整调用链核对，并修正测试的同一错误假设；旧版失败、新版通过。0.1.6 的真实现场证实死亡与渲染同线程，因此该次漏记由本次对象检查解释。见 对象校验修复（本地验证记录未随源码发布）。
+0.1.7 fixes real kills being rejected by the receiver-object check: the original death function receives the World embedded in the controller (GC+0x2E4), which was previously — and wrongly — compared against the controller itself. The full call chain was checked against the local program, and the test's same wrong assumption was corrected; the old version fails, the new one passes. 0.1.6's live evidence confirmed death and rendering on the same thread, so this missed record is explained by that object check. See the object-check fix (local validation records are not published with the source).
 
-0.1.6 修正死亡回调必须与界面刷新同线程的错误限制：死亡线程只提交带角色与世界范围的快照，界面线程核对后保存待抽卡，保留重复击杀去重与手动翻牌、领奖。增加首次线程与首领拒绝原因日志，便于核对真实击杀。旧版未登记的击杀无法从空记录自动恢复；原版任务完成奖励本来就可能按角色职业直接入包，与额外抽奖分开。见 漏记修复记录（本地验证记录未随源码发布）。
+0.1.6 fixed the wrong restriction that the death callback had to share a thread with the UI refresh: the death thread now only submits a snapshot with character and world scope, and the UI thread verifies it and saves the pending draw, keeping the duplicate-kill dedup, the manual card flip, and the prize claim. Logs for the first-thread and boss-rejection reasons were added to help verify real kills. Kills not registered by the old version cannot be recovered from empty records; vanilla quest-completion rewards may already go straight to the bag by character class, separate from this extra draw. See the missed-record fix record (local validation records are not published with the source).
 
-0.1.5 按 frontend-design 技能统一整个抽奖窗口：石板边框、标题、真实保底三格、卡背、旋转品质卡和异常提示。仅本模组换用本机微软雅黑 Regular 常规字重，正文20px，标题按真实字号绘制，不加粗或叠字；小窗口保留字号并紧凑布局。已备份安装实验副本，存档和抽奖记录保留，实际游戏效果待重开验收。见 整体 UI 与字体记录（本地验证记录未随源码发布）。
+0.1.5 unified the whole draw window per the frontend-design skill: stone-slab border, title, the real three pity slots, card back, the spinning quality card, and the error hint. Only this mod switches to the local Microsoft YaHei Regular weight — body 20px, titles drawn at real sizes, no bolding or double-drawing; small windows keep the font size with a compact layout. The playtest copy was installed as a backup; saves and draw records are kept, and the real in-game effect awaits relaunch acceptance. See the overall UI and font record (local validation records are not published with the source).
 
-0.1.4 将揭晓后的卡面整体按真实品质着色，约八秒持续旋转一圈，名称、等级、Power、职业、品质和来源固定在四周。1.1 秒后仍可立即领取，不用等待旋转结束；只在抽奖窗口内绘制，不显示装备模型。已备份更新实验副本，已有数据保留，真实游戏流畅度待验收。见 预览与验证（本地验证记录未随源码发布）。
+0.1.4 colors the revealed card face by its real quality and rotates it continuously for about eight seconds, with the name, level, Power, class, quality, and source fixed around it. After 1.1 seconds you can still claim immediately — no need to wait out the spin; it draws only inside the draw window and shows no equipment model. The playtest copy was updated as a backup; existing data kept, real in-game smoothness pending acceptance. See preview and validation (local validation records are not published with the source).
 
-0.1.3 增加约 1.1 秒的卡背收拢、翻面与真实品质光点；只在开奖窗口绘制，不暂停游戏。动画结束后领取装备，关闭窗口也会保留已保存的结果。卡池、职业保底及数据格式不变。已备份安装实验副本，游戏内流畅度和实际领奖待验收，见 动画与验证记录（本地验证记录未随源码发布）。
+0.1.3 adds a ~1.1 s card-back gather, flip, and real-quality light dots; it draws only in the draw window and does not pause the game. The equipment is claimed after the animation ends; closing the window also keeps the saved result. The card pool, class pity, and data format are unchanged. The playtest copy was installed as a backup; in-game smoothness and the actual claim are pending acceptance — see the animation and validation record (local validation records are not published with the source).
 
-0.1.1 修复启动时的地址重定位误判：Windows 改变程序加载地址时仍严格核对真实指令与处理函数地址，避免模组未启用、F9 无反应。卡池、保底、数据格式和原开关不变。
+0.1.1 fixed the address-relocation misjudgment at startup: when Windows changes the program's load address, the real instructions and handler addresses are still strictly verified, preventing the mod from failing to enable and F9 from doing nothing. The card pool, pity, data format, and original switch are unchanged.
 
-## 奖励规则
+## Reward rules
 
-- 每次有本角色正伤害参与记录、进入原版死亡掉落流程的敌对首领计一次。首领以游戏 `0x200` 标记为准，普通怪、宠物、未参与的附近击杀、单纯消失或卸载均不算。首次启用以前的击杀不会补记。
-- 基础分配：40% 当前职业专属武器/防具、40% 该首领七个原版可掉穿戴槽的非空装备、20% 其他职业装备或通用首饰。其他分支内部四等分：通用首饰、其余三个职业各一份。实际 Boss 装备也可能适合自己，因此“本职业最终占比”不固定为 40%。
-- 没有穿戴装备的首领仍有一抽，其不可用的份额按 2:1 分给本职业和其他分支，最终约 66.7% / 33.3%。界面按本次情况显示基础分配。
-- 额外抽奖连续三次没出当前职业**专属**装备，下一次保证本职业专属武器/防具。任何分支抽到本职业专属装备都会重置计数；通用首饰不重置。保底不保证颜色、部位或属性提升，也不转换原版掉落。
-- Boss 穿戴物品整件复制，保留原品质、等级、种子与改造。其他分支按击杀时的 Boss 等级附近生成：基础等级为 `max(1,L-1或L)`，沿原版等级曲线上下 0.05 浮动。品质按 Boss 的阶级抽取，沿用已核实品质公式的形状，但使用独立随机数；不是提高等级就必出紫色或金色。
-- 新装备均使用原版合法类型与材质；游侠随机池含弓、弩、回旋镖，防具四部位等权。这是新增卡池的规则，不照搬原版随机生成器漏弩、部分肩甲重复的权重。
-- 暂存上限 128 次；接近上限请及时领取。满后保留原版掉落，但不再增加额外机会，HUD 会提示先领取。
+- Every hostile boss that enters the vanilla death-loot flow with this character's positive damage recorded counts once. A boss is defined by the game's `0x200` flag — ordinary monsters, pets, nearby kills you did not participate in, and simple disappearance or unloading do not count. Kills from before the first enable are not backfilled.
+- Base split: 40% your class's exclusive weapon/armor, 40% non-empty equipment from the boss's seven vanilla wearable slots, 20% other classes' equipment or universal jewelry. The remaining branch divides into four equal parts inside itself: universal jewelry and one part for each of the other three classes. Real boss equipment can also fit you, so the "final share for your class" is not fixed at 40%.
+- A boss with no worn equipment still gets one draw; its unavailable shares go 2:1 to your class and the other branch, ending at roughly 66.7% / 33.3%. The UI shows the base split for the current case.
+- When the extra draw misses your class's **exclusive** equipment three times in a row, the next one guarantees an exclusive weapon/armor for your class. Drawing your class's exclusive equipment in any branch resets the counter; universal jewelry does not. The pity does not guarantee color, slot, or a stat upgrade, and it does not convert vanilla drops.
+- The boss's worn items are copied whole, keeping the original quality, level, seed, and modifications. The other branches generate around the boss's level at kill time: the base level is `max(1, L−1 or L)`, floating ±0.05 along the vanilla level curve. Quality is drawn by the boss's tier using the shape of the verified quality formula but an independent random stream; a higher level does not force purple or gold.
+- The new equipment uses only vanilla-legal types and materials; the ranger pool includes bows, crossbows, and boomerangs, with the four armor slots equally weighted. These are the new card-pool rules and do not copy the vanilla generator's weighting that misses crossbows and duplicates some pauldrons.
+- The staging cap is 128 draws; claim in time when close to the cap. When full, vanilla loot is still kept, but no extra chances are added, and the HUD prompts you to claim first.
 
-## 保存与边界
+## Saving and boundaries
 
-抽奖按世界种子、世界名称、角色存档编号、角色名和职业分开保存。Boss 等级、候选与随机种子在击杀后记录；未来升级不提高旧卡奖励。开奖结果与保底计数先保存，重进不能重抽。停用、卸下默认保留未领取次数和记录；已领取装备由原版存档保存，停用不会撤销。
+Draws are saved separately by world seed, world name, character save number, character name, and class. The boss level, candidates, and random seed are recorded after the kill; future upgrades do not improve old cards' rewards. The draw results and pity counter are saved first — re-entering cannot redraw. Disabling and removing keep the unclaimed draws and records by default; claimed equipment lives in the vanilla save, and disabling does not revert it.
 
-领奖前先保存“正在发放”记录，再调用原生背包加物函数，并核对恰好新增一件。调用异常或结果不能确认时锁定该卡，绝不自动重发。若异常退出发生在领奖期间，请保留 `data/boss_draw/` 和日志以便核对；当前首版会阻止该卡后续领取。它不是游戏存档与模组文件之间的跨文件事务，不能保证断电等情况下装备与抽奖记录同时落盘；正常保存退出仍由游戏负责。
+Before granting, it saves an "issuing" record, then calls the native inventory add-item function and verifies exactly one item was added. On a call error or an unconfirmable result it locks that card and never auto-reissues. If an exceptional exit happens during a claim, keep `data/boss_draw/` and the logs for verification; the current first version blocks later claims of that card. It is not a cross-file transaction between the game save and the mod's files, so equipment and draw records are not guaranteed to hit the disk together under power loss and the like; normal save-and-exit remains the game's job.
 
-只支持已核实的 2013 Alpha 客户端及现有 Qube Loader。联网、角色/世界无法确认、未知版本、函数入口被外部覆盖时拒绝发奖。原版死亡函数仅观察，不取消、不改参数、不重放；发奖调用原版背包方法，不修改物品掉率、金币、经验、药水或共享加载器。独立随机数不调用游戏 rand/srand。
+Only the verified 2013 Alpha client and the existing Qube Loader are supported. Multiplayer, an unconfirmable character/world, unknown versions, or externally overwritten function entries refuse to grant. The vanilla death function is only observed — never canceled, never re-parameterized, never replayed; granting calls the vanilla inventory method and does not change drop rates, money, experience, potions, or the shared loader. The independent random stream does not call the game's rand/srand.
 
-## 安装与管理
+## Install and management
 
-正常退出实验副本游戏、启动器和管理器后运行根目录 `Install-BossDraw.ps1`。安装器完整备份存档、已有本模块文件和配置，核对程序及加载器散列，保留其他模块。默认只安装实验副本，不启动游戏；正式目录需要另行明确授权。
+After fully exiting the playtest game, launcher, and manager, run `Install-BossDraw.ps1` from the root. The installer fully backs up saves, this module's existing files and configs, verifies the program and loader hashes, and keeps the other modules. It installs only the playtest copy by default and never starts the game; the formal directory needs separate explicit authorization.
 
-原“魔方世界模组管理器”提供 **首领抽奖** 条目：
+The original "魔方世界模组管理器" (Cube World mod manager) provides the **首领抽奖** (Boss Draw) entry:
 
-| 项目 | 值 |
+| Item | Value |
 | --- | --- |
 | DLL | `mods/boss_draw.dll` |
 | manifest ID | `local.cubeworld.boss-draw` |
-| 管理 ID / 开关 | `BossDraw` / `boss_draw.enabled` |
-| 数据 | `data/boss_draw/<世界角色范围>/ledger.bin`、`ledger_backup.bin` |
-| 公共依赖 | 已核实的 Qube Loader 与公共启动器；不依赖任何其他功能 DLL |
+| Manager ID / switch | `BossDraw` / `boss_draw.enabled` |
+| Data | `data/boss_draw/<world-character scope>/ledger.bin`, `ledger_backup.bin` |
+| Shared dependencies | the verified Qube Loader and shared launcher; no dependency on any other feature DLL |
 
-`Manage-Mod.ps1 -Mod BossDraw -Action Disable/Enable/Uninstall` 沿用单模块流程。卸下仅将本 DLL 移入项目备份，保留抽奖数据和存档；不删除其他模块或公共框架。使用 `Prepare-Playtest.ps1 -Mods BossDraw` 可以准备仅含此功能的新实验副本，但不覆盖现有 `playtest`。
+`Manage-Mod.ps1 -Mod BossDraw -Action Disable/Enable/Uninstall` follows the single-module flow. Removal moves only this DLL into the project backup, keeping the draw data and saves; it deletes no other module or the shared framework. `Prepare-Playtest.ps1 -Mods BossDraw` prepares a new playtest copy with only this feature, without overwriting the existing `playtest`.
 
-构建及必要检查：`Build-BossDraw.ps1`。实现依据见 [SOURCES.md](SOURCES.md)。离线仿真和实际 DLL 检查不代表游戏内击杀、发奖、保存重开及模组组合已验收；真实验收状态见本次交付记录。
+Build and necessary checks: `Build-BossDraw.ps1`. Implementation basis in [SOURCES.md](SOURCES.md). Offline simulation and the real-DLL checks do not mean in-game kills, granting, save/restart, and mod combinations are accepted; for the real acceptance status see this delivery's record.
 
-2026-10-29：0.1.2 已备份更新实验副本，沿用原管理器第八项开关；补偿卡已保存，核对待抽 1 次、未翻牌、保底计数 0。36 个受保护文件（含 8 份原版存档）未变，重复执行未增加次数。没有启动游戏或直接发装备；0.1.1 的 F9 已由用户确认，0.1.2 新击杀、实际翻牌领奖和保存重开仍待验收。见 本次补偿记录（本地验证记录未随源码发布）。
+2026-10-29: 0.1.2 updated the playtest copy as a backup, reusing the manager's original eighth switch; the compensation card was saved, verified as 1 pending draw, unflipped, pity counter 0. The 36 protected files (including 8 vanilla saves) are unchanged, and repeated runs added no draws. Neither was the game started nor equipment granted directly; 0.1.1's F9 was confirmed by the user, while 0.1.2's new kills, actual flip-and-claim, and save/restart are still pending acceptance. See this compensation record (local validation records are not published with the source).

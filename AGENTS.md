@@ -1,42 +1,42 @@
-# 魔方世界 Mod 项目约定
+# Cube World Mod Project Conventions
 
-## 接手与范围
+## Taking over and scope
 
-- 开始工作先阅读根目录 `README.md`、`MODS.md`、相关功能目录的说明，并检查 Git 状态。已有未提交修改属于当前工作现场，不得覆盖或顺带提交。
-- 用户希望地图、药水等不同功能可以独立安装、停用和卸下。新功能默认延续这个边界，不因共用项目目录而合并成一个大 Mod。
-- 新增独立 Mod 时，默认把它接入现有可视化模组管理器。这属于该 Mod 的交付范围，不要求用户另行提出或在其他对话里重复提醒；未完成管理器接入时，不得把该 Mod 宣称为已交付完成。具体流程见 `MODS.md` 的“新增 Mod 的默认交付要求”。
-- 模块封装调整不顺带改变药水价格、成长规则、地图交互等玩法。
+- When starting work, first read the root `README.md`, `MODS.md`, and the docs of the feature directories involved, and check Git status. Existing uncommitted changes are the current working scene; do not overwrite them or sweep them into your commits.
+- The user wants features such as the map and the potion shop to be independently installable, toggleable, and removable. New features inherit this boundary by default; do not merge them into one big mod just because they share the project directory.
+- When adding a standalone mod, wire it into the existing visual mod manager by default. That is part of the mod's delivery scope; the user does not need to ask for it again or remind in another conversation. A mod without manager integration must not be declared delivered. See "Default delivery requirements for new mods" in `MODS.md`.
+- Refactoring a module must not change gameplay along the way — potion prices, progression rules, map interaction, and the like.
 
-## 新功能开工前的复用判断
+## Reuse check before starting new work
 
-- 新增 Mod 或大幅扩展现有玩法前，先读 [当前开发方向](research/development-direction-2026-10-29.md)，再按需核对 Omega 的最新官方补丁和相关现成 Mod。[2026-10-25 对照](research/omega-mod-planning-2026-10-25.md)是历史快照，其中带日期的状态必须刷新，不能一直当作最新结论。
-- 方向判断先查对应研究、现场记录和必要的项目既有对话，沿用用户已明确的选择，避免让用户重复说明已有信息。刷装问题先读 [2013 掉落逆向报告](research/loot-mechanics-2013-2026-10-27.md)；当前优先是原版 Boss 实际装备情报，掉率、职业转换和保底仍属于未选择的玩法改造方案。
-- 开工前用简短说明提醒用户：当前痛点、官方或现成方案是否已经解决、能否在当前版本直接使用，以及“建议做 / 可以等 / 暂不投入”的理由。存在可用方案时优先复用；仓库存在不代表已经兼容，复用还需核对许可证、版本、框架、存档与冲突边界。
-- 区分官方已实装、开发演示或计划、玩家反馈和未知项。Omega 的相似功能不自动否定当前 2013 版低成本修补的价值，也不证明本地 DLL、偏移、存档或配置能够直接迁移。
-- 针对后期缺少目标，先验证一个小规模目标或记录方案能否提高继续游玩的意愿，再考虑新奖励体系、营地、村民或经营系统；不把更多数值、地点清单或重复任务直接当作长期玩法改善。
-- 本步骤用于提醒取舍，不增加普通修复的反复确认。用户已明确选择继续当前版本或接受差异后，按授权推进；不因官方未来计划擅自取消任务，也不自动安装新工具、切换游戏版本或开启周期监控。
+- Before adding a mod or significantly extending existing gameplay, first read the [current development direction](research/development-direction-2026-10-29.md), then check the latest official Omega patches and existing mods as needed. The [2026-10-25 comparison](research/omega-mod-planning-2026-10-25.md) is a historical snapshot; its dated statements must be refreshed and must not be treated as the latest conclusion.
+- For direction calls, first check the related research, working records, and the necessary past project conversations; reuse choices the user has already made instead of making them restate known information. For equipment-rolling questions, read the [2013 loot reverse-engineering report](research/loot-mechanics-2013-2026-10-27.md) first; the current priority is real equipment intel for vanilla bosses, while drop rates, class switching, and pity rules remain unselected gameplay-rework proposals.
+- Before starting, briefly remind the user: the current pain point, whether an official or existing solution already solves it, whether it can be used directly in the current version, and the reasoning behind "do it / can wait / don't invest yet". When a usable solution exists, prefer reuse; presence in a repository does not mean compatibility — reuse still requires checking license, version, framework, save data, and conflict boundaries.
+- Distinguish what officials have actually shipped, what is a dev demo or a plan, player reports, and unknowns. A similar Omega feature does not automatically negate a low-cost 2013 fix, nor does it prove that local DLLs, offsets, saves, or configs can migrate directly.
+- For the late-game lack of goals, first verify that a small-scale goal or logging scheme actually increases the desire to keep playing, before considering new reward systems, camps, villagers, or economy systems; do not treat more numbers, location lists, or repeatable quests as long-term gameplay improvements.
+- This step exists to keep trade-offs in mind, not to add repeated confirmations to ordinary fixes. Once the user has clearly chosen to continue with the current version or accept the differences, proceed as authorized; do not cancel tasks on your own because of official future plans, and do not automatically install new tools, switch game versions, or enable periodic monitoring.
 
-## 模块与公共框架
+## Modules and the shared framework
 
-- 公共部分是 Qube Loader 和启动器。地图为 `waypoint.dll`，药水商店为 `potion_shop.dll`；两者不得相互设为启动或安装的必需条件。
-- 当前城镇标签、店铺指南仍属于地图模块，不声称它们已经是独立 DLL。是否进一步拆分由实际需求决定。
-- 每个新 Mod 使用唯一的 DLL 名和 manifest ID；配置、数据及开关键使用自己的名字。现有数据目录按 DLL 文件名隔离，不能随意改名导致旧数据失联。
-- 安装、更新和管理脚本只改选定 Mod 拥有的文件和配置键，保留其他 Mod 的内容。共享框架升级单独处理，不能捆绑在普通功能更新中覆盖。
-- 优先使用现有加载器的接口。改同一游戏函数、价格、库存或内存位置前先检查其他 Mod 的使用情况；加载顺序和优先级不能替代功能兼容验证。
-- 检查不通过时明确拒绝或停用，不能通过关闭版本校验、强写游戏程序或忽略冲突来强行运行。
+- The shared parts are Qube Loader and the launcher. The map is `waypoint.dll`, the potion shop is `potion_shop.dll`; neither may be made a required condition for the other to start or install.
+- The current town labels and shop guide still belong to the map module; do not claim they are a standalone DLL. Whether to split them further depends on actual need.
+- Each new mod uses a unique DLL name and manifest ID; its config, data, and toggle keys use their own names. Existing data directories are isolated by DLL file name; do not rename them casually, which would orphan old data.
+- Install, update, and management scripts only touch the files and config keys owned by the selected mod and preserve the other mods' content. Shared-framework upgrades are handled separately and must not be bundled into ordinary feature updates.
+- Prefer the existing loader's interfaces. Before changing the same game function, price, inventory, or memory location, check how other mods use it; load order and priority do not substitute for compatibility verification.
+- When a check fails, refuse or disable explicitly; never force it to run by disabling version checks, hard-patching the game program, or ignoring conflicts.
 
-## 拆装与数据保护
+## Install/removal and data protection
 
-- 拆装以完全退出目标游戏和启动器后操作为准，不实现或承诺未经验证的运行中热插拔。
-- 优先使用 `Manage-Mod.ps1` 管理单模块。停用保留 DLL；卸下仅将选定 DLL 移入项目备份，不删除文件。
-- 默认保留原角色和世界存档、Mod 自身数据及配置。停用药水不会撤销此前正常购买、消耗或保存的游戏状态。
-- 卸下一个功能时保留公共加载器、启动器及其他 Mod。旧启动器仍要求地图 DLL 时，先停用地图；在公共启动器升级前拒绝直接卸下地图。
-- 默认操作实验副本。正式目录的安装或配置改动需要用户对该目标的明确授权；不自动启动游戏。
+- Install and removal count only after the target game and launcher have fully exited; do not implement or promise unverified hot-plugging while the game is running.
+- Prefer `Manage-Mod.ps1` for single-mod management. Disabling keeps the DLL; removal only moves the selected DLL into the project backup and deletes nothing.
+- By default, keep the original character and world saves, each mod's own data, and its config. Disabling the potion shop does not roll back purchases, consumption, or game states that were previously saved normally.
+- Removing one feature keeps the shared loader, the launcher, and the other mods. While the old launcher still requires the map DLL, disable the map first; refuse to remove the map directly until the shared launcher has been upgraded.
+- Operate on the playtest copy by default. Installing to or configuring the formal directory requires the user's explicit authorization for that target; never start the game automatically.
 
-## 验证与交付
+## Validation and delivery
 
-- 新 Mod 必须在同一次交付中具备管理器名称、说明、安装检测、独立开关和安全锁定；同步状态接口、管理脚本、必要的构建/安装入口及文档，并重新构建管理器。只生成 DLL 或只修改源码不能代替完整接入。
-- 更新已有 Mod 时，核对其在管理器中的名称、路径和启停流程是否仍然匹配；沿用原有开关，不增加重复条目。只有用户明确要求只研究、只做原型或暂不接入时，才按该明确范围交付。
-- 修改单模块时检查其单独运行、与现有 Mod 同时运行、停用或卸下后其他 Mod 的行为。离线检查和游戏内验收分别记录，不把源码独立视为所有组合都已兼容。
-- 当前需要关注的组合是仅地图、仅药水、两者同时、两者都停用，以及分别卸下一项后重新启动。
-- 保护既有未提交工作；未经授权不创建额外 Git Worktree，不将其他任务的修改纳入提交。Git 暂存和提交按用户当前授权处理。
+- A new mod must ship, in the same delivery, with its manager name, description, install detection, independent switch, and safe lockout; keep the status interface, management scripts, the necessary build/install entry points, and docs in sync, and rebuild the manager. Producing only a DLL or only changing source does not count as full integration.
+- When updating an existing mod, re-check that its name, path, and enable/disable flow in the manager still match; keep the original switch and do not add duplicate entries. Only when the user explicitly asks for research-only, prototype-only, or no-integration do you deliver to that narrower scope.
+- When changing a single module, check it running alone, running with the existing mods, and how the other mods behave after it is disabled or removed. Record offline checks and in-game acceptance separately; do not treat source independence as all combinations being compatible.
+- The combinations currently needing attention are: map only, potion shop only, both together, both disabled, and restarts after removing one of them.
+- Protect existing uncommitted work; do not create extra Git worktrees without authorization, and do not sweep other tasks' changes into commits. Handle Git staging and commits per the user's current authorization.

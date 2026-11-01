@@ -1,9 +1,9 @@
-# 地图导航 0.3.6：区域探索兼容
+# Navigation 0.3.6: Region Explorer compatibility
 
-增加可选的区域探索目标交接和左侧面板避让。区域探索选点时共用一个导航目标、一个向下像素箭头；没有安装或启用区域探索时，保留原地图标点、店铺指南和 0.3.5 的旅馆重复标签修复。
+Adds the optional Region Explorer target handoff and left-panel yielding. When Region Explorer picks a spot, they share one navigation target and one down pixel arrow; with Region Explorer absent or disabled, the original map waypoints, shop guide, and the 0.3.5 duplicate-inn fix are kept.
 
-这是地图模块自身的兼容更新，不将区域探索设为必需依赖。区域探索的 DLL、开关和数据由独立的 `Install-RegionExplorer.ps1` / `Manage-Mod.ps1 -Mod RegionExplorer` 管理。
+This is the map module's own compatibility update and does not make Region Explorer a required dependency. Region Explorer's DLL, switch, and data are managed by the separate `Install-RegionExplorer.ps1` / `Manage-Mod.ps1 -Mod RegionExplorer`.
 
-根目录 `Install-TownLabels.ps1` 默认备份并更新实验副本的 `mods/waypoint.dll`；游戏和启动器须完全退出。保留原游戏、存档、配置、药水及其他 Mod。正式副本仅在用户明确指定后更新。安装不会启动游戏。
+The root `Install-TownLabels.ps1` backs up and updates the playtest copy's `mods/waypoint.dll` by default; the game and launcher must be fully exited. The original game, saves, config, potion, and the other mods are kept. The formal copy is updated only when the user explicitly says so. Installing never starts the game.
 
-51 项导航检查、44 项城镇检查及实际 DLL 在合成 SDK 中的消息/存储失败检查用于离线验证；完整记录见 `research/evidence/explorer-0.1.0-validation.md`。游戏内地点选择、地图开关和各 Mod 组合仍需实测。
+The 51 navigation checks, 44 town checks, and the real DLL's messaging/storage failure checks in the synthetic SDK served as offline validation; the full record is in `research/evidence/explorer-0.1.0-validation.md`. In-game place selection, map toggling, and the mod combinations still need live testing.

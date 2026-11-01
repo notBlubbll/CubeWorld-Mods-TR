@@ -1,40 +1,40 @@
-# 批量补给 0.1.2（实验版）
+# Batch Actions 0.1.2 (playtest)
 
-本次字体微调：保留原版方正粗圆字形，改进像素对齐和采样，地图/探索减轻黑描边；不改布局或玩法。已独立备份更新实验副本，真实观感待重开确认。见 字体记录（本地验证记录未随源码发布）。
+This font tweak: keeps the original FangZheng CuYuan glyph shapes, improves pixel alignment and sampling, and lightens the black outline on the map/explorer panels; no layout or gameplay changes. The playtest copy was updated as an independent backup; the real look is still pending a re-launch to confirm. See font record (local validation records are not published with the source).
 
-空瓶、水瓶、生命药水使用可见的数量窗口。默认选择 10 个，A / D 每次减 / 加 10，再确认购买或制作。作为独立模组安装和开关。
+Empty bottles, water bottles, and health potions get a visible quantity window. The default selection is 10; A / D decreases / increases by 10 each press; then confirm the purchase or crafting. Installed and toggled as a standalone mod.
 
-## 使用
+## Usage
 
-- **买空瓶：在商店点击空瓶，弹出“选择购买数量”。** 左键、右键或中键均可，不需要 Shift。
-- **做水瓶、生命药水：选中原版配方并点制作。** 这一轮原版进度走完后，弹出“选择制作数量”，此时尚未消耗材料或产生药水。
-- **A 减 10，D 加 10，Enter 确认，Esc 关闭。** 也可点窗口中的加减和确认按钮；最少 1 个，到边界时自动收住。没有可用数量时显示 0，并锁定确认按钮。关闭窗口不购买、不制作。
-- 窗口显示“已有 / 50”“本次最多”，购买另显示单价、总价及铜钱，制作显示材料现有数量。原版同种物品最多携带 50 个；已有 50 个空瓶时不能继续买，先装水消耗空瓶即可腾出数量。本次最多数量同时受余额、材料及剩余携带空间限制。
-- 每份仍按原价扣款、按原配方扣材料；药水等级和恢复量沿用当前选中的原生配方，升级后的高阶配方同样可用。确认后显示实际完成数量；发生变化或调用异常时停止余下操作。
-- 仅针对空瓶购买、水瓶和普通生命药水制作；其他商品、装备、回购物品和配方保持原版操作。仅单人使用；联网或手上拿着物品时保留原版操作。选择数量期间由现有加载器接管输入，A / D 不控制角色移动；失去焦点、移动超过 1 格、角色或原生菜单变化会关闭选择。
+- **Buying empty bottles: click an empty bottle in the shop and the "choose quantity" window pops up.** Left, right, or middle click all work — no Shift needed.
+- **Making water bottles / health potions: select the vanilla recipe and click craft.** After this round of the vanilla progress finishes, the "choose craft quantity" window pops up — at that moment no materials have been consumed and no potions produced.
+- **A decreases 10, D increases 10, Enter confirms, Esc closes.** The window's +/- and confirm buttons work too; the minimum is 1 and it stops at the bounds. With no quantity available it shows 0 and locks the confirm button. Closing the window buys and crafts nothing.
+- The window shows "owned / 50" and "max this round"; buying also shows the unit price, total price, and copper; crafting shows the materials on hand. The vanilla carries at most 50 of the same item; with 50 empty bottles you cannot buy more — fill bottles with water to consume them and free up the count. The max-this-round is limited by your balance, materials, and remaining carry space together.
+- Each unit still charges the original price and consumes the original recipe's materials; the potion level and heal follow the currently selected native recipe, and the higher recipes unlocked later work too. After confirming it shows the actually completed count; on any change or call error it stops the remaining operations.
+- Only the empty-bottle purchase and the water bottle / ordinary health potion crafting are covered; other goods, equipment, buyback items, and recipes keep the vanilla flow. Single-player only; in multiplayer or while holding an item, the vanilla flow stays. While the quantity is being chosen, the existing loader takes over the input — A / D do not move the character; losing focus, moving more than 1 cell, or a change of character or native menu closes the chooser.
 
-正常退出游戏和启动器后运行根目录 `Install-BatchActions.ps1`，默认安装实验副本。原来的“魔方世界模组管理器”有独立的“批量补给”开关。安装不会自动启动游戏。
+After fully exiting the game and launcher, run `Install-BatchActions.ps1` from the root; it installs to the playtest copy by default. The original "魔方世界模组管理器" (Cube World mod manager) has an independent "批量补给" (Batch Actions) switch. Installing never starts the game.
 
-## 独立边界
+## Independent boundaries
 
-| 项目 | 值 |
+| Item | Value |
 | --- | --- |
 | DLL | `mods/batch_actions.dll` |
 | manifest ID | `local.cubeworld.batch-actions` |
-| 管理器 ID / 开关 | `BatchActions` / `batch_actions.enabled` |
-| 配置和数据 | 不新增配置项或数据文件，保留此前存在的 `config/batch_actions.ini` 与 `data/batch_actions/` |
-| 公共依赖 | 已核实版本的 Qube Loader 和公共启动器，不依赖其他功能 DLL |
+| Manager ID / switch | `BatchActions` / `batch_actions.enabled` |
+| Config and data | no new config keys or data files; the pre-existing `config/batch_actions.ini` and `data/batch_actions/` are kept |
+| Shared dependencies | the verified Qube Loader and shared launcher; no dependency on the other feature DLLs |
 
-`Manage-Mod.ps1 -Mod BatchActions -Action Disable/Enable/Uninstall` 沿用现有管理流程。停用保留 DLL，卸下只把本 DLL 移入项目备份。存档和已正常获得、消耗的物品保持原游戏保存结果；停用不会撤销交易。正式目录安装仍需用户明确授权。
+`Manage-Mod.ps1 -Mod BatchActions -Action Disable/Enable/Uninstall` follows the existing management flow. Disabling keeps the DLL; removal moves only this DLL into the project backup. Saves and items already legitimately obtained or consumed keep the game's own saved results; disabling does not revert trades. Installing to the formal directory still needs the user's explicit authorization.
 
-## 实现与兼容
+## Implementation and compatibility
 
-通过加载器通用函数拦截接口捕获原购买和制作完成入口，先等待用户选择和确认。仅在确认后的帧事件调用原游戏交易和制作，并核对与原操作处于同一线程；不同线程时拒绝处理。每次原生调用后核对产出、扣款或材料，失败和非预期变化立即停止。数量不超过原生携带上限 50，没有后台点击器或直接修改金币、物品数量的写入。制作先走完一轮原版进度，批量部分不逐份重复等待。
+The original purchase and craft-completion entries are captured through the loader's generic function-interception interface, waiting for the user's selection and confirmation first. Only in the confirmed frame event does it call the original game's trade and craft, verifying the same thread as the original operation; a different thread refuses processing. After every native call it re-checks the output, the charge, or the materials, and any failure or unexpected change stops immediately. Quantities never exceed the native carry cap of 50; there is no background clicker and no direct writes to money or item counts. Crafting runs one round of the vanilla progress first; the batch part does not repeat the wait per unit.
 
-数量窗口沿用加载器统一输入接管和 ImGui，中文字体复用现有源码中的独立字体助手，不依赖区域探索 DLL。输入接管期间原商店悬停可能变化，购买时只临时绑定捕获的商店行列、清空玩家格悬停并隐藏装备交互标志，走原版中键购买分支；每份结束后恢复这些界面字段及输入状态。金币、库存、材料仍完全由原游戏处理，界面绑定失败时不调用购买。
+The quantity window uses the loader's unified input takeover and ImGui; the Chinese font reuses the independent font helper in the existing source and does not depend on the region explorer DLL. During input takeover the original shop hover may change; while buying, it only temporarily binds the captured shop row/column, clears the player-cell hover, and hides the equipment-interaction flag, going through the vanilla middle-click buy branch; after each unit it restores those UI fields and the input state. Money, inventory, and materials are still handled entirely by the original game; if the UI binding fails, no purchase is called.
 
-购买入口与背包分类使用加载器同一个通用拦截槽，等全部模组初始化完成后再注册，保留背包分类的初始化检查和点击保护；未改变已有六个模组源码。制作入口不能同时被另一个独占拦截器占用：加载器按需启用的 `ITEM_PICKUP` 捕获也使用 `0x4709c0`，当前六个模组没有订阅它。若该入口已被占用，本模组拒绝启用并记录原因，不覆盖它。未来新增使用该捕获的模组时需另行验证，不能以调整加载顺序保证兼容。
+The purchase entry shares the loader's generic interception slot with Inventory Sort, registering only after all mods finish initializing, keeping Inventory Sort's initialization checks and click protection; the existing six mods' sources are unchanged. The craft entry cannot be occupied by another exclusive interceptor at the same time: the loader's on-demand `ITEM_PICKUP` capture also uses `0x4709c0`, and the current six mods do not subscribe to it. If that entry is already taken, this mod refuses to enable and records the reason — it does not override it. Future mods using that capture need separate verification; load order is not a compatibility guarantee.
 
-只接受已核实的 2013 Alpha 程序、关键指令和加载器；未知版本或外来函数跳转拒绝启用。只读验证背包、当前配方和需求列表，不修改价格、原生制作等级算法、背包容量或保存格式。
+Only the verified 2013 Alpha program, key instructions, and loader are accepted; unknown versions or foreign jumps refuse to enable. It verifies the inventory, the current recipe, and the requirement lists read-only, changing no prices, no native crafting-level algorithm, no inventory capacity, and no save format.
 
-`Build-BatchActions.ps1` 构建独立 DLL，运行批量逻辑、实际 DLL 初始化以及生产界面/回调路径检查。检查使用合成内存和模拟原生调用，不能替代游戏内交易、制作、保存重开及组合验收。原生依据和复用判断见 [SOURCES.md](SOURCES.md)，本次验证见 记录（本地验证记录未随源码发布）。
+`Build-BatchActions.ps1` builds the standalone DLL and runs the batch-logic, real-DLL-init, and production UI/callback path checks. The checks use synthetic memory and simulated native calls — they do not replace in-game trade, craft, save/restart, and combination acceptance. The native basis and reuse reasoning are in [SOURCES.md](SOURCES.md); this round's validation is in the record (local validation records are not published with the source).

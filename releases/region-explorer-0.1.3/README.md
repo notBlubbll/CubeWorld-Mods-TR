@@ -1,9 +1,9 @@
-# 区域探索 0.1.3
+# Region Explorer 0.1.3
 
-现有区域探索 Mod 的独立更新：名称增加原版地点类型，准确区分森林、宫殿、金字塔等；挑战列表补回无当前任务编号但仍保留进度/完成状态的记录，明确标注“留存进度/留存完成”。面板显示当前页签数量，并说明仅限周边加载记录，不等于完整通关历史。
+Standalone update of the existing Region Explorer mod: the names gain the vanilla place type, accurately telling apart forests, palaces, pyramids, and the like; the challenge list brings back records with no current quest number but retained progress/completion state, clearly labeled "retained progress/retained completed". The panel shows the current tab's counts and explains that it covers only nearby loaded records — not a complete clear history.
 
-保留原版难度颜色、距离排序、翻页、鼠标和单箭头导航。原管理器条目、DLL 路径和独立开关沿用；不更新其他 Mod 或公共框架，不改药水、背包和存档。地图照明继续保持关闭。
+Keeps the vanilla difficulty colors, distance sorting, paging, the cursor, and single-arrow navigation. The original manager entry, DLL path, and independent switch are reused; no other mod or shared framework is updated, and the potion, inventory, and saves are untouched. Map Light stays off.
 
-游戏与启动器完全退出后，通过根目录 `Install-RegionExplorer.ps1` 安装到实验副本。脚本先备份完整存档、旧 DLL 和自身数据，保留其他文件及开关；正式副本须另有明确授权。不会自动启动游戏，不支持运行中替换。
+After the game and launcher fully exit, install to the playtest copy via the root's `Install-RegionExplorer.ps1`. The script first backs up the full saves, the old DLL, and its own data, keeping the other files and switches; the formal copy needs separate explicit authorization. It never starts the game and does not support in-run replacement.
 
-依据与验证见 `region_explorer/SOURCES.md`、`research/evidence/explorer-0.1.3-validation.md`。软件预览和离线检查不等于真实游戏验收。
+Basis and validation: `region_explorer/SOURCES.md`, `research/evidence/explorer-0.1.3-validation.md`. Software previews and offline checks do not equal real in-game acceptance.

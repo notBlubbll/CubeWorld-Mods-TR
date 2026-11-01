@@ -1,9 +1,9 @@
-# 背包分类 0.1.6
+# Inventory Sort 0.1.6
 
-修复物品拿到鼠标上后，原位置被收起、可见空格不能放回的问题。已显示的物品拿起或卖掉后，原分类内保留空位，其他物品和后续分类不前移补位；拿着同页物品时，保留的空位及可见行末空格通过原生真实空位接收放回，标题行继续不可点击。原格子尺寸、换行、中文类别名称、详情避让与跨区域读取修复保留。
+Fixes the original position collapsing after picking an item up onto the mouse, and visible blanks not accepting the put-back. After a displayed item is picked up or sold, the empty slot is kept in its section; other items and later sections do not shift forward. While holding an item of the same tab, the kept slots and the visible row-end blanks receive the put-back through real native slots, and the title rows stay unclickable. The original cell size, wrapping, Chinese category names, the detail yielding, and the cross-region read fix are kept.
 
-位置保留在当前游戏会话内，包括切换页签和关闭再打开背包。重新启动游戏或换角色后按实际物品重新建立分区，没有新增位置存档。新增物品需要更多行时仍沿用原版列数自动扩展。
+Positions persist within the current game session, including tab switches and closing/reopening the inventory. After restarting the game or switching characters, the sections are rebuilt from the actual items; no new position save file. When new items need more rows, the original column count auto-extends as before.
 
-沿用原管理器“背包分类”、`inventory_sort.enabled` 和独立 `inventory_sort.dll`。根目录 `Install-InventorySort.ps1` 在正常保存并完全退出目标游戏和启动器后，核验已知旧版并备份旧 DLL、完整存档与配置，再只更新本模块；默认实验副本，不自动启动游戏。正式目标需要单独明确授权。
+Reuses the original manager's "背包分类" entry, `inventory_sort.enabled`, and the standalone `inventory_sort.dll`. After a normal save and a full exit of the target game and launcher, the root's `Install-InventorySort.ps1` verifies the known old versions, backs up the old DLL, full saves, and configs, then updates only this module; playtest copy by default, never starting the game. The formal target needs separate explicit authorization.
 
-已用真实拿起前后的 105 格记录回放原位放回、可见空格放回和卖出后位置，实际 DLL 仿真中的取放使用受控原生替身。验证和真实游戏状态见 记录（本地验证记录未随源码发布）。
+Replayed with real 105-cell records from before and after a pickup — the in-place put-back, the visible-blank put-back, and the post-sale positions; the take/place in the real-DLL simulation uses controlled native stand-ins. The validation and real-game state are in the record (local validation records are not published with the source).

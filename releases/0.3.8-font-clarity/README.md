@@ -1,87 +1,87 @@
-# 地图标点导航 0.3.8（开发测试副本）
+# Map Waypoint Navigation 0.3.8 (development test copy)
 
-本次字体微调：保留原版方正粗圆字形，改进像素对齐和采样，地图/探索减轻黑描边；不改布局或玩法。已独立备份更新实验副本，真实观感待重开确认。见 字体记录（本地验证记录未随源码发布）。
+This font tweak: keeps the original FangZheng CuYuan glyph shapes, improves pixel alignment and sampling, and lightens the black outline on the map/explorer panels; no layout or gameplay changes. The playtest copy was updated as an independent backup; the real look is still pending a re-launch to confirm. See font record (local validation records are not published with the source).
 
-目标：在原版大地图标记一个目的地，关掉地图后持续显示相对方向和水平距离，战斗和转身后仍能继续赶路。
+Goal: mark a destination on the vanilla world map and, after closing the map, keep showing the relative direction and horizontal distance, so you can keep moving even in combat and after turning around.
 
-2026-10-24 23:15 +08:00 已备份后安装 0.3.7：修复鼠标移到右侧“店铺指南”的商店、旅馆列表时被面板遮住的问题。仅在右侧面板内且游戏处于前台时，最后补画白色像素手形，手指尖与右键选店的坐标一致；移出面板或关闭地图就不补画，不更改系统鼠标和点击操作。左侧区域探索继续使用已安装的独立 0.1.1；照明继续停用。本次只替换地图 DLL，未更新其他模组、加载器、启动器或正式副本。检查及安装证据见 `research/evidence/town-0.3.7-validation.md`，游戏内鼠标效果待重开确认。
+2026-10-24 23:15 +08:00 — 0.3.7 installed after backup: fixes the cursor being covered by the panel when hovering the shop/inn list of the right-side "shop guide". Only while inside the right panel and with the game in the foreground, a white pixel hand is drawn last, with the fingertip matching the right-click shop coordinates; no redraw when leaving the panel or closing the map, and no changes to the system cursor or click behavior. The left-side region explorer keeps using the installed standalone 0.1.1; the map light stays disabled. This pass only replaced the map DLL; no other mods, the loader, the launcher, or the formal copy were updated. For check and install evidence see `research/evidence/town-0.3.7-validation.md`; the in-game cursor effect still needs confirmation after a restart.
 
-2026-10-24 16:46 +08:00 已独立备份并安装 0.3.6：支持可选的区域探索选点，沿用一个导航目标和向下箭头，并让店铺名避开探索面板。没有启用区域探索时保留原交互，未把它设为地图依赖。区域探索由独立 DLL、安装脚本和管理器开关管理；本次没有更新药水、公共框架或正式副本。实际 DLL 已在合成 SDK 中核对交接、世界作用域、存储失败和独立运行；游戏内验证尚待用户操作。见 `releases/0.3.6-explorer-bridge` 和 `research/evidence/explorer-0.1.0-validation.md`。
+2026-10-24 16:46 +08:00 — 0.3.6 installed as an independent backup: supports the optional region explorer pick, reuses one navigation target and the down arrow, and keeps shop names clear of the explorer panel. Without the region explorer enabled, the original interaction is preserved; it is not made a map dependency. The region explorer is managed by its own DLL, install script, and manager switch; this pass did not update the potion shop, the shared framework, or the formal copy. The actual DLL was checked in the synthetic SDK for handoff, world scoping, storage failures, and standalone runs; in-game verification is still pending the user. See `releases/0.3.6-explorer-bridge` and `research/evidence/explorer-0.1.0-validation.md`.
 
-已安装修复 0.3.5：店铺名称使用原始生成位置，避免把店主走动后的当前位置再记成一家店。新世界缓存中的三个相邻旅馆记录已用于离线回归；实际旧缓存会在再次靠近并加载对应店铺时自动整理，不清空其他城镇、世界或原导航目的地。44 项城镇检查及更新保护检查通过。2026-10-24 12:56 +08:00，用户确认退出并授权后已完成实验副本更新，完整存档、旧模组及标点已备份；未启动游戏，实际旅馆显示待验收。见 `releases/0.3.5-fixed-shops` 与 `research/evidence/town-0.3.5-validation.md`。
+Installed fix 0.3.5: shop names use the original generated position, so a shopkeeper's current position after walking around is not recorded as another shop. Three adjacent inn records in the new world cache were used for offline regression; the real old cache tidies itself automatically when the matching shop is approached and loaded again, without clearing other towns, worlds, or the original navigation destination. The 44 town checks and the update-protection checks passed. 2026-10-24 12:56 +08:00 — after the user confirmed the exit and authorized it, the playtest copy update was completed, with the full saves, old mods, and waypoints backed up; the game was not started, and the real inn display is pending acceptance. See `releases/0.3.5-fixed-shops` and `research/evidence/town-0.3.5-validation.md`.
 
-已安装修复 0.3.4：选中店铺或手动地图标点后，金色像素箭头位于目标上方，向下指向准确目标坐标，箭杆加粗、整体适度放大，仍不添加“目的地”或重复店名牌。原名称自动避让箭头，右侧指南、顶部目标与距离保留。2026-10-23 22:14 +08:00 核实游戏关闭后已更新实验副本，存档及旧模组已备份，药水模组未改。Release 构建、32 项城镇检查及两种独立预览通过，游戏内效果仍待核对。
+Installed fix 0.3.4: after selecting a shop or placing a manual map waypoint, a gold pixel arrow sits above the target, pointing down at the exact target coordinates, with a thicker shaft and a modest overall scale-up; still no added "destination" label or duplicate shop-name plate. Names automatically avoid the arrow; the right-side guide, the top target, and the distance stay. 2026-10-23 22:14 +08:00 — after verifying the game was closed, the playtest copy was updated; the saves and old mods were backed up, the potion mod untouched. The Release build, the 32 town checks, and two standalone previews passed; the in-game effect still needs checking.
 
-## 店铺招牌名称
+## Shop sign names
 
-只读取原游戏绘制招牌的实体（类别 3，角色 128–135），补充旅馆、道具店、武器店、防具店、鉴定店、铁匠铺、木工坊、纺织坊名称。不扫描家具，不给制作台单独标名，不强制加载区域。右侧列表显示附近每类店铺中最近的一处，右键地图店名或列表行可以设置精确位置为导航目标；其余地图区域保留自由标点。
+Only the entities the original game draws shop signs for are read (category 3, roles 128–135), adding names for the inn, item shop, weapon shop, armor shop, identifier's shop, smithy, workshop, and clothier. No furniture is scanned, no separate label is added for crafting benches, and no regions are force-loaded. The right-side list shows the nearest shop of each nearby category; right-clicking a map shop name or a list row sets that exact position as the navigation target; the rest of the map keeps free waypoints.
 
-地图标签会避让；设施缓存与导航标点分开保存，沿用当前世界作用域和原 `CW_WAYPOINT_2` 标点格式。设施缓存改为 `CW_TOWN_2`，自动忽略 0.3.0 的错误家具缓存，重新发现真实招牌。缓存最多 512 处，实体遍历最多 4096 个节点，每 1.5 秒最多刷新一次。
+Map labels avoid overlaps; the facility cache and the navigation waypoints are stored separately, keeping the current world scoping and the original `CW_WAYPOINT_2` waypoint format. The facility cache is now `CW_TOWN_2`, which automatically ignores 0.3.0's broken furniture cache and rediscovers the real signs. The cache holds at most 512 entries, the entity walk touches at most 4096 nodes, and it refreshes at most once per 1.5 s.
 
-0.3.5 沿用 `CW_TOWN_2`，每次发现可信固定店铺位置时，将附近 8 个水平单位内、垂直差小于 4 的同类旧记录归到最近的固定位置。没有加载到对应店铺时保留旧记录；距离较远的旅馆、不同类型或不同楼层不合并。该范围针对本次相距约 2–3 步的重复记录，不是全图同名店铺合并。
+0.3.5 keeps `CW_TOWN_2` and, each time a trusted fixed shop position is discovered, folds old records of the same category within 8 horizontal units and a vertical difference under 4 into the nearest fixed position. Old records are kept when the matching shop is not loaded; distant inns, different categories, or different floors are not merged. This range targets this incident's duplicate records about 2–3 steps apart — it is not a whole-map merge of same-named shops.
 
-最新文件与说明见 `releases/0.3.6-explorer-bridge`，安装脚本 `Install-TownLabels.ps1` 默认只更新实验版，要求目标游戏和启动器完全退出，先校验并备份完整存档、旧导航及地图数据；保留其他 Mod 和原开关。0.3.1 的真实地图中已核对 5 个店名与原招牌相邻，日志显示 `loaded=5 new=5 known=5 scan=0 ms`。该计时仅表示毫秒级采样下不足 1 ms，不是性能压测。未实测的类别及其他场景见 `research/evidence/town-0.3.1-validation.md`。
+The latest files and notes are in `releases/0.3.6-explorer-bridge`; the install script `Install-TownLabels.ps1` updates only the playtest copy by default, requires the target game and launcher to be fully exited, and verifies and backs up the full saves, old navigation, and map data first; the other mods and the original switches are kept. In 0.3.1's real map, 5 shop names were verified adjacent to their original signs, with the log showing `loaded=5 new=5 known=5 scan=0 ms`. That timing only means under 1 ms at millisecond sampling — not a performance stress test. Untested categories and other scenarios are in `research/evidence/town-0.3.1-validation.md`.
 
-0.3.2 将右侧列表扩充为“店铺指南”，每类店铺下方给出两行用途或常见商品。内容按 2013 Alpha 资料核对，来源表在 `research/evidence/shop-guide-sources.md`，文案在 `town_guide.hpp`。用途文字不加到地图地点旁，店名和右键导航保留。指南只在原生 M 地图打开且绘制准备好时调用，关地图即隐藏。商品说明不代表读取了实时库存。
+0.3.2 expands the right-side list into a "shop guide", giving two lines of purpose or common goods under each shop category. The content was checked against 2013 Alpha references; the source table is at `research/evidence/shop-guide-sources.md`, the copy in `town_guide.hpp`. The purpose text is not added next to map locations; shop names and right-click navigation stay. The guide only runs while the native M map is open and drawing is ready, and hides when the map closes. The goods notes do not represent reads of live stock.
 
-新侧栏 Release 编译通过，1280×800、800×560、800×480 与空列表的同代码预览通过，包含全部 8 类说明的文字宽度和列表点击命中检查。电脑操作工具启动游戏连续两次报告 `GetCursorPos failed: 拒绝访问 (0x80070005)`，已停止重试，未改系统权限或设置；已提示用户从原入口打开并核对显示/隐藏。此时不声称新侧栏已在游戏内实测。
+The new sidebar's Release build passed, plus same-code previews at 1280×800, 800×560, 800×480, and with an empty list, including text-width checks for all 8 category blurbs and list click-hit checks. The PC automation tool reported `GetCursorPos failed: 拒绝访问 (0x80070005)` (access denied) twice in a row when launching the game; retries were stopped, no system permissions or settings were changed; the user was asked to open from the original entry and check show/hide. No claim is made that the new sidebar was tested live in-game at this point.
 
-## 文件隔离
+## File isolation
 
-0.2.0 统一导航相关界面的样式：采用游戏本地 `resource1.dat` 中的字体，黑白阶梯边框、深蓝面板、金色方块路标和独立距离牌。地图提示、标点名称牌、临时通知使用同一套绘制函数，缩小了无目标提示和次要文字。字体文件只在游戏本地读取，不随模组重新分发；缺失时回退系统中文字体。导航操作、距离算法及 `CW_WAYPOINT_2` 格式保持兼容，现有标点不清除。
+0.2.0 unified the style of the navigation-related UI: fonts from the game's local `resource1.dat`, a black-and-white stepped border, a deep-blue panel, gold block wayposts, and a separate distance plate. The map hint, the waypoint name plate, and transient notices share one drawing function; the no-target hint and secondary text were shrunk. The font file is only read from the local game and is not redistributed with the mod; on absence it falls back to a system Chinese font. Navigation actions, the distance algorithm, and the `CW_WAYPOINT_2` format stay compatible; existing waypoints are not cleared.
 
-## 操作
+## Usage
 
-1. 从实验副本的 `NavigationLauncher.exe` 启动，可选择刚导入的原角色和世界；正式游戏则用正式目录里的“导航启动”。
-2. 按 `M` 打开原版大地图，在地图中右键放置或更换黄色标点。
-3. 关闭地图，顶部方向栏显示目标方向和水平距离；目标在视野外时显示左右箭头。
-4. 距离小于 20 个世界单位时显示“已接近目的地”，保留标点。
-5. 打开地图后按 `Delete` 取消标点。退出重进同一世界后读取自己的标点文件。
+1. Launch from the playtest copy's `NavigationLauncher.exe`; you can pick the freshly imported original character and world; for the formal game, use the "导航启动" (navigation launch) entry in the formal directory.
+2. Press `M` to open the vanilla world map; right-click in the map to place or replace the yellow waypoint.
+3. Close the map: the top direction bar shows the target bearing and horizontal distance; left/right arrows appear when the target is out of view.
+4. Within 20 world units it shows "approaching destination", and the waypoint is kept.
+5. With the map open, press `Delete` to cancel the waypoint. After quitting and re-entering the same world, it reads its own waypoint file.
 
-界面中的 `m` 目前按游戏坐标单位计数，尚待实测校准。地图选点采用完整原地图变换矩阵与水平平面求交；三维地形起伏仍可能造成落点偏差。
+The `m` in the UI currently counts game coordinate units and awaits measured calibration. Map picking intersects the full original map transform matrix with the horizontal plane; 3D terrain relief can still cause landing-point offsets.
 
-0.1.1 修正了遗漏透视矩阵的错误：0.1.0 曾把远处城镇误算成玩家附近的点，导致走向城镇时数字反而增加。旧版标点不再读取，请重新右键标记一次；角色和世界存档不受影响。
+0.1.1 fixed the missing projection matrix: 0.1.0 had mis-computed distant towns as points near the player, so the number went up while walking toward a town. Old waypoints are no longer read — right-click once to re-mark; character and world saves are unaffected.
 
-## 本地构建
+## Local build
 
-运行根目录的 `Build-Navigation.ps1`，然后运行 `Prepare-Playtest.ps1`。准备脚本不会启动游戏，也不会复制旧存档；若 `playtest` 已存在，会拒绝覆盖以保护实验存档。
+Run `Build-Navigation.ps1` from the root, then `Prepare-Playtest.ps1`. The preparation script does not start the game and does not copy old saves; if `playtest` already exists, it refuses to overwrite in order to protect the playtest saves.
 
-`Install-Navigation.ps1` 用于本机用户指定的正式目录：要求游戏/服务器已退出、核对已测试程序散列、先备份校验存档和配置，再新增文件。遇到同名安装文件会停止以免覆盖；不自动启动游戏。正式入口可以加载导航，原入口仍可用于不带导航游玩。
+`Install-Navigation.ps1` is for the machine-local formal directory the user specifies: it requires the game/server to have exited, verifies the tested program hashes, backs up and verifies the saves and configs first, then adds files. It stops on same-named files to avoid overwriting; it never starts the game. The formal entry can load navigation; the original entry still works for playing without navigation.
 
-正式入口的 740 权限错误已修复：当 Windows 返回 `ERROR_ELEVATION_REQUIRED` 时，启动器通过正常 UAC 授权重新运行自身一次，再创建自己拥有的游戏子进程；需要用户亲自确认 Windows 授权窗口。取消授权或重试仍失败会停止，不循环请求权限。不更改游戏兼容配置或系统安全设置。更新记录见 `research/evidence/launcher-740-repair.json`。
+The formal entry's error 740 is fixed: when Windows returns `ERROR_ELEVATION_REQUIRED`, the launcher re-runs itself once through normal UAC consent and then creates the game child process it owns; the user must personally confirm the Windows prompt. Cancelling or failing again stops it — no permission loops. No game compatibility settings or system security settings are changed. See `research/evidence/launcher-740-repair.json` for the repair record.
 
-依赖固定为：
+Dependencies pinned to:
 
-- Qube-Loader `4c3dad5a4665ffcc40117aef7fe6da6fdea61ca9`。
-- ImGui `8936b58fe26e8c3da834b8f60b06511d537b4c63`。
-- MinHook `c3fcafdc10146beb5919319d0683e44e3c30d537`。
-- 逆向参考 CubeWorld-Reversal `e6e906e4b2644806ef19c2e1f12ebc636c347f7c`。
+- Qube-Loader `4c3dad5a4665ffcc40117aef7fe6da6fdea61ca9`.
+- ImGui `8936b58fe26e8c3da834b8f60b06511d537b4c63`.
+- MinHook `c3fcafdc10146beb5919319d0683e44e3c30d537`.
+- Reverse-engineering reference CubeWorld-Reversal `e6e906e4b2644806ef19c2e1f12ebc636c347f7c`.
 
-Qube 的本地改动包括首次绘制前加载游戏原有中文字体（系统微软雅黑仅作回退），以及修复高分屏下隐藏绘制探测窗口的零客户区问题。补丁分别保存在 `research/evidence/loader-chinese-font.patch` 和 `loader-high-dpi-probe.patch`。本机工具路径写在构建脚本中。使用 Release 构建，避开本机 Debug 链接器的 MSPDB140 版本问题。
+The local Qube changes include loading the game's original Chinese font before the first draw (the system Microsoft YaHei is fallback only) and fixing the zero-client-area problem of the hidden draw-probe window on high-DPI screens. The patches are kept in `research/evidence/loader-chinese-font.patch` and `loader-high-dpi-probe.patch`. The local tool paths are written in the build scripts. Build with Release to avoid the local Debug linker's MSPDB140 version problem.
 
-## 地图接入依据
+## Basis for the map integration
 
-经原程序静态反汇编及参考源码交叉定位：
+Located via static disassembly of the original program, cross-checked against the reference sources:
 
-- `GameController+0x8006e4`：`M` 大地图开关。SDK 当前名为 `mapOpen` 的普通 Widget 字段不用于此功能。
-- `GameController+0x800d44`：嵌入的 WorldMap；`WorldMap+0x4` 保存透视矩阵，`WorldMap+0x44` 保存视图矩阵。列主序组合 `透视 × 视图` 后才用于地图选点，不能把视图矩阵单独当成完整投影。
-- `GameController+0x1000e4c`：地图拖动偏移。原程序在 `0x4adf13` 将其转换成固定点数，与玩家坐标相加，作为地图绘制原点。
-- 玩家坐标使用 Creature 的 `+0x10/+0x18/+0x20` 三个 64 位定点数，避免远坐标下不必要的浮点精度损失。
-- 世界标点作用域由世界名称和种子共同确定；同种子但不同名称的世界分开存储。
+- `GameController+0x8006e4`: the `M` world-map toggle. The SDK's plain Widget field currently named `mapOpen` is not used by this feature.
+- `GameController+0x800d44`: the embedded WorldMap; `WorldMap+0x4` holds the projection matrix, `WorldMap+0x44` the view matrix. Only the column-major `projection × view` combination is used for map picking — the view matrix alone must not be treated as the full projection.
+- `GameController+0x1000e4c`: the map drag offset. The original program converts it to fixed point at `0x4adf13`, adds it to the player coordinates, and uses it as the map draw origin.
+- Player coordinates use the three 64-bit fixed-point values at Creature `+0x10/+0x18/+0x20`, avoiding needless floating-point precision loss at far coordinates.
+- World waypoint scoping is determined by the world name and seed together; same-seed worlds with different names are stored separately.
 
-导航模组声明 `Overlay | RawMem` 能力，不申请游戏属性写入或自定义游戏函数钩子。Qube 自身仍使用其原有的图形/输入钩子提供叠加显示。启动时保留 Qube 的版本校验，未开放版本不匹配强行运行。
+The navigation mod declares the `Overlay | RawMem` capabilities and requests no game-property writes and no custom game-function hooks. Qube itself still uses its original graphics/input hooks to provide the overlay. Qube's version check stays on at load; mismatched versions are not forced to run.
 
-## 验证情况
+## Validation status
 
-0.2.0：框架与模组 Release 编译通过，51 项检查通过。在实验版原 4 级角色场景中已看到导航栏与距离牌，日志确认加载游戏原字体、0.2.0 模组及恢复原世界标点；用户按提示查看样式后确认方向接近预期。已备份后将同一构建同步到正式版；正式版本次样式更新后尚未重新启动，不把它写成已实测。安装期间游戏程序、配置和全部存档散列保持不变。
+0.2.0: the framework and mod Release builds passed, 51 checks passed. In the playtest copy's original level-4 character scene, the navigation bar and distance plate were seen, and the logs confirmed the game's original font loading, the 0.2.0 mod, and the original world waypoints being restored; the user checked the style and confirmed the direction was close to expectations. After backing up, the same build was synced to the formal copy; the formal copy has not been restarted since this style update, and that is not written up as tested. During the install, the game program, configs, and all save hashes stayed unchanged.
 
-2026-10-22：Release 编译完成，51 项检查通过，涵盖实际日志矩阵回归、朝固定目标移动时距离减小、远离时距离增加及旧版标点失效。实验副本实测已确认框架和 0.1.1 模组加载、中文显示、原生地图右键标点；用户反馈“正在走，数字变小”。详细证据见 `research/evidence/navigation-0.1.1-validation.md`。
+2026-10-22: Release builds done, 51 checks passed, covering the real log-matrix regression, the distance decreasing while moving toward a fixed target, increasing when moving away, and old waypoints being invalidated. Live playtest checks confirmed the framework and 0.1.1 mod loading, Chinese display, and right-click waypoints on the native map; the user reported "walking and the number is getting smaller". Detailed evidence is in `research/evidence/navigation-0.1.1-validation.md`.
 
-以下完整场景尚未全部验收：
+The following full scenarios are not yet fully accepted:
 
-- 滚轮缩放、拖动和重新打开地图后核对落点，检查地形高度带来的偏差。
-- 转身、侧移、跑远再回来时，方向和距离变化符合实际。
-- 同一世界重启后恢复；新世界、同种子不同名称世界不继承标点；取消后重启仍为取消状态。
-- 实验角色战斗、死亡、进出世界后正常；原目录的程序及配置未改写。
+- Zoom, drag, and reopen the map and check the landing point; check offsets from terrain height.
+- Direction and distance changing correctly when turning, strafing, running away, and coming back.
+- Restore after restarting the same world; new worlds and same-seed different-name worlds not inheriting waypoints; cancellation persisting after restart.
+- The playtest character staying normal through combat, death, and world transitions; the original directory's program and configs untouched.
 
-编译检查和数学检查不能代替以上游戏内验收。
+Compile checks and math checks do not replace the in-game acceptance above.

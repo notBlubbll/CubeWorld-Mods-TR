@@ -1,11 +1,11 @@
-# 旅馆重复名牌修复 0.3.5
+# Duplicate Inn Nameplate Fix 0.3.5
 
-旧版把店主的当前坐标当作店铺位置。旅馆店主走动后，附近新坐标可能被当成另一家旅馆，累积多块中文名牌。
+The old version treated the shopkeeper's current coordinates as the shop position. After an innkeeper walked around, nearby new coordinates could be read as another inn, piling up multiple Chinese nameplates.
 
-本版读取店铺的原始生成位置。再次靠近并加载对应旅馆时，会把附近的同类旧记录归到最近的固定店铺位置，保留其他真实旅馆和未加载地区的记录；原世界、目的地及数据格式继续沿用。地图向下箭头和店铺指南沿用 0.3.4。
+This version reads the shop's original generated position. When the matching inn is approached and loaded again, nearby same-category old records are folded into the nearest fixed shop position, keeping the other real inns and the records of unloaded regions; the original world, destinations, and data format continue as before. The map down arrow and shop guide follow 0.3.4.
 
-Win32 Release 构建及 44 项城镇检查通过，覆盖这次缓存里的三个重复旅馆坐标、不同旅馆、部分区域加载、反复扫描和旧缓存兼容。19 项安装流程检查在 PowerShell 7 与 Windows PowerShell 5.1 中通过；独立模组管理 41 项及管理器状态 82 项离线检查通过。游戏内显示和各模组组合的真实运行仍待验收。
+The Win32 Release build and the 44 town checks passed, covering this cache's three duplicate inn coordinates, different inns, partial region loads, repeated scans, and old-cache compatibility. 19 install-flow checks passed in both PowerShell 7 and Windows PowerShell 5.1; the 41 standalone mod-management and 82 manager-status offline checks passed. The in-game display and the real running of every mod combination are still pending acceptance.
 
-仍用实验副本原来的“导航启动”或模组管理器的“实验副本”入口。进入出现问题的新世界，靠近那家旅馆后按 M 核对：同一处只保留一个“旅馆”名称，选中后的标记仍是向下箭头。
+Keep using the playtest copy's original "导航启动" (navigation launch) or the mod manager's "playtest copy" entry. Enter the new world where the problem appeared, approach that inn, and press M to verify: only one "旅馆" (inn) name remains at the same spot, and the marker after selecting is still the down arrow.
 
-这仍是原“地图导航”模块，文件名 `waypoint.dll`，不增加新的管理器条目；原独立开关继续有效。今后重装由根目录 `Install-TownLabels.ps1` 执行，要求目标游戏和启动器完全退出，不自动启用原来关闭的地图模块。
+This is still the original "Navigation" module, file name `waypoint.dll`, adding no new manager entry; the original independent switch stays in effect. Future reinstalls go through the root `Install-TownLabels.ps1`, which requires the target game and launcher to be fully exited and does not auto-enable a map module that was turned off.

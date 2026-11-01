@@ -1,35 +1,35 @@
-# 批量补给 0.1.0（实验版）
+# Batch Actions 0.1.0 (playtest)
 
-空瓶、水瓶、生命药水统一按每批最多 10 份处理，作为独立模组安装和开关。
+Empty bottles, water bottles, and health potions are handled in batches of at most 10, installed and toggled as a standalone mod.
 
-## 使用
+## Usage
 
-- **买空瓶：按住 Shift，在商店空瓶上右键一次。**
-- **做水瓶、生命药水：按住 Shift，点击原版制作按钮，保持 Shift 到这一轮制作完成。** 原版进度走完后处理这一批，最多 10 份。松开 Shift 停止后续批量调用；已经开始的原版一份仍按原版完成。
-- 普通点击保留原版的一份；原版长按连续制作仍然可用。按着 Shift 长按制作会连续发起批次，每批至多 10 份。
-- 铜钱、材料不足，达到原版同类物品携带上限，或者菜单、角色、选择发生变化时停止。每份仍按原价扣款、按原配方扣材料；药水等级和恢复量沿用当前选中的原生配方，因此升级后的高阶配方同样可用。
-- 仅针对空瓶购买、水瓶和普通生命药水制作；其他商品、装备、回购物品和其他配方保持原版操作。仅单人使用；联网、手上拿着物品或不在游戏前台时不启用批量。
+- **Buying empty bottles: hold Shift and right-click the empty bottle in the shop once.**
+- **Making water bottles / health potions: hold Shift, click the vanilla craft button, and keep Shift held until this crafting round finishes.** The batch is processed after the vanilla progress completes, at most 10 units. Releasing Shift stops further batch calls; the vanilla unit already started still finishes the vanilla way.
+- A normal click keeps the vanilla single unit; the vanilla long-press continuous crafting still works. Holding Shift and long-pressing craft launches batches continuously, at most 10 per batch.
+- It stops when copper or materials run out, the vanilla carry limit for the item type is reached, or the menu, character, or selection changes. Each unit still charges the original price and consumes the original recipe's materials; the potion level and heal follow the currently selected native recipe, so higher recipes unlocked later work too.
+- Only the empty-bottle purchase and the water bottle / ordinary health potion crafting are covered; other goods, equipment, buyback items, and other recipes keep the vanilla flow. Single-player only; batch is not enabled in multiplayer, while holding an item, or when the game is not in the foreground.
 
-正常退出游戏和启动器后运行根目录 `Install-BatchActions.ps1`，默认安装实验副本。原来的“魔方世界模组管理器”有独立的“批量补给”开关。安装不会自动启动游戏。
+After fully exiting the game and launcher, run `Install-BatchActions.ps1` from the root; it installs to the playtest copy by default. The original "魔方世界模组管理器" (Cube World mod manager) has an independent "批量补给" (Batch Actions) switch. Installing never starts the game.
 
-## 独立边界
+## Independent boundaries
 
-| 项目 | 值 |
+| Item | Value |
 | --- | --- |
 | DLL | `mods/batch_actions.dll` |
 | manifest ID | `local.cubeworld.batch-actions` |
-| 管理器 ID / 开关 | `BatchActions` / `batch_actions.enabled` |
-| 配置和数据 | 不新增配置项或数据文件，保留此前存在的 `config/batch_actions.ini` 与 `data/batch_actions/` |
-| 公共依赖 | 已核实版本的 Qube Loader 和公共启动器，不依赖其他功能 DLL |
+| Manager ID / switch | `BatchActions` / `batch_actions.enabled` |
+| Config and data | no new config keys or data files; the pre-existing `config/batch_actions.ini` and `data/batch_actions/` are kept |
+| Shared dependencies | the verified Qube Loader and shared launcher; no dependency on the other feature DLLs |
 
-`Manage-Mod.ps1 -Mod BatchActions -Action Disable/Enable/Uninstall` 沿用现有管理流程。停用保留 DLL，卸下只把本 DLL 移入项目备份。存档和已正常获得、消耗的物品保持原游戏保存结果；停用不会撤销交易。正式目录安装仍需用户明确授权。
+`Manage-Mod.ps1 -Mod BatchActions -Action Disable/Enable/Uninstall` follows the existing management flow. Disabling keeps the DLL; removal moves only this DLL into the project backup. Saves and items already legitimately obtained or consumed keep the game's own saved results; disabling does not revert trades. Installing to the formal directory still needs the user's explicit authorization.
 
-## 实现与兼容
+## Implementation and compatibility
 
-通过加载器的通用函数拦截接口处理原生购买和制作入口，批量调用始终在发起操作的游戏线程同步完成，没有后台点击器或直接修改金币、物品数量的写入。每次原生调用后核对产出、扣款或材料数量，失败和非预期变化立即停止，单次最多 10 次。原生制作仍先完成一轮进度，批量部分不重复等待九次进度。
+The native purchase and craft entries are handled through the loader's generic function-interception interface; batch calls always complete synchronously on the game thread that started the operation — no background clicker and no direct writes to money or item counts. After each native call the output, charge, or material counts are verified; failures and unexpected changes stop immediately, with at most 10 calls per batch. Native crafting still completes one round of progress first; the batch part does not repeat the nine-progress wait per unit.
 
-购买入口与背包分类使用加载器同一个通用拦截槽，等全部模组初始化完成后再注册，保留背包分类的初始化检查和点击保护；未改变已有六个模组源码。制作入口不能同时被另一个独占拦截器占用：加载器按需启用的 `ITEM_PICKUP` 捕获也使用 `0x4709c0`，当前六个模组没有订阅它。若该入口已被占用，本模组拒绝启用并记录原因，不覆盖它。未来新增使用该捕获的模组时需另行验证，不能以调整加载顺序保证兼容。
+The purchase entry shares the loader's generic interception slot with Inventory Sort, registering only after all mods finish initializing, keeping Inventory Sort's initialization checks and click protection; the existing six mods' sources are unchanged. The craft entry cannot be occupied by another exclusive interceptor at the same time: the loader's on-demand `ITEM_PICKUP` capture also uses `0x4709c0`, and the current six mods do not subscribe to it. If that entry is already taken, this mod refuses to enable and records the reason — it does not override it. Future mods using that capture need separate verification; load order is not a compatibility guarantee.
 
-只接受已核实的 2013 Alpha 程序、关键指令和加载器；未知版本或外来函数跳转拒绝启用。只读验证背包、当前配方和需求列表，不修改价格、原生制作等级算法、背包容量或保存格式。
+Only the verified 2013 Alpha program, key instructions, and loader are accepted; unknown versions or foreign jumps refuse to enable. It verifies the inventory, the current recipe, and the requirement lists read-only, changing no prices, no native crafting-level algorithm, no inventory capacity, and no save format.
 
-`Build-BatchActions.ps1` 构建独立 DLL，运行批量逻辑及实际 DLL 初始化检查。检查使用合成内存和模拟原生调用，不能替代游戏内交易、制作、保存重开及组合验收。原生依据和复用判断见 [SOURCES.md](SOURCES.md)，本次验证见 记录（本地验证记录未随源码发布）。
+`Build-BatchActions.ps1` builds the standalone DLL and runs the batch-logic and real-DLL-init checks. The checks use synthetic memory and simulated native calls — they do not replace in-game trade, craft, save/restart, and combination acceptance. The native basis and reuse reasoning are in [SOURCES.md](SOURCES.md); this round's validation is in the record (local validation records are not published with the source).

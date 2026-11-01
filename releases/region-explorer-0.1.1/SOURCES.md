@@ -1,14 +1,14 @@
-# 区域探索的来源与可核验边界
+# Region Explorer: sources and verifiable boundaries
 
-核验时间：2026-10-24。仅支持本机已验证的 2013 Alpha：`Cube.exe` SHA-256 `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`。
+Verification time: 2026-10-24. Only this machine's verified 2013 Alpha is supported: `Cube.exe` SHA-256 `84A7A132A84D4282338E7EA45A1940D32066D64E39CBAFED8F2418D5A6DC30BF`.
 
-- [RegionReveal](https://github.com/Jovinull/RegionReveal/tree/8633915f10b6ad565a31fc653d4f7e3f3b2c2484)，固定提交 `8633915f10b6ad565a31fc653d4f7e3f3b2c2484`。参考其 `docs/MAP_LABELS.md`、`docs/REVERSE_ENGINEERING.md`、`docs/BEHAVIOUR.md`、`src/game/cube_world.hpp`、`src/game/world.cpp` 和 `src/region_reveal/marks.cpp` 所整理的本版本地图布局、原生标签分类及任务状态。保留原 MIT 许可于 `RegionReveal-LICENSE.txt`。本模块自行实现 Qube SDK 只读扫描、列表、目标存储和可选导航消息；没有安装该项目的 dinput8 代理或原生补丁，也未调用它的区域揭示函数。
-- [CubeWorld-Reversal](https://github.com/qad3n/CubeWorld-Reversal)：本地 `external/CubeWorld-Reversal/cube/control/GameController.cpp` 的 `NameGen_initFirstNameTables`（原地址 0x5a0ed0）及区域生成调用；本地 `cube/_library/crt_stl.cpp` 的地图序列化函数（原地址 0x605420）。地图保存结构与任务实时数据不同，不能把存档中缺失任务字段理解成没有 Boss。
-- [Qube-Loader](https://github.com/qad3n/Qube-Loader)：沿用项目现有 SDK、ImGui 和公共加载器，不改变公共框架。其 GPL-3.0 许可随项目保留。
-- 本机只读证据：`research/evidence/explorer-name-layout.json` 核对实际可执行文件中的 40 段 UTF-16 名字音节；`explorer-saved-records.json` 核对两份实际地图、761 条地标及其中 24 条城镇。测试记录只重建存档已具有的字段，不补造实时任务状态。
+- [RegionReveal](https://github.com/Jovinull/RegionReveal/tree/8633915f10b6ad565a31fc653d4f7e3f3b2c2484), pinned commit `8633915f10b6ad565a31fc653d4f7e3f3b2c2484`. Its `docs/MAP_LABELS.md`, `docs/REVERSE_ENGINEERING.md`, `docs/BEHAVIOUR.md`, `src/game/cube_world.hpp`, `src/game/world.cpp`, and `src/region_reveal/marks.cpp` were referenced for this version's map layout, native label categories, and quest states. The original MIT license is kept at `RegionReveal-LICENSE.txt`. This module implements its own Qube SDK read-only scan, list, target storage, and optional navigation messaging; the project's dinput8 proxy and native patch were not installed, and its region-reveal functions were never called.
+- [CubeWorld-Reversal](https://github.com/qad3n/CubeWorld-Reversal): the local `external/CubeWorld-Reversal/cube/control/GameController.cpp`'s `NameGen_initFirstNameTables` (original address 0x5a0ed0) and the region-generation calls; the map serialization function in the local `cube/_library/crt_stl.cpp` (original address 0x605420). The map save structure differs from live quest data — a missing quest field in a save must not be read as "no boss".
+- [Qube-Loader](https://github.com/qad3n/Qube-Loader): the project's existing SDK, ImGui, and shared loader are reused without changing the shared framework. Its GPL-3.0 license is kept with the project.
+- Local read-only evidence: `research/evidence/explorer-name-layout.json` verified the 40 UTF-16 name syllables in the actual executable; `explorer-saved-records.json` verified two real maps, 761 landmarks, and 24 towns among them. The test records rebuild only the fields the save already has — no live quest states are fabricated.
 
-WorldMap 为控制器内嵌对象 `gc+0x800d44`，稀疏块表为 `+0xb0`；每块地标区偏移 0x34000，共 64 条、每条 0x68 字节。城镇类别为 1；任务 ID 在记录 +0x34，状态字节在 +0x41（0 未完成、1 进行中、2 完成）。类别 0/10 不参与原生地标标签；尚未完整核实的其他类别只称“地标”。
+WorldMap is the controller-embedded object at `gc+0x800d44`; the sparse block table is at `+0xb0`; each block's landmark area is offset 0x34000, holding 64 records of 0x68 bytes each. Town is category 1; the quest ID is at record +0x34 and the state byte at +0x41 (0 unfinished, 1 in progress, 2 completed). Categories 0/10 take no part in native landmark labels; the other categories not yet fully verified are just called "landmark".
 
-名字采用原生默认种族索引算法，保留 uint32 溢出：`(seed/7 + seed*13)%20`、`(seed*7 + seed/10)%20`。源码只保存本版本中字符串的 RVA，运行时读取用户原程序，不分发游戏字体、词表或地图资源。未实现汉化专名转换。
+Names use the native default species-index algorithm, keeping the uint32 overflow: `(seed/7 + seed*13)%20`, `(seed*7 + seed/10)%20`. The source stores only the RVAs of the strings in this version and reads them from the user's original program at runtime — no game fonts, word lists, or map assets are distributed. No Chinese proper-name conversion was implemented.
 
-存储块是固定大小的技术分块；有名字的地理区域边界由其他噪声/分区规则决定，不能将存储块边缘当作沙漠或雪地区域边界。本版未绘制此类边界，也未实现任意种子离线世界预测。
+Storage blocks are fixed-size technical chunks; the borders of named geographic regions are decided by other noise/partition rules, so a storage-block edge is not a desert or snow-region boundary. This version draws no such borders and implements no offline world prediction for arbitrary seeds.

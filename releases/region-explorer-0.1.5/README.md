@@ -1,7 +1,7 @@
-# 区域探索 0.1.5：首领职业测试版
+# Region Explorer 0.1.5: boss-class test version
 
-沿用现有管理器的“区域探索”，不增加新条目或依赖。按 M 打开“挑战”页，在每个地点下查看“已确认”“预测”或“未知”；特殊物种与已完成但没有历史职业的地点分别说明。
+Reuses the existing manager's "区域探索" (Region Explorer), adding no new entries or dependencies. Open the "Challenges" page with M and view "Confirmed", "Predicted", or "Unknown" under each place; special species and finished places with no historical class are explained separately.
 
-“已确认”需要原刷怪记录、出生区块、任务和实体编号共同匹配；不是把附近任意怪物当作 Boss。“预测”只覆盖任务类型5、已有详细记录且走常规职业生成分支的首领。远方仅有粗地图记录时仍为未知，不承诺整张无限地图的职业预测。仅在打开挑战页时每两秒只读查询，不改游戏随机状态或生成远处怪物，原难度色和导航保留。
+"Confirmed" requires the original spawn record, spawn chunk, quest, and entity number to all match; it is not treating any nearby monster as the boss. "Predicted" covers only quest type-5 bosses with detailed records that take the regular class-generation branch. Far places with only coarse map records stay unknown — no whole infinite-map class prediction is promised. The read-only query runs only on the open Challenges page every two seconds, changing no game random state and spawning no far monsters; the original difficulty colors and navigation are kept.
 
-完全退出目标游戏和启动器后运行根目录 `Install-RegionExplorer.ps1`，默认仅实验副本。安装会核实游戏、公共框架及原随机数库，备份完整存档和旧探索，保留其他 Mod、开关和数据；不自动启动游戏。正式副本须另行授权。真实游戏的职业对应与性能待验收，详见 `research/evidence/explorer-0.1.5-validation.md`。
+After fully exiting the target game and launcher, run the root's `Install-RegionExplorer.ps1` — playtest copy only by default. The install verifies the game, the shared framework, and the original random-number library, backs up the full saves and the old explorer data, and keeps the other mods, switches, and data; it never starts the game. The formal copy needs separate authorization. The real-game class matching and performance are pending acceptance — see `research/evidence/explorer-0.1.5-validation.md`.
